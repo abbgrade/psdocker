@@ -5,7 +5,7 @@ $VerbosePreference = "Continue"
 
 if ( $PSScriptRoot ) { $ScriptRoot = $PSScriptRoot } else { $ScriptRoot = Get-Location }
 $ModuleManifestPath = "$ScriptRoot\..\PSDocker.psd1"
-Import-Module "$ScriptRoot\..\PSDocker.psm1" -Force
+Import-Module "$ScriptRoot\..\PSDocker.psm1" -Prefix 'Docker' -Force
 
 Describe 'Module Manifest Tests' {
 
@@ -16,7 +16,10 @@ Describe 'Module Manifest Tests' {
 
     It 'Test docker pull' {
         Install-DockerImage -Image 'kitematic/hello-world-nginx'
-        { Install-DockerImage -Image 'foobar' } | Should Throw
+        try {
+            Install-DockerImage -Image 'foobar'
+            Should Throw
+        } catch {}
     }
 }
 

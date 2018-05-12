@@ -1,4 +1,4 @@
-function Install-DockerImage {
+function Install-Image {
 
     param (
         [ValidateNotNullOrEmpty()]
