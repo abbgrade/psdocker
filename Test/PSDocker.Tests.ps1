@@ -41,7 +41,7 @@ Describe 'Module Tests' {
                 Should Throw
             } catch {}
 
-            New-DockerContainer -Image $image | Should Be
+            New-DockerContainer -Image $image -Environment @{"A" = 1; "B" = "C"} | Should Be
         }
     }
 }
