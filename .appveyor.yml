@@ -1,13 +1,24 @@
 version: '1.0.{build}'
 
+environment:
+  nuget_apikey:
+    secure: AWSfDUQgVaMF1fhfsaVx5Hy/qIa9lwyPwXQ9kYTYUJV4qdEeFHMIggk2COOD6DH2
+
 image: Visual Studio 2017
 
 install:
+  - ps: Install-Module InvokeBuild -Force
   - ps: Install-Module Pester -Force -SkipPublisherCheck
   - docker version
 
 platform:
   - x64
 
+build_script:
+  - ps: Invoke-Build Build
+
 test_script:
   - ps: .\Test\appveyor.Pester.ps1
+
+after_test:
+  - ps: Invoke-Build Publish
