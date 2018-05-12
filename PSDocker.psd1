@@ -30,7 +30,7 @@ CompanyName = ''
 Copyright = '(c) 2018 s.kampmann. Alle Rechte vorbehalten.'
 
 # Beschreibung der von diesem Modul bereitgestellten Funktionen
-# Description = ''
+Description = 'Cmdlets that wrap Docker CLI with error handling.'
 
 # Die für dieses Modul mindestens erforderliche Version des Windows PowerShell-Moduls
 # PowerShellVersion = ''
@@ -95,13 +95,13 @@ PrivateData = @{
     PSData = @{
 
         # 'Tags' wurde auf das Modul angewendet und unterstützt die Modulermittlung in Onlinekatalogen.
-        # Tags = @()
+        Tags = @('Docker')
 
         # Eine URL zur Lizenz für dieses Modul.
-        # LicenseUri = ''
+        LicenseUri = 'https://github.com/abbgrade/PSDocker/blob/master/LICENSE'
 
         # Eine URL zur Hauptwebsite für dieses Projekt.
-        # ProjectUri = ''
+        ProjectUri = 'https://github.com/abbgrade/PSDocker'
 
         # Eine URL zu einem Symbol, das das Modul darstellt.
         # IconUri = ''
@@ -117,7 +117,7 @@ PrivateData = @{
 # HelpInfoURI = ''
 
 # Standardpräfix für Befehle, die aus diesem Modul exportiert werden. Das Standardpräfix kann mit "Import-Module -Prefix" überschrieben werden.
-# DefaultCommandPrefix = ''
+DefaultCommandPrefix = 'Docker'
 
 }
 
