@@ -34,7 +34,7 @@ function New-Container {
 
     if ( $Ports ) {
         foreach ( $item in $Ports.GetEnumerator() ) {
-            $arguments.Add( "-p $( $item.Name)=$( $item.Value )") | Out-Null
+            $arguments.Add( "-p $( $item.Name):$( $item.Value )") | Out-Null
         }
     }
 
