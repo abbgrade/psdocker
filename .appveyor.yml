@@ -1,0 +1,13 @@
+version: '1.0.{build}'
+
+image: Visual Studio 2017
+
+install:
+  - ps: Install-Module Pester -Force -SkipPublisherCheck
+  - docker version
+
+platform:
+  - x64
+
+test_script:
+  - ps: .\Test\appveyor.Pester.ps1
