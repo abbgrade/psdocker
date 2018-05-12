@@ -23,12 +23,25 @@ Describe 'Module Tests' {
         }
     }
     Context 'Cmdlets' {
-        It 'Test docker pull' {
-            Install-DockerImage -Image 'kitematic/hello-world-nginx'
+
+        BeforeAll {
+            $image = 'microsoft/nanoserver'
+        }
+
+        It 'docker pull' {
+            Install-DockerImage -Image $image
             try {
                 Install-DockerImage -Image 'foobar'
                 Should Throw
             } catch {}
+        }
+        It 'docker run' {
+            try {
+                New-DockerContainer
+                Should Throw
+            } catch {}
+
+            New-DockerContainer -Image $image | Should Be
         }
     }
 }

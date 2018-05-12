@@ -10,5 +10,11 @@ Install PSDocker from [PowerShell Gallery](https://www.powershellgallery.com/pac
 
 ## Usage
 
-    Import-Module PSDocker -Prefix 'Docker'
-    Install-DockerImage -Image 'kitematic/hello-world-nginx'
+Get a image from the docker repository
+
+    Install-DockerImage -Image 'microsoft/nanoserver'
+
+Create a new container
+
+    New-DockerContainer -Image 'microsoft/nanoserver'
+
