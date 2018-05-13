@@ -24,12 +24,14 @@ function Invoke-ClientCommand {
     $process.StartInfo.CreateNoWindow = $true
 
     # Connect output events
-    $standardOutputBuffer = New-Object System.Collections.Concurrent.ConcurrentQueue[string]
-    $standardErrorBuffer = New-Object System.Collections.Concurrent.ConcurrentQueue[string]
+    $standardOutputBuffer = New-Object System.Collections.SortedList
+    $standardErrorBuffer = New-Object System.Collections.SortedList
 
     $EventAction = {
         if ( -not [String]::IsNullOrEmpty( $EventArgs.Data )) {
-            $Event.MessageData.Enqueue( $EventArgs.Data )
+            $Event.MessageData.Add( $event.EventIdentifier, $EventArgs.Data )
+
+            # Write-Verbose "$( $event.EventIdentifier ): $( $eventArgs.Data )"
         }
     }
 
@@ -64,19 +66,19 @@ function Invoke-ClientCommand {
 
     # Process output
 
-    if ( $standardOutputBuffer.Length ) {
-        foreach ( $line in $standardOutputBuffer ) { # $standardOutput.Split([Environment]::NewLine) ) {
+    if ( $standardOutputBuffer.Count ) {
+        foreach ( $line in $standardOutputBuffer.Values ) { # $standardOutput.Split([Environment]::NewLine) ) {
             if ( $line ) {
                 Write-Verbose $line -Verbose
             }
         }
         if ( $TableOutput ) {
-            Convert-ToTable -Content $standardOutputBuffer -ColumnNames $ColumnNames
+            Convert-ToTable -Content $standardOutputBuffer.Values -ColumnNames $ColumnNames
         }
     }
 
-    if ( $standardErrorBuffer.Length -or $process.ExitCode ) {
-        foreach ( $line in $standardErrorBuffer) {
+    if ( $standardErrorBuffer.Count -or $process.ExitCode ) {
+        foreach ( $line in $standardErrorBuffer.Values ) {
             if ( $line ) {
                 Write-Warning $line
             }
