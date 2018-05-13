@@ -8,7 +8,10 @@ function Invoke-ClientCommand {
         $TimeoutMS = $null,
 
         [switch]
-        $TableOutput
+        $TableOutput,
+
+        [hashtable]
+        $ColumnNames
     )
 
     # Configure process
@@ -61,7 +64,7 @@ function Invoke-ClientCommand {
             }
         }
         if ( $TableOutput ) {
-            Convert-ToTable -Content $output
+            Convert-ToTable -Content $output -ColumnNames $ColumnNames
         }
     }
     $standardError = $standardErrorBuffer.ToString().Trim()

@@ -1,7 +1,11 @@
 function Convert-ToTable {
 
     param (
-        [string] $Content
+        [string]
+        $Content,
+
+        [hashtable]
+        $ColumnNames
     )
 
     $rows = $Content.Split([Environment]::NewLine)
@@ -21,8 +25,12 @@ function Convert-ToTable {
             $length = $null
         }
 
+        if ( $ColumnNames -and $ColumnNames.ContainsKey( $columnName )) {
+            $columnName = $ColumnNames[ $columnName ]
+        }
+
         $schema.Add(@{
-            Name = $columnName.ToLower()
+            Name = $columnName
             Offset = $offset
             Length = $length
         }) | Out-Null

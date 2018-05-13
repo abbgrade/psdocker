@@ -8,7 +8,7 @@ function New-Container {
         [string]
         $Image,
 
-        [Hashtable]
+        [hashtable]
         $Environment,
 
         [hashtable]
@@ -45,6 +45,8 @@ function New-Container {
     $arguments.Add( $Image ) | Out-Null
 
     Invoke-ClientCommand -ArgumentList $arguments
+
+    Get-Container -Latest
 
     Write-Debug "Docker container created."
 }

@@ -22,6 +22,14 @@ function Get-Container {
 
     # $arguments.Add( '--no-trunc' ) | Out-Null
 
-    Invoke-ClientCommand -ArgumentList $arguments -TableOutput
+    Invoke-ClientCommand -ArgumentList $arguments -TableOutput -ColumnNames @{
+        'CONTAINER ID' = 'ContainerID'
+        'IMAGE' = 'Image'
+        'COMMAND' = 'Command'
+        'CREATED' = 'Created'
+        'STATUS' = 'Status'
+        'PORTS' = 'Ports'
+        'NAMES' = 'Name'
+    }
     Write-Debug "Docker container removed."
 }
