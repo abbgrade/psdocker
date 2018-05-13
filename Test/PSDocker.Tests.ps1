@@ -32,7 +32,28 @@ Describe 'Module Tests' {
             } | Should Throw
         }
         It 'docker ps' {
-            $container = Get-DockerContainer | Should Not Be $null
+            $baseLineContainer = @(
+                ( New-DockerContainer -Image $image ),
+                ( New-DockerContainer -Image $image )
+            )
+
+            $previousCount = ( Get-DockerContainer ).Length
+
+            $container = @(
+                ( New-DockerContainer -Image $image ),
+                ( New-DockerContainer -Image $image ),
+                ( New-DockerContainer -Image $image ),
+                ( New-DockerContainer -Image $image )
+            )
+
+
+            $afterCount = ( Get-DockerContainer ).Length
+
+            $afterCount | Should Be $( $previousCount + 4 )
+
+            ( $baseLineContainer + $container ) | ForEach-Object {
+                Remove-DockerContainer -Name $_.Name
+            }
         }
         It 'docker run' {
             {

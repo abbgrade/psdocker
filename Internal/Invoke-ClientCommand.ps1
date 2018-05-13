@@ -21,55 +21,63 @@ function Invoke-ClientCommand {
     $process.StartInfo.RedirectStandardOutput = $true
     $process.StartInfo.RedirectStandardError = $true
     $process.StartInfo.UseShellExecute = $false
-    $process.StartInfo.CreateNoWindow = $true
+    # $process.StartInfo.CreateNoWindow = $true
 
     # Connect output events
-    $standardOutputBuffer = New-Object System.Text.StringBuilder
-    $standardErrorBuffer = New-Object System.Text.StringBuilder
+    $standardOutputBuffer = New-Object System.Collections.ArrayList
+    $standardErrorBuffer = New-Object System.Collections.ArrayList
 
-    Unregister-Event -SourceIdentifier StdOutEvent -ErrorAction SilentlyContinue
-    Register-ObjectEvent -InputObject $process -SourceIdentifier StdOutEvent -Action {
-        $event.MessageData.AppendLine( $eventArgs.Data )
-    } -MessageData $standardOutputBuffer -EventName 'OutputDataReceived' | Out-Null
-
-    Unregister-Event -SourceIdentifier StdErrEvent -ErrorAction SilentlyContinue
-    Register-ObjectEvent -InputObject $process -SourceIdentifier StdErrEvent -Action {
-        $event.MessageData.AppendLine( $eventArgs.Data )
-    } -MessageData $standardErrorBuffer -EventName 'ErrorDataReceived' | Out-Null
-
-    $processCall = "$( $process.StartInfo.FileName ) $( $process.StartInfo.Arguments )"
-    if ( $processCall.Length -ge 250 ) {
-        $processCall = "$( $processCall.Substring(252) )..."
+    $EventAction = {
+        if (! [String]::IsNullOrEmpty($EventArgs.Data)) {
+            $Event.MessageData.Add($EventArgs.Data)
+        }
     }
-    Write-Debug "Process started: $processCall"
-    $process.Start() | Out-Null
-    $process.BeginOutputReadLine()
-    $process.BeginErrorReadLine()
 
-    # Wait for exit
-    [bool] $timeout = $false
-    if (( -not $TimeoutMS ) -or $process.WaitForExit( $TimeoutMS )) {
-        $process.WaitForExit() # Ensure streams are flushed
-        Write-Debug "Process exited (code $( $process.ExitCode ))"
-    } else {
-        $timeout = $true
+    $outputEvent = Register-ObjectEvent -InputObject $process `
+        -EventName 'OutputDataReceived' -Action $EventAction -MessageData $standardOutputBuffer
+    $errorEvent = Register-ObjectEvent -InputObject $process `
+        -EventName 'ErrorDataReceived' -Action $EventAction -MessageData $standardErrorBuffer
+
+    try {
+        $processCall = "$( $process.StartInfo.FileName ) $( $process.StartInfo.Arguments )"
+        if ( $processCall.Length -ge 250 ) { $processCall = "$( $processCall.Substring(252) )..." }
+        Write-Debug "Process started: $processCall"
+
+        $process.Start() | Out-Null
+        $process.BeginOutputReadLine()
+        $process.BeginErrorReadLine()
+
+        # Wait for exit
+        [bool] $timeout = $false
+        if (( -not $TimeoutMS ) -or $process.WaitForExit( $TimeoutMS )) {
+            $process.WaitForExit() # Ensure streams are flushed
+            Write-Debug "Process exited (code $( $process.ExitCode ))"
+        } else {
+            $timeout = $true
+        }
+    } catch {
+        throw
+    } finally {
+        Unregister-Event -SourceIdentifier $outputEvent.Name
+        Unregister-Event -SourceIdentifier $errorEvent.Name
     }
 
     # Process output
+
+    $standardOutput = $standardOutputBuffer -join [Environment]::NewLine
     if ( $standardOutputBuffer.Length ) {
-        $output = $standardOutputBuffer.ToString()
-        foreach ( $line in $output.Split([Environment]::NewLine) ) {
+        foreach ( $line in $standardOutputBuffer ) { # $standardOutput.Split([Environment]::NewLine) ) {
             if ( $line ) {
-                Write-Verbose $line
+                Write-Verbose $line -Verbose
             }
         }
         if ( $TableOutput ) {
-            Convert-ToTable -Content $output -ColumnNames $ColumnNames
+            Convert-ToTable -Content $standardOutputBuffer -ColumnNames $ColumnNames
         }
     }
-    $standardError = $standardErrorBuffer.ToString().Trim()
-    if ( $standardError.Length -or $process.ExitCode ) {
-        foreach ( $line in $standardError.Split([Environment]::NewLine)) {
+
+    if ( $standardErrorBuffer.Length -or $process.ExitCode ) {
+        foreach ( $line in $standardErrorBuffer) {
             if ( $line ) {
                 Write-Warning $line
             }

@@ -20,7 +20,7 @@ function Get-Container {
         $arguments.Add( '--latest' ) | Out-Null
     }
 
-    # $arguments.Add( '--no-trunc' ) | Out-Null
+    $arguments.Add( '--no-trunc' ) | Out-Null
 
     Invoke-ClientCommand -ArgumentList $arguments -TableOutput -ColumnNames @{
         'CONTAINER ID' = 'ContainerID'

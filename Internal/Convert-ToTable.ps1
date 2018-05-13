@@ -1,27 +1,32 @@
 function Convert-ToTable {
 
     param (
-        [string]
+        [string[]]
         $Content,
 
         [hashtable]
         $ColumnNames
     )
 
-    $rows = $Content.Split([Environment]::NewLine)
+    $header = $Content[0]
+    $lines = New-Object System.Collections.ArrayList
+    foreach ( $line in $Content[1..$Content.Length]) {
+        if ( $line ) {
+            $lines.Add($line)
+        }
+    }
 
     # Extract schema
-    $headerRow = $rows[0]
     $schema = New-Object System.Collections.ArrayList
     $offset = 0
     do {
-        $index = $headerRow.IndexOf('  ')
+        $index = $header.IndexOf('  ')
 
         if ($index -gt 0) {
-            $columnName = $headerRow.Substring(0, $index)
-            $length = $headerRow.IndexOf($headerRow.Substring($index).Trim())
+            $columnName = $header.Substring(0, $index)
+            $length = $header.IndexOf($header.Substring($index).Trim())
         } else {
-            $columnName = $headerRow.Trim()
+            $columnName = $header.Trim()
             $length = $null
         }
 
@@ -34,23 +39,21 @@ function Convert-ToTable {
             Offset = $offset
             Length = $length
         }) | Out-Null
-        $headerRow = $headerRow.Substring($length)
+        $header = $header.Substring($length)
         $offset += $length
     } while ( $length )
 
     # Extract data
-    foreach ( $row in $rows[1..$rows.Length] ) {
-        if ( $row ) {
-            $data = @{}
-            foreach ( $column in $schema ) {
-                if ( $column.Length ) {
-                    $value = $row.Substring($column.Offset, $column.Length)
-                } else {
-                    $value = $row.Substring($column.Offset)
-                }
-                $data[$column.Name] = $value.Trim()
+    foreach ( $line in $lines ) {
+        $row = @{}
+        foreach ( $column in $schema ) {
+            if ( $column.Length ) {
+                $value = $line.Substring($column.Offset, $column.Length)
+            } else {
+                $value = $line.Substring($column.Offset)
             }
-            New-Object PSObject -Property $data
+            $row[$column.Name] = $value.Trim()
         }
+        New-Object PSObject -Property $row
     }
 }
