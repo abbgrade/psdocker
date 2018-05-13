@@ -5,7 +5,10 @@ function Invoke-DockerCLI {
         $ArgumentList,
 
         [int]
-        $TimeoutMS = $null
+        $TimeoutMS = $null,
+
+        [switch]
+        $TableOutput
     )
 
     $process = New-Object System.Diagnostics.Process
@@ -45,8 +48,24 @@ function Invoke-DockerCLI {
         Write-Verbose "Process timed out"
     }
 
-    if ( $standardOutputBuffer.Length ) { $standardOutputBuffer.ToString().Split([Environment]::NewLine) | Foreach-Object { if ( $_ ) { Write-Debug $_ }}}
-    if ( $standardErrorBuffer.Length ) { $standardErrorBuffer.ToString().Split([Environment]::NewLine) | Foreach-Object { if ( $_ ) { Write-Error $_ }}}
+    if ( $standardOutputBuffer.Length ) {
+        $output = $standardOutputBuffer.ToString()
+        foreach ( $line in $output.Split([Environment]::NewLine) ) {
+            if ( $line ) {
+                Write-Debug $line
+            }
+        }
+        if ( $TableOutput ) {
+            Convert-ToTable -Content $output
+        }
+    }
+    if ( $standardErrorBuffer.Length ) {
+        foreach ( $line in $standardErrorBuffer.ToString().Split([Environment]::NewLine)) {
+            if ( $line ) {
+                Write-Error $line
+            }
+        }
+    }
 
     if ( $timeout ) {
         throw "Process timed out"

@@ -35,6 +35,10 @@ Describe 'Module Tests' {
                 Should Throw
             } catch {}
         }
+        It 'docker ps' {
+            $container = Get-DockerContainer
+            $container.Length
+        }
         It 'docker run' {
             try {
                 New-DockerContainer

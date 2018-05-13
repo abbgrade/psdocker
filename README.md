@@ -26,3 +26,6 @@ Remove a container
 
     Remove-DockerContainer -Name 'mycontainer'
 
+Get container information
+
+    Get-DockerContainer
