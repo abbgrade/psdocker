@@ -37,7 +37,7 @@ Describe 'Module Tests' {
                 ( New-DockerContainer -Image $image )
             )
 
-            $previousCount = ( Get-DockerContainer ).Length
+            $previousCount = ( Get-DockerContainer ).Count
 
             $container = @(
                 ( New-DockerContainer -Image $image ),
@@ -47,7 +47,7 @@ Describe 'Module Tests' {
             )
 
 
-            $afterCount = ( Get-DockerContainer ).Length
+            $afterCount = ( Get-DockerContainer ).Count
 
             $afterCount | Should Be $( $previousCount + 4 )
 
@@ -62,6 +62,7 @@ Describe 'Module Tests' {
 
             $container = New-DockerContainer -Image $image -Environment @{"A" = 1; "B" = "C"}
             $container.Image | Should Be $image
+            Remove-DockerContainer -Name $container.Name
         }
         It 'docker remove' {
             $container = New-DockerContainer -Image $image
