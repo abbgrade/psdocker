@@ -23,15 +23,15 @@ task Publish {
 
 	## Remove all of the files/folders to exclude out of the main folder
 	$excludeFromPublish = @(
-		'PSDocker\\psdocker\.nuspec'
-		'PSDocker\\\.appveyor\.yml'
-		'PSDocker\\PSDocker\.build\.ps1'
-		'PSDocker\\Test\\appveyor\.Pester\.yml'
-		'PSDocker\\\.git'
-		'PSDocker\\\.vscode'
+		'psdocker\.nuspec'
+		'\.appveyor\.yml'
+		'PSDocker\.build\.ps1'
+		'Test\\appveyor\.Pester\.yml'
+		'\.git'
+		'\.vscode'
 	)
 	$exclude = $excludeFromPublish -join '|'
-	Get-ChildItem -Path $env:APPVEYOR_BUILD_FOLDER -Recurse | Where-Object { $_.FullName -match $exclude } | Remove-Item -Force -Recurse
+	Get-ChildItem -Path $env:APPVEYOR_BUILD_FOLDER -Recurse -Force | Where-Object { $_.FullName -match $exclude } | Remove-Item -Force -Recurse
 
 	## Publish module to PowerShell Gallery
 	$publishParams = @{
