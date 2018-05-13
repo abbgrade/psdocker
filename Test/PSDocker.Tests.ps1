@@ -43,6 +43,13 @@ Describe 'Module Tests' {
 
             New-DockerContainer -Image $image -Environment @{"A" = 1; "B" = "C"} | Should Be
         }
+        It 'docker remove' {
+            $containerName = 'testcontainer'
+            try {
+                New-DockerContainer -Image $image -Name $containerName
+            } catch {}
+            Remove-DockerContainer -Name $containerName
+        }
     }
 }
 

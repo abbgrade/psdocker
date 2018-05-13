@@ -16,5 +16,13 @@ Get a image from the docker repository
 
 Create a new container
 
-    New-DockerContainer -Image 'microsoft/nanoserver'
+    New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer'
+
+Stop a container
+
+    Stop-DockerContainer -Name 'mycontainer'
+
+Remove a container
+
+    Remove-DockerContainer -Name 'mycontainer'
 
