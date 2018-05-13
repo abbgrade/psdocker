@@ -30,7 +30,10 @@ function Convert-ToTable {
             $length = $null
         }
 
-        if ( $ColumnNames -and $ColumnNames.ContainsKey( $columnName )) {
+        if ( $ColumnNames ) {
+            if ( -not $ColumnNames.ContainsKey( $columnName ) ) {
+                throw "Unexpected column '$columnName'"
+            }
             $columnName = $ColumnNames[ $columnName ]
         }
 
