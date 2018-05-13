@@ -1,5 +1,5 @@
 
-$ErrorActionPreference = "Stop"
+$ErrorActionPreference = "Continue"
 $DebugPreference = "Continue"
 $VerbosePreference = "Continue"
 
@@ -30,20 +30,18 @@ Describe 'Module Tests' {
 
         It 'docker pull' {
             Install-DockerImage -Image $image
-            try {
+            {
                 Install-DockerImage -Image 'foobar'
-                Should Throw
-            } catch {}
+            } | Should Throw
         }
         It 'docker ps' {
             $container = Get-DockerContainer
             $container.Length
         }
         It 'docker run' {
-            try {
+            {
                 New-DockerContainer
-                Should Throw
-            } catch {}
+            } | Should Throw
 
             New-DockerContainer -Image $image -Environment @{"A" = 1; "B" = "C"} | Should Be
         }
