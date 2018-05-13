@@ -21,15 +21,15 @@ function Invoke-ClientCommand {
     $process.StartInfo.RedirectStandardOutput = $true
     $process.StartInfo.RedirectStandardError = $true
     $process.StartInfo.UseShellExecute = $false
-    # $process.StartInfo.CreateNoWindow = $true
+    $process.StartInfo.CreateNoWindow = $true
 
     # Connect output events
-    $standardOutputBuffer = New-Object System.Collections.ArrayList
-    $standardErrorBuffer = New-Object System.Collections.ArrayList
+    $standardOutputBuffer = New-Object System.Collections.Concurrent.ConcurrentQueue[string]
+    $standardErrorBuffer = New-Object System.Collections.Concurrent.ConcurrentQueue[string]
 
     $EventAction = {
-        if (! [String]::IsNullOrEmpty($EventArgs.Data)) {
-            $Event.MessageData.Add($EventArgs.Data)
+        if ( -not [String]::IsNullOrEmpty( $EventArgs.Data )) {
+            $Event.MessageData.Enqueue( $EventArgs.Data )
         }
     }
 
@@ -64,7 +64,6 @@ function Invoke-ClientCommand {
 
     # Process output
 
-    $standardOutput = $standardOutputBuffer -join [Environment]::NewLine
     if ( $standardOutputBuffer.Length ) {
         foreach ( $line in $standardOutputBuffer ) { # $standardOutput.Split([Environment]::NewLine) ) {
             if ( $line ) {
