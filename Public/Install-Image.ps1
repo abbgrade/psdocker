@@ -6,6 +6,6 @@ function Install-Image {
         $Image
     )
 
-    Invoke-DockerCLI "pull", $Image
+    Invoke-ClientCommand "pull", $Image
     Write-Debug "Docker image '$Image' pulled."
 }

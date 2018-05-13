@@ -6,6 +6,6 @@ function Stop-Container {
         $Name
     )
 
-    Invoke-DockerCLI 'stop', $Name
+    Invoke-ClientCommand 'stop', $Name
     Write-Debug "Docker container removed."
 }

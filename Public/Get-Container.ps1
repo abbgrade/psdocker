@@ -22,6 +22,6 @@ function Get-Container {
 
     # $arguments.Add( '--no-trunc' ) | Out-Null
 
-    Invoke-DockerCLI -ArgumentList $arguments -TableOutput
+    Invoke-ClientCommand -ArgumentList $arguments -TableOutput
     Write-Debug "Docker container removed."
 }

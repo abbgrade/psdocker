@@ -13,6 +13,6 @@ function Remove-Container {
         Stop-Container -Name $Name
     }
 
-    Invoke-DockerCLI 'rm', $Name
+    Invoke-ClientCommand 'rm', $Name
     Write-Debug "Docker container removed."
 }

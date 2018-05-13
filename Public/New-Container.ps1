@@ -44,7 +44,7 @@ function New-Container {
 
     $arguments.Add( $Image ) | Out-Null
 
-    Invoke-DockerCLI -ArgumentList $arguments
+    Invoke-ClientCommand -ArgumentList $arguments
 
     Write-Debug "Docker container created."
 }

@@ -1,4 +1,4 @@
-function Invoke-DockerCLI {
+function Invoke-ClientCommand {
 
     param (
         [string[]]
