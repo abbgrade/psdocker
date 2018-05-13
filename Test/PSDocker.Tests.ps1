@@ -7,6 +7,7 @@ if ( $PSScriptRoot ) { $ScriptRoot = $PSScriptRoot } else { $ScriptRoot = Get-Lo
 $ModuleManifestPath = "$ScriptRoot\..\PSDocker.psd1"
 Import-Module "$ScriptRoot\..\PSDocker.psm1" -Prefix 'Docker' -Force
 
+$image = 'microsoft/nanoserver'
 Describe 'Module Tests' {
 
     Context 'Module' {
@@ -22,11 +23,7 @@ Describe 'Module Tests' {
             $dockerService.Status | Should -Be "Running"
         }
     }
-    Context 'Cmdlets' {
-
-        BeforeAll {
-            $image = 'microsoft/nanoserver'
-        }
+    Context 'Lifecycle Cmdlets' {
 
         It 'docker pull' {
             Install-DockerImage -Image $image
@@ -35,8 +32,7 @@ Describe 'Module Tests' {
             } | Should Throw
         }
         It 'docker ps' {
-            $container = Get-DockerContainer
-            $container.Length
+            $container = Get-DockerContainer | Should Not Be $null
         }
         It 'docker run' {
             {
@@ -49,6 +45,17 @@ Describe 'Module Tests' {
         It 'docker remove' {
             $container = New-DockerContainer -Image $image
             Remove-DockerContainer -Name $container.Name
+        }
+    }
+    Context 'Container Cmdlets' {
+        BeforeAll {
+            $container = New-DockerContainer -Image $image
+        }
+        It 'docker exec' {
+            Invoke-DockerContainerCommand -Name $container.Name -Command "hostname"
+        }
+        AfterAll {
+            Remove-DockerContainer -Name $container.Name -Force
         }
     }
 }
