@@ -23,13 +23,12 @@ task Publish {
 
 	## Remove all of the files/folders to exclude out of the main folder
 	$excludeFromPublish = @(
-		'psdocker\\PSDocker\.build\.ps1'
-		'psdocker\\appveyor\.yml'
-		'psdocker\\Test\\appveyor\.Pester\.yml'
-		'psdocker\\\.git'
-		'psdocker\\\.vscode'
-		'psdocker\\\.nuspec'
-		'psdocker\\README\.md'
+		'PSDocker\\psdocker\.nuspec'
+		'PSDocker\\\.appveyor\.yml'
+		'PSDocker\\PSDocker\.build\.ps1'
+		'PSDocker\\Test\\appveyor\.Pester\.yml'
+		'PSDocker\\\.git'
+		'PSDocker\\\.vscode'
 	)
 	$exclude = $excludeFromPublish -join '|'
 	Get-ChildItem -Path $env:APPVEYOR_BUILD_FOLDER -Recurse | Where-Object { $_.FullName -match $exclude } | Remove-Item -Force -Recurse
