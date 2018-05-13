@@ -29,9 +29,7 @@ function Invoke-ClientCommand {
 
     $EventAction = {
         if ( -not [String]::IsNullOrEmpty( $EventArgs.Data )) {
-            $Event.MessageData.Add( $event.EventIdentifier, $EventArgs.Data )
-
-            # Write-Verbose "$( $event.EventIdentifier ): $( $eventArgs.Data )"
+            $Event.MessageData.Add( $event.EventIdentifier, $EventArgs.Data ) | Out-Null
         }
     }
 

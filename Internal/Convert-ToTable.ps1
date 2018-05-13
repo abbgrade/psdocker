@@ -12,7 +12,7 @@ function Convert-ToTable {
     $lines = New-Object System.Collections.ArrayList
     foreach ( $line in $Content[1..$Content.Length]) {
         if ( $line ) {
-            $lines.Add($line)
+            $lines.Add($line) | Out-Null
         }
     }
 
