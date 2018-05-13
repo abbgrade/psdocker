@@ -46,7 +46,9 @@ function New-Container {
 
     Invoke-ClientCommand -ArgumentList $arguments
 
-    Get-Container -Latest
+    $container = Get-Container -Latest
 
-    Write-Debug "Docker container created."
+    Write-Debug "Docker container '$( $container.Name )' created."
+
+    $container
 }
