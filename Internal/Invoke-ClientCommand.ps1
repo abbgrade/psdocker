@@ -30,6 +30,7 @@ function Invoke-ClientCommand {
     $EventAction = {
         if ( -not [String]::IsNullOrEmpty( $EventArgs.Data )) {
             $Event.MessageData.Add( $event.EventIdentifier, $EventArgs.Data ) | Out-Null
+            Write-Verbose $EventArgs.Data -Verbose
         }
     }
 
@@ -65,11 +66,6 @@ function Invoke-ClientCommand {
     # Process output
 
     if ( $standardOutputBuffer.Count ) {
-        foreach ( $line in $standardOutputBuffer.Values ) { # $standardOutput.Split([Environment]::NewLine) ) {
-            if ( $line ) {
-                Write-Verbose $line -Verbose
-            }
-        }
         if ( $TableOutput ) {
             Convert-ToTable -Content $standardOutputBuffer.Values -ColumnNames $ColumnNames
         }

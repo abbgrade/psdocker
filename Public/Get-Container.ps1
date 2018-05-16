@@ -5,7 +5,10 @@ function Get-Container {
         $Running,
 
         [switch]
-        $Latest
+        $Latest,
+
+        [string]
+        $Name
     )
 
     $arguments = New-Object System.Collections.ArrayList
@@ -18,6 +21,10 @@ function Get-Container {
 
     if ( $Latest ) {
         $arguments.Add( '--latest' ) | Out-Null
+    }
+
+    if ( $Name ) {
+        $arguments.Add( "--filter name=$Name" ) | Out-Null
     }
 
     $arguments.Add( '--no-trunc' ) | Out-Null

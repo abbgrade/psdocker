@@ -26,7 +26,7 @@ task Publish {
 		'psdocker\.nuspec'
 		'\.appveyor\.yml'
 		'PSDocker\.build\.ps1'
-		'Test\\appveyor\.Pester\.yml'
+		'Test\\appveyor\.Pester\.ps1'
 		'\.git'
 		'\.vscode'
 	)

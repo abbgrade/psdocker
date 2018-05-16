@@ -7,7 +7,7 @@ if ( $PSScriptRoot ) { $ScriptRoot = $PSScriptRoot } else { $ScriptRoot = Get-Lo
 $ModuleManifestPath = "$ScriptRoot\..\PSDocker.psd1"
 Import-Module "$ScriptRoot\..\PSDocker.psm1" -Prefix 'Docker' -Force
 
-$image = 'microsoft/nanoserver'
+$image = 'hello-world:latest'
 Describe 'Module Tests' {
 
     Context 'Module' {
@@ -71,7 +71,7 @@ Describe 'Module Tests' {
     }
     Context 'Container Cmdlets' {
         BeforeAll {
-            $container = New-DockerContainer -Image $image
+            $container = New-DockerContainer -Image 'microsoft/iis' -Detach
         }
         It 'docker exec' {
             Invoke-DockerContainerCommand -Name $container.Name -Command "hostname"

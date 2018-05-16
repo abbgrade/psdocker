@@ -29,3 +29,8 @@ Remove a container
 Get container information
 
     Get-DockerContainer
+
+Run a command in a docker container
+
+    $container = New-DockerContainer -Image 'microsoft/iis' -Detach
+    Invoke-DockerContainerCommand -Name $container.Name -Command "hostname"
