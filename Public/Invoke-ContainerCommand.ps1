@@ -10,8 +10,9 @@ function Invoke-ContainerCommand {
         $Command
     )
 
-    Get-Container -Name $Name
+    $container = Get-Container -Name $Name
+    Write-Debug "Container status is $( $container.Status )."
 
-    Invoke-ClientCommand 'exec', $Name, $Command
+    Invoke-ClientCommand 'exec', $Name, "'$Command'"
     Write-Debug "Command on Docker container executed."
 }
