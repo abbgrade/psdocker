@@ -74,11 +74,13 @@ Describe 'Module Tests' {
             $container = New-DockerContainer -Image 'microsoft/iis' -Detach
         }
         It 'docker exec' {
-            Invoke-DockerContainerCommand -Name $container.Name -Command "hostname"
+            Invoke-DockerContainerCommand -Name $container.Name -Command 'hostname'
+        }
+        It 'docker exec powershell' {
+            Invoke-DockerContainerCommand -Name $container.Name 'powershell.exe', '-Command', 'Get-Service -Name W3SVC'
         }
         AfterAll {
             Remove-DockerContainer -Name $container.Name -Force
         }
     }
 }
-

@@ -65,10 +65,8 @@ function Invoke-ClientCommand {
 
     # Process output
 
-    if ( $standardOutputBuffer.Count ) {
-        if ( $TableOutput ) {
-            Convert-ToTable -Content $standardOutputBuffer.Values -ColumnNames $ColumnNames
-        }
+    if ( $standardOutputBuffer.Count -and $TableOutput ) {
+        Convert-ToTable -Content $standardOutputBuffer.Values -ColumnNames $ColumnNames
     }
 
     if ( $standardErrorBuffer.Count -or $process.ExitCode ) {

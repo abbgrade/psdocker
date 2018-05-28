@@ -7,12 +7,15 @@ function Invoke-ContainerCommand {
 
         [ValidateNotNullOrEmpty()]
         [string]
-        $Command
+        $Command,
+
+        [string[]]
+        $Arguments
     )
 
     $container = Get-Container -Name $Name
-    Write-Debug "Container status is $( $container.Status )."
+    Write-Debug "Container status is '$( $container.Status )'."
 
-    Invoke-ClientCommand 'exec', $Name, "'$Command'"
+    Invoke-ClientCommand 'exec', $Name, ( @() + $Command + $Arguments )
     Write-Debug "Command on Docker container executed."
 }
