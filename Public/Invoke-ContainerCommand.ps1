@@ -10,12 +10,18 @@ function Invoke-ContainerCommand {
         $Command,
 
         [string[]]
-        $Arguments
+        $Arguments,
+
+        [int]
+        $TimeoutMS = $null,
+
+        [switch]
+        $StringOutput
     )
 
     $container = Get-Container -Name $Name
     Write-Debug "Container status is '$( $container.Status )'."
 
-    Invoke-ClientCommand 'exec', $Name, ( @() + $Command + $Arguments )
+    Invoke-ClientCommand -ArgumentList ( @( 'exec', $Name, $Command ) + $Arguments ) -StringOutput:$StringOutput -TimeoutMS $TimeoutMS
     Write-Debug "Command on Docker container executed."
 }
