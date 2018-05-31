@@ -25,7 +25,9 @@ function Get-Service {
             $status = $null
             try {
                 $status = [Enum]::ToObject([System.ServiceProcess.ServiceControllerStatus], $_.Status)
-            } catch {}
+            } catch {
+                Write-Warning $_.Exception
+            }
 
             New-Object PSObject -Property @{
                 Name  = $_.Name
