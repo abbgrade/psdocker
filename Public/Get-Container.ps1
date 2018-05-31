@@ -38,5 +38,4 @@ function Get-Container {
         'PORTS' = 'Ports'
         'NAMES' = 'Name'
     }
-    Write-Debug "Docker container removed."
 }
