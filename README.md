@@ -33,4 +33,9 @@ Get container information
 Run a command in a docker container
 
     $container = New-DockerContainer -Image 'microsoft/iis' -Detach
-    Invoke-DockerContainerCommand -Name $container.Name -Command "hostname"
+    Invoke-DockerContainerCommand -Name $container.Name -Command "hostname" -StringOutput
+
+Get the status of a windows services in a container
+
+    $container = New-DockerContainer -Image 'microsoft/iis' -Detach
+    Get-DockerService -ContainerName $container.Name -Name 'W3SVC'

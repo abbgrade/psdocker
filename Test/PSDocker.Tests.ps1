@@ -1,23 +1,22 @@
 
 $ErrorActionPreference = "Continue"
 $DebugPreference = "Continue"
-$VerbosePreference = "Continue"
+$VerbosePreference = "Continue" # "SilentlyContinue"
 
 if ( $PSScriptRoot ) { $ScriptRoot = $PSScriptRoot } else { $ScriptRoot = Get-Location }
 $ModuleManifestPath = "$ScriptRoot\..\PSDocker.psd1"
 Import-Module "$ScriptRoot\..\PSDocker.psm1" -Prefix 'Docker' -Force
 
-$image = 'hello-world:latest'
 Describe 'Module Tests' {
 
     Context 'Module' {
-        It 'Passes Test-ModuleManifest' {
-            Test-ModuleManifest -Path $ModuleManifestPath | Should Not BeNullOrEmpty
-            $? | Should Be $true
+        It 'ModuleManifest is valid' {
+            Test-ModuleManifest -Path $ModuleManifestPath | Should -Not -BeNullOrEmpty
+            $? | Should -Be $true
         }
     }
     Context "Docker Service" {
-        It "is running" {
+        It "Docker service is running" {
             $dockerService = Get-Service | Where-Object Name -eq "Docker"
             $dockerService | Should -Not -BeNullOrEmpty # Docker is not running
             $dockerService.Status | Should -Be "Running"
@@ -25,13 +24,18 @@ Describe 'Module Tests' {
     }
     Context 'Lifecycle Cmdlets' {
 
-        It 'docker pull' {
+        BeforeAll {
+            $image = 'hello-world:latest'
+        }
+        It 'docker pull works' {
             Install-DockerImage -Image $image
+        }
+        It 'docker pull throws on invalid image' {
             {
                 Install-DockerImage -Image 'foobar'
             } | Should Throw
         }
-        It 'docker ps' {
+        It 'docker ps returns the correct number of containers' {
             $baseLineContainer = @(
                 ( New-DockerContainer -Image $image ),
                 ( New-DockerContainer -Image $image )
@@ -49,38 +53,55 @@ Describe 'Module Tests' {
 
             $afterCount = ( Get-DockerContainer ).Count
 
-            $afterCount | Should Be $( $previousCount + 4 )
+            $afterCount | Should -Be $( $previousCount + 4 )
 
             ( $baseLineContainer + $container ) | ForEach-Object {
                 Remove-DockerContainer -Name $_.Name
             }
         }
-        It 'docker run' {
+        It 'docker run throws without image' {
             {
                 New-DockerContainer
-            } | Should Throw
-
+            } | Should -Throw
+        }
+        It 'docker run works' {
             $container = New-DockerContainer -Image $image -Environment @{"A" = 1; "B" = "C"}
-            $container.Image | Should Be $image
+            $container.Image | Should -Be $image
+
             Remove-DockerContainer -Name $container.Name
         }
-        It 'docker remove' {
+        It 'docker remove works' {
             $container = New-DockerContainer -Image $image
+
             Remove-DockerContainer -Name $container.Name
         }
     }
     Context 'Container Cmdlets' {
         BeforeAll {
-            $container = New-DockerContainer -Image 'microsoft/iis' -Detach
+            try {
+                $container = New-DockerContainer -Image 'microsoft/iis' -Detach
+            } catch {
+                Write-Error $_.Exception -ErrorAction 'Continue'
+                throw
+            }
         }
-        It 'docker exec' {
-            Invoke-DockerContainerCommand -Name $container.Name -Command 'hostname'
+        It 'docker exec does not throw' {
+            { Invoke-DockerContainerCommand -Name $container.Name 'hostname' } | Should -Not -Throw
+        }
+        It 'docker exec returns a valid output' {
+            Invoke-DockerContainerCommand -Name $container.Name -Command 'powershell' -Arguments 'echo foobar' -StringOutput | Should -Be 'foobar'
         }
         It 'docker exec powershell' {
-            Invoke-DockerContainerCommand -Name $container.Name 'powershell.exe', '-Command', 'Get-Service -Name W3SVC'
+            $service = Get-DockerService -ContainerName $container.Name -Name 'W3SVC'
+            $service.Name | Should -Be 'W3SVC'
         }
         AfterAll {
-            Remove-DockerContainer -Name $container.Name -Force
+            try {
+                Remove-DockerContainer -Name $container.Name -Force
+            } catch {
+                Write-Error $_.Exception -ErrorAction 'Continue'
+                throw
+            }
         }
     }
 }
