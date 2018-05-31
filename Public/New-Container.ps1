@@ -14,10 +14,14 @@ function New-Container {
         [hashtable]
         $Ports,
 
+        [int]
+        $TimeoutMS = $null,
+
         [switch]
         $Detach
     )
 
+    # prepare arugments
     $arguments = New-Object System.Collections.ArrayList
 
     $arguments.Add( 'run' ) | Out-Null
@@ -44,11 +48,16 @@ function New-Container {
 
     $arguments.Add( $Image ) | Out-Null
 
-    Invoke-ClientCommand -ArgumentList $arguments
+    # create container
+    Invoke-ClientCommand -ArgumentList $arguments -TimeoutMS $TimeoutMS
 
+    # check container
     $container = Get-Container -Latest
-
+    if ( -not $container.Name ) {
+        throw "Failed to create container"
+    }
     Write-Debug "Docker container '$( $container.Name )' created."
 
+    # return result
     $container
 }
