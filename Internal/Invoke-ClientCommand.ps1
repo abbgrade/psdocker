@@ -5,7 +5,10 @@ function Invoke-ClientCommand {
         $ArgumentList,
 
         [int]
-        $TimeoutMS = $null,
+        $TimeoutMS = 10000,
+
+        [switch]
+        $StringOutput,
 
         [switch]
         $TableOutput,
@@ -30,7 +33,7 @@ function Invoke-ClientCommand {
     $EventAction = {
         if ( -not [String]::IsNullOrEmpty( $EventArgs.Data )) {
             $Event.MessageData.Add( $event.EventIdentifier, $EventArgs.Data ) | Out-Null
-            Write-Verbose $EventArgs.Data -Verbose
+            Write-Verbose $EventArgs.Data
         }
     }
 
@@ -65,8 +68,12 @@ function Invoke-ClientCommand {
 
     # Process output
 
-    if ( $standardOutputBuffer.Count -and $TableOutput ) {
-        Convert-ToTable -Content $standardOutputBuffer.Values -ColumnNames $ColumnNames
+    if ( $standardOutputBuffer.Count  ) {
+        if ( $StringOutput ) {
+            $standardOutputBuffer.Values -join "`r`n"
+        } elseif ( $TableOutput ) {
+            Convert-ToTable -Content $standardOutputBuffer.Values -ColumnNames $ColumnNames
+        }
     }
 
     if ( $standardErrorBuffer.Count -or $process.ExitCode ) {
