@@ -16,6 +16,6 @@ function Remove-Container {
         Stop-Container -Name $Name
     }
 
-    Invoke-ClientCommand -TimeoutMS:$TimeoutMS 'rm', $Name
+    Invoke-ClientCommand -ArgumentList 'rm', $Name -TimeoutMS:$TimeoutMS
     Write-Debug "Docker container removed."
 }
