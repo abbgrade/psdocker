@@ -55,7 +55,7 @@ function Invoke-ClientCommand {
         [bool] $timeout = $false
         if (( -not $TimeoutMS ) -or $process.WaitForExit( $TimeoutMS )) {
             $process.WaitForExit() # Ensure streams are flushed
-            Write-Debug "Process exited (code $( $process.ExitCode ))"
+            Write-Debug "Process exited (code $( $process.ExitCode )) after $( $process.ExitTime - $process.StartTime )."
         } else {
             $timeout = $true
         }
@@ -67,7 +67,6 @@ function Invoke-ClientCommand {
     }
 
     # Process output
-
     if ( $standardOutputBuffer.Count  ) {
         if ( $StringOutput ) {
             $standardOutputBuffer.Values -join "`r`n"
@@ -76,16 +75,16 @@ function Invoke-ClientCommand {
         }
     }
 
+    # process error
     if ( $standardErrorBuffer.Count -or $process.ExitCode ) {
         foreach ( $line in $standardErrorBuffer.Values ) {
             if ( $line ) {
                 Write-Warning $line
             }
         }
-        throw "Proccess failed ($processCall)"
+        throw "Proccess failed ($processCall) after $( $process.ExitTime - $process.StartTime )."
     }
-
     if ( $timeout ) {
-        throw "Process timed out ($processCall)"
+        throw "Process timed out ($processCall) after $( $process.ExitTime - $process.StartTime )."
     }
 }
