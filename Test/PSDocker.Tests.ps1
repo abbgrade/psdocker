@@ -97,7 +97,9 @@ Describe 'Module Tests' {
         }
         AfterAll {
             try {
-                Remove-DockerContainer -Name $container.Name -Force
+                if ( $container ) {
+                    Remove-DockerContainer -Name $container.Name -Force
+                }
             } catch {
                 Write-Error $_.Exception -ErrorAction 'Continue'
                 throw
