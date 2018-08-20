@@ -39,3 +39,7 @@ Get the status of a windows services in a container
 
     $container = New-DockerContainer -Image 'microsoft/iis' -Detach
     Get-DockerService -ContainerName $container.Name -Name 'W3SVC'
+
+Get the version information of the Docker client or server
+
+    Get-DockerVersion

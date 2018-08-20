@@ -1,7 +1,9 @@
 
 $ErrorActionPreference = "Continue"
-$DebugPreference = "Continue"
-$VerbosePreference = "Continue" # "SilentlyContinue"
+$DebugPreference = "SilentlyContinue"
+# $DebugPreference = "Continue"
+$VerbosePreference = "SilentlyContinue"
+# $VerbosePreference = "Continue"
 
 if ( $PSScriptRoot ) { $ScriptRoot = $PSScriptRoot } else { $ScriptRoot = Get-Location }
 $ModuleManifestPath = "$ScriptRoot\..\PSDocker.psd1"
@@ -20,6 +22,10 @@ Describe 'Module Tests' {
             $dockerService = Get-Service | Where-Object Name -eq "Docker"
             $dockerService | Should -Not -BeNullOrEmpty # Docker is not running
             $dockerService.Status | Should -Be "Running"
+        }
+        It "Linux or Windows mode" {
+            $dockerVersion = Get-DockerVersion
+            $dockerVersion.Server.OSArch | Should Be "windows/amd64"
         }
     }
     Context 'Lifecycle Cmdlets' {
