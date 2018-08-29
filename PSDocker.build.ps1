@@ -28,7 +28,7 @@ task Publish {
 	# Publish module to PowerShell Gallery
 	$clientModulePath = "$env:APPVEYOR_BUILD_FOLDER\src\Modules\Client"
 
-	Get-ChildItem $clientModulePath -Recurse
+	Get-ChildItem $env:APPVEYOR_BUILD_FOLDER -Recurse
 
 	$publishParams = @{
 		Path        = $clientModulePath
