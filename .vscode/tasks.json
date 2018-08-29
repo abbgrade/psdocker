@@ -6,7 +6,7 @@
         "options": {
             "shell": {
                 "executable": "powershell.exe",
-                "args": [ "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command" ]
+                "args": [ "-NoProfile", "-ExecutionPolicy Bypass", "-NonInteractive", "-Command" ]
             }
         }
     },

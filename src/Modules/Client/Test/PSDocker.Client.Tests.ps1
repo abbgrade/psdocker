@@ -84,42 +84,4 @@ Describe 'Module Tests' {
             Remove-DockerContainer -Name $container.Name
         }
     }
-    Context 'Container Cmdlets' {
-        BeforeAll {
-            try {
-                $dockerArch = ( Get-DockerVersion ).Server.OSArch
-                [string] $image = $null
-                [string] $powershell = $null
-                switch ( $dockerArch ) {
-                    'windows/amd64' {
-                        $image = 'microsoft/iis'
-                        $powershell = 'powershell'
-                    }
-                    'linux/amd64' {
-                        $image = 'microsoft/powershell'
-                        $powershell = 'pwsh'
-                    }
-                    default {
-                        throw "missing test for $dockerArch"
-                    }
-                }
-
-                # $container = New-DockerContainer -Image $image -Detach
-                $container = New-DockerContainer -Image $image -Interactive -Detach
-            } catch {
-                Write-Error $_.Exception -ErrorAction 'Continue'
-                throw
-            }
-        }
-        AfterAll {
-            try {
-                if ( $container ) {
-                    Remove-DockerContainer -Name $container.Name -Force
-                }
-            } catch {
-                Write-Error $_.Exception -ErrorAction 'Continue'
-                throw
-            }
-        }
-    }
 }
