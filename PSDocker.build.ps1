@@ -26,8 +26,12 @@ task Test {
 
 task Publish {
 	# Publish module to PowerShell Gallery
+	$clientModulePath = "$env:APPVEYOR_BUILD_FOLDER\src\Modules\Client"
+
+	Get-ChildItem $clientModulePath -Recurse
+
 	$publishParams = @{
-		Path        = "$env:APPVEYOR_BUILD_FOLDER\src\Modules\Client"
+		Path        = $clientModulePath
 		NuGetApiKey = $env:nuget_apikey
 	}
 	Publish-Module @publishParams
