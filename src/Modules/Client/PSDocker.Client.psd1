@@ -1,5 +1,5 @@
 #
-# Modulmanifest für das Modul "PSDocker"
+# Modulmanifest für das Modul "PSDocker.Client"
 #
 # Generiert von: s.kampmann
 #
@@ -9,7 +9,7 @@
 @{
 
 # Die diesem Manifest zugeordnete Skript- oder Binärmoduldatei.
-RootModule = 'PSDocker.psm1'
+RootModule = 'PSDocker.Client.psm1'
 
 # Die Versionsnummer dieses Moduls
 ModuleVersion = '0.0.1'
@@ -120,5 +120,6 @@ PrivateData = @{
 DefaultCommandPrefix = 'Docker'
 
 }
+
 
 

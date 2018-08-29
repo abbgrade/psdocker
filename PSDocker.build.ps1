@@ -1,10 +1,16 @@
 task Build {
-    $manifestFilePath = "$env:APPVEYOR_BUILD_FOLDER\PSDocker.psd1"
+	if ( $env:APPVEYOR ) {
+		$buildPath = '.'
+	} else {
+		$buildPath = $env:APPVEYOR_BUILD_FOLDER
+	}
+    $manifestFilePath = "$buildPath\src\Modules\Client\PSDocker.Client.psd1"
 	$manifestContent = Get-Content -Path $manifestFilePath -Raw
 
 	## Update the module version based on the build version and limit exported functions
-	$replacements = @{
-		"ModuleVersion = '.*'" = "ModuleVersion = '$env:APPVEYOR_BUILD_VERSION'"
+	$replacements = @{}
+	if ( $env:APPVEYOR ) {
+		$replacements["ModuleVersion = '.*'"] = "ModuleVersion = '$env:APPVEYOR_BUILD_VERSION'"
 	}
 
 	$replacements.GetEnumerator() | ForEach-Object {

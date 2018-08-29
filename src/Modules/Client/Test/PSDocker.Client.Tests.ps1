@@ -1,13 +1,10 @@
-
 $ErrorActionPreference = "Continue"
 $DebugPreference = "SilentlyContinue"
-# $DebugPreference = "Continue"
 $VerbosePreference = "SilentlyContinue"
-# $VerbosePreference = "Continue"
 
 if ( $PSScriptRoot ) { $ScriptRoot = $PSScriptRoot } else { $ScriptRoot = Get-Location }
-$ModuleManifestPath = "$ScriptRoot\..\PSDocker.psd1"
-Import-Module "$ScriptRoot\..\PSDocker.psm1" -Prefix 'Docker' -Force
+$ModuleManifestPath = "$ScriptRoot\..\PSDocker.Client.psd1"
+Import-Module "$ScriptRoot\..\PSDocker.Client.psm1" -Prefix 'Docker' -Force
 
 Describe 'Module Tests' {
 
@@ -92,17 +89,14 @@ Describe 'Module Tests' {
             try {
                 $dockerArch = ( Get-DockerVersion ).Server.OSArch
                 [string] $image = $null
-                [string] $service = $null
                 [string] $powershell = $null
                 switch ( $dockerArch ) {
                     'windows/amd64' {
                         $image = 'microsoft/iis'
-                        $service = 'W3SVC'
                         $powershell = 'powershell'
                     }
                     'linux/amd64' {
                         $image = 'microsoft/powershell'
-                        $service = 'nginx'
                         $powershell = 'pwsh'
                     }
                     default {
@@ -111,21 +105,11 @@ Describe 'Module Tests' {
                 }
 
                 # $container = New-DockerContainer -Image $image -Detach
-                $container = New-DockerContainer -Image $image -Interactive -Detach -Verbose
+                $container = New-DockerContainer -Image $image -Interactive -Detach
             } catch {
                 Write-Error $_.Exception -ErrorAction 'Continue'
                 throw
             }
-        }
-        It 'docker exec does not throw' {
-            { Invoke-DockerContainerCommand -Name $container.Name 'hostname' } | Should -Not -Throw
-        }
-        It 'docker exec returns a valid output' {
-            Invoke-DockerContainerCommand -Name $container.Name -Command $powershell -Arguments '-c "Write-Host foobar"' -StringOutput | Should -Be 'foobar'
-        }
-        It 'docker exec powershell' {
-            $service = Get-DockerService -ContainerName $container.Name # -Name $service
-            $service.Name | Should -Be 'W3SVC'
         }
         AfterAll {
             try {
