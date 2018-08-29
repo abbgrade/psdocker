@@ -1,5 +1,5 @@
 function Convert-ToTable {
-
+    [CmdletBinding()]
     param (
         [string[]]
         $Content,

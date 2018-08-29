@@ -19,13 +19,18 @@ Describe 'Module Tests' {
     }
     Context "Docker Service" {
         It "Docker service is running" {
-            $dockerService = Get-Service | Where-Object Name -eq "Docker"
+            $dockerService = @() +
+                ( Get-Service | Where-Object Name -eq "Docker" ) +
+                ( Get-Process | Where-Object Name -eq "Docker for Windows" )
+
             $dockerService | Should -Not -BeNullOrEmpty # Docker is not running
-            $dockerService.Status | Should -Be "Running"
+            if ( $dockerService.Status ) {
+                $dockerService.Status | Should -Be "Running"
+            }
         }
         It "Linux or Windows mode" {
             $dockerVersion = Get-DockerVersion
-            $dockerVersion.Server.OSArch | Should Be "windows/amd64"
+            $dockerVersion.Server.OSArch | Should -BeIn @( "windows/amd64", "linux/amd64" )
         }
     }
     Context 'Lifecycle Cmdlets' {
@@ -85,7 +90,28 @@ Describe 'Module Tests' {
     Context 'Container Cmdlets' {
         BeforeAll {
             try {
-                $container = New-DockerContainer -Image 'microsoft/iis' -Detach
+                $dockerArch = ( Get-DockerVersion ).Server.OSArch
+                [string] $image = $null
+                [string] $service = $null
+                [string] $powershell = $null
+                switch ( $dockerArch ) {
+                    'windows/amd64' {
+                        $image = 'microsoft/iis'
+                        $service = 'W3SVC'
+                        $powershell = 'powershell'
+                    }
+                    'linux/amd64' {
+                        $image = 'microsoft/powershell'
+                        $service = 'nginx'
+                        $powershell = 'pwsh'
+                    }
+                    default {
+                        throw "missing test for $dockerArch"
+                    }
+                }
+
+                # $container = New-DockerContainer -Image $image -Detach
+                $container = New-DockerContainer -Image $image -Interactive -Detach -Verbose
             } catch {
                 Write-Error $_.Exception -ErrorAction 'Continue'
                 throw
@@ -95,10 +121,10 @@ Describe 'Module Tests' {
             { Invoke-DockerContainerCommand -Name $container.Name 'hostname' } | Should -Not -Throw
         }
         It 'docker exec returns a valid output' {
-            Invoke-DockerContainerCommand -Name $container.Name -Command 'powershell' -Arguments 'echo foobar' -StringOutput | Should -Be 'foobar'
+            Invoke-DockerContainerCommand -Name $container.Name -Command $powershell -Arguments '-c "Write-Host foobar"' -StringOutput | Should -Be 'foobar'
         }
         It 'docker exec powershell' {
-            $service = Get-DockerService -ContainerName $container.Name -Name 'W3SVC'
+            $service = Get-DockerService -ContainerName $container.Name # -Name $service
             $service.Name | Should -Be 'W3SVC'
         }
         AfterAll {

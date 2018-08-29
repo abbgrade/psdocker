@@ -1,5 +1,5 @@
 function Invoke-ClientCommand {
-
+    [CmdletBinding()]
     param (
         [string[]]
         $ArgumentList,
@@ -45,7 +45,7 @@ function Invoke-ClientCommand {
     try {
         $processCall = "$( $process.StartInfo.FileName ) $( $process.StartInfo.Arguments )"
         if ( $processCall.Length -ge 250 ) { $processCall = "$( $processCall.Substring(252) )..." }
-        Write-Debug "Process started: $processCall"
+        Write-Verbose "Process started: $processCall"
 
         $process.Start() | Out-Null
         $process.BeginOutputReadLine()
@@ -55,7 +55,7 @@ function Invoke-ClientCommand {
         [bool] $timeout = $false
         if (( -not $TimeoutMS ) -or $process.WaitForExit( $TimeoutMS )) {
             $process.WaitForExit() # Ensure streams are flushed
-            Write-Debug "Process exited (code $( $process.ExitCode )) after $( $process.ExitTime - $process.StartTime )."
+            Write-Verbose "Process exited (code $( $process.ExitCode )) after $( $process.ExitTime - $process.StartTime )."
         } else {
             $timeout = $true
         }
@@ -69,20 +69,26 @@ function Invoke-ClientCommand {
     # Process output
     if ( $standardOutputBuffer.Count  ) {
         if ( $StringOutput ) {
-            $standardOutputBuffer.Values -join "`r`n"
+            $standardOutput = $standardOutputBuffer.Values -join "`r`n"
+            Write-Verbose "Process output: $standardOutput"
+            $standardOutput
         } elseif ( $TableOutput ) {
             Convert-ToTable -Content $standardOutputBuffer.Values -ColumnNames $ColumnNames
         }
+    } else {
+        Write-Verbose "No process output"
     }
 
     # process error
     if ( $standardErrorBuffer.Count -or $process.ExitCode ) {
         foreach ( $line in $standardErrorBuffer.Values ) {
             if ( $line ) {
-                Write-Warning $line
+                Write-Debug "Process error: $line"
             }
         }
         throw "Proccess failed ($processCall) after $( $process.ExitTime - $process.StartTime )."
+    } else {
+        Write-Verbose "No process error output"
     }
     if ( $timeout ) {
         throw "Process timed out ($processCall) after $( $process.ExitTime - $process.StartTime )."

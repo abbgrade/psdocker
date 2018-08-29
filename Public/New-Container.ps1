@@ -1,5 +1,5 @@
 function New-Container {
-
+    [CmdletBinding()]
     param (
         [string]
         $Name,
@@ -18,7 +18,10 @@ function New-Container {
         $TimeoutMS = $null,
 
         [switch]
-        $Detach
+        $Detach,
+
+        [switch]
+        $Interactive
     )
 
     # prepare arugments
@@ -32,18 +35,22 @@ function New-Container {
 
     if ( $Environment ) {
         foreach ( $item in $Environment.GetEnumerator() ) {
-            $arguments.Add( "-e `"$( $item.Name)=$( $item.Value )`"") | Out-Null
+            $arguments.Add( "--env `"$( $item.Name)=$( $item.Value )`"") | Out-Null
         }
     }
 
     if ( $Ports ) {
         foreach ( $item in $Ports.GetEnumerator() ) {
-            $arguments.Add( "-p $( $item.Name):$( $item.Value )") | Out-Null
+            $arguments.Add( "--publish $( $item.Name):$( $item.Value )") | Out-Null
         }
     }
 
     if ( $Detach ) {
-        $arguments.Add( '-d' ) | Out-Null
+        $arguments.Add( '--detach' ) | Out-Null
+    }
+
+    if ( $Interactive ) {
+        $arguments.Add( '--interactive' ) | Out-Null
     }
 
     $arguments.Add( $Image ) | Out-Null

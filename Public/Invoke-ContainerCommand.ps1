@@ -1,5 +1,5 @@
 function Invoke-ContainerCommand {
-
+    [CmdletBinding()]
     param (
         [ValidateNotNullOrEmpty()]
         [string]
@@ -20,8 +20,11 @@ function Invoke-ContainerCommand {
     )
 
     $container = Get-Container -Name $Name
-    Write-Debug "Container status is '$( $container.Status )'."
+    Write-Verbose "Container status is '$( $container.Status )'."
 
-    Invoke-ClientCommand -ArgumentList ( @( 'exec', $Name, $Command ) + $Arguments ) -StringOutput:$StringOutput -TimeoutMS $TimeoutMS
-    Write-Debug "Command on Docker container executed."
+    Invoke-ClientCommand `
+        -ArgumentList ( @( 'exec', $Name, $Command ) + $Arguments ) `
+        -StringOutput:$StringOutput `
+        -TimeoutMS $TimeoutMS
+    Write-Verbose "Command on Docker container executed."
 }

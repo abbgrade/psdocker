@@ -1,5 +1,5 @@
 function Stop-Container {
-
+    [CmdletBinding()]
     param (
         [ValidateNotNullOrEmpty()]
         [string]

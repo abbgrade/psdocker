@@ -1,5 +1,5 @@
 function Get-Container {
-
+    [CmdletBinding()]
     param (
         [switch]
         $Running,

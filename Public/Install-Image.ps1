@@ -1,5 +1,5 @@
 function Install-Image {
-
+    [CmdletBinding()]
     param (
         [ValidateNotNullOrEmpty()]
         [string]

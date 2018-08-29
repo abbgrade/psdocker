@@ -1,5 +1,5 @@
 function Remove-Container {
-
+    [CmdletBinding()]
     param (
         [ValidateNotNullOrEmpty()]
         [string]

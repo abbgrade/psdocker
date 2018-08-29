@@ -1,5 +1,5 @@
 function Get-Service {
-
+    [CmdletBinding()]
     param (
         [ValidateNotNullOrEmpty()]
         [string]
@@ -7,7 +7,10 @@ function Get-Service {
 
         [ValidateNotNullOrEmpty()]
         [string]
-        $Name
+        $Name,
+
+        [switch]
+        $PowershellCore = $false
     )
 
     $command = 'Get-Service'
@@ -15,9 +18,14 @@ function Get-Service {
         $command += " -Name '$Name'"
     }
 
+    $powershell = 'powershell'
+    if ( $PowershellCore ) {
+        $powershell = 'pwsh'
+    }
+
     $json = Invoke-DockerContainerCommand `
         -Name $ContainerName `
-        -Command 'powershell' `
+        -Command $powershell `
         -Arguments "$command | Select Name, DisplayName, Status | ConvertTo-Json" `
         -StringOutput | ConvertFrom-Json
 
