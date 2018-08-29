@@ -1,10 +1,11 @@
 task Build {
+	[string] $root = $null
 	if ( $env:APPVEYOR ) {
-		$buildPath = '.'
+		$root = $env:APPVEYOR_BUILD_FOLDER
 	} else {
-		$buildPath = $env:APPVEYOR_BUILD_FOLDER
+		$root = '.'
 	}
-    $manifestFilePath = "$buildPath\src\Modules\Client\PSDocker.Client.psd1"
+    $manifestFilePath = "$root\src\Modules\Client\PSDocker.Client.psd1"
 	$manifestContent = Get-Content -Path $manifestFilePath -Raw
 
 	# Update the module version based on the build version and limit exported functions
@@ -17,7 +18,11 @@ task Build {
 		$manifestContent = $manifestContent -replace $_.Key, $_.Value
 	}
 
-	$manifestContent | Set-Content -Path $manifestFilePath
+	$manifestContent.Trim() | Set-Content -Path $manifestFilePath
+
+	# Copy build artefacts
+	New-Item -Path "$root\build" -ItemType Directory
+	Copy-Item -Path "$root\src\Modules\Client" -Destination "$root\build\PSDocker.Client" -Recurse
 }
 
 task Test {
@@ -25,14 +30,8 @@ task Test {
 }
 
 task Publish {
-	# Publish module to PowerShell Gallery
-	$clientModulePath = "$env:APPVEYOR_BUILD_FOLDER\src\Modules\Client"
-
 	Get-ChildItem $env:APPVEYOR_BUILD_FOLDER -Recurse
 
-	$publishParams = @{
-		Path        = $clientModulePath
-		NuGetApiKey = $env:nuget_apikey
-	}
-	Publish-Module @publishParams
+	# Publish module to PowerShell Gallery
+	Publish-Module -Path $clientModulePath -NuGetApiKey $env:nuget_apikey
 }
