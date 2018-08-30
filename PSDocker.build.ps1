@@ -30,8 +30,6 @@ task Test {
 }
 
 task Publish {
-	Get-ChildItem $env:APPVEYOR_BUILD_FOLDER -Recurse
-
 	# Publish module to PowerShell Gallery
 	Publish-Module -Path "$($env:APPVEYOR_BUILD_FOLDER)\build\PSDocker.Client" -NuGetApiKey $env:nuget_apikey
 }
