@@ -84,4 +84,51 @@ Describe 'Module Tests' {
             Remove-DockerContainer -Name $container.Name
         }
     }
+    Context 'Container Cmdlets' {
+        BeforeAll {
+            try {
+                $dockerArch = ( Get-DockerVersion ).Server.OSArch
+                [string] $image = $null
+                [string] $service = $null
+                [string] $printCommand = $null
+                switch ( $dockerArch ) {
+                    'windows/amd64' {
+                        $image = 'microsoft/iis'
+                        $printCommand = 'powershell -c Write-Host'
+                    }
+                    'linux/amd64' {
+                        $image = 'microsoft/powershell'
+                        $printCommand = 'echo'
+                    }
+                    default {
+                        throw "missing test for $dockerArch"
+                    }
+                }
+
+                # $container = New-DockerContainer -Image $image -Detach
+                $container = New-DockerContainer -Image $image -Interactive -Detach
+            } catch {
+                Write-Error $_.Exception -ErrorAction 'Continue'
+                throw
+            }
+        }
+        It 'docker exec does not throw' {
+            # {
+                Invoke-DockerCommand -Name $container.Name 'hostname'
+            # } | Should -Not -Throw
+        }
+        It 'docker exec returns a valid output' {
+            Invoke-DockerCommand -Name $container.Name -Command $printCommand -Arguments 'foobar' -StringOutput | Should -Be 'foobar'
+        }
+        AfterAll {
+            try {
+                if ( $container ) {
+                    Remove-DockerContainer -Name $container.Name -Force
+                }
+            } catch {
+                Write-Error $_.Exception -ErrorAction 'Continue'
+                throw
+            }
+        }
+    }
 }
