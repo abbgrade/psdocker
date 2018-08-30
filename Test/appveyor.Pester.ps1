@@ -1,8 +1,9 @@
 $PSVersion = $PSVersionTable.PSVersion.Major
-$TestFile = "TestResultsPS$PSVersion.xml"
 $ProjectRoot = $ENV:APPVEYOR_BUILD_FOLDER
 
 Set-Location $ProjectRoot
 
-Invoke-Pester -Path "$ProjectRoot\src\Modules\Client\Test" -OutputFormat NUnitXml -OutputFile "$ProjectRoot\$TestFile" -PassThru |
-    Export-Clixml -Path "$ProjectRoot\PesterResults$PSVersion.xml"
+foreach( $module in @( 'Client', 'Container' )) {
+    Invoke-Pester -Path "$ProjectRoot\src\Modules\$module\Test" -OutputFormat NUnitXml -OutputFile "$ProjectRoot\TestResults.$module.PS$PSVersion.xml" -PassThru |
+        Export-Clixml -Path "$ProjectRoot\PesterResults.$module.$PSVersion.xml"
+}
