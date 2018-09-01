@@ -84,7 +84,7 @@ Describe 'Module Tests' {
             Remove-DockerContainer -Name $container.Name
         }
     }
-    Context 'Container Cmdlets' {
+    Context 'Container Commands' {
         BeforeAll {
             try {
                 $dockerArch = ( Get-DockerVersion ).Server.OSArch
@@ -113,9 +113,7 @@ Describe 'Module Tests' {
             }
         }
         It 'docker exec does not throw' {
-            # {
-                Invoke-DockerCommand -Name $container.Name 'hostname'
-            # } | Should -Not -Throw
+            Invoke-DockerCommand -Name $container.Name 'hostname'
         }
         It 'docker exec returns a valid output' {
             Invoke-DockerCommand -Name $container.Name -Command $printCommand -Arguments 'foobar' -StringOutput | Should -Be 'foobar'

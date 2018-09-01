@@ -18,7 +18,7 @@ ModuleVersion = '0.0.1'
 # CompatiblePSEditions = @()
 
 # ID zur eindeutigen Kennzeichnung dieses Moduls
-GUID = '22cb8e1e-1c64-446b-960c-7c5e8529eb31'
+GUID = 'c906e0e2-d3af-4e11-ab55-9db0000af8f8'
 
 # Autor dieses Moduls
 Author = 'Steffen Kampmann'
