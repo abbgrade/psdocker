@@ -1,11 +1,14 @@
-task Build {
-
-	[string] $root = $null
+function Get-BuildRoot {
 	if ( $env:APPVEYOR ) {
-		$root = $env:APPVEYOR_BUILD_FOLDER
+		Write-Output $env:APPVEYOR_BUILD_FOLDER
 	} else {
-		$root = '.'
+		Write-Output '.'
 	}
+
+}
+
+task Build {
+	[string] $root = Get-BuildRoot
 
 	New-Item -Path "$root\build" -ItemType Directory -Force | Out-Null
 
@@ -19,18 +22,22 @@ task Build {
 
 		Write-Output "Start build of module $module"
 
-		$manifestFilePath = "$root\src\Modules\$module\PSDocker.$module.psd1"
-		$manifestContent = Get-Content -Path $manifestFilePath -Raw
+		$moduleSourcePath = "$root\src\Modules\$module"
+		$moduleBuildPath = "$root\build\PSDocker.$module"
+		$manifestFilePath = "$moduleSourcePath\PSDocker.$module.psd1"
 
+		#region Update Manifest
+		$manifestContent = Get-Content -Path $manifestFilePath -Raw
 		$replacements.GetEnumerator() | ForEach-Object {
 			$manifestContent = $manifestContent -replace $_.Key, $_.Value
 		}
-
 		$manifestContent.Trim() | Set-Content -Path $manifestFilePath
+		#endregion
 
-		# Copy build artefacts
-		Copy-Item -Path "$root\src\Modules\$module" -Destination "$root\build\PSDocker.$module" -Recurse
-
+		#region Copy Build Artefacts
+		if ( Test-Path $moduleBuildPath ) { Remove-Item $moduleBuildPath -Recurse }
+		Copy-Item -Path $moduleSourcePath -Destination $moduleBuildPath -Recurse
+		#endregion
 
 		Write-Output "Build of module $module is done"
 	}
@@ -41,14 +48,15 @@ task Test {
 }
 
 task Publish {
-	# Publish module to PowerShell Gallery
+	[string] $root = Get-BuildRoot
 
+	# Publish module to PowerShell Gallery
 	Write-Output "Publish module PSDocker.Client to PSGallery"
-	Publish-Module -Path "$($env:APPVEYOR_BUILD_FOLDER)\build\PSDocker.Client" -NuGetApiKey $env:nuget_apikey
+	Publish-Module -Path x -NuGetApiKey $env:nuget_apikey
 
 	Write-Output "Install module PSDocker.Client from PSGallery"
-	Import-Module 'PSDocker.Client' -Verbose
+	Import-Module -Path "$root\build\PSDocker.Client\PSDocker.Client.psd1" -Verbose
 
 	Write-Output "Publish module PSDocker.Container to PSGallery"
-	Publish-Module -Path "$($env:APPVEYOR_BUILD_FOLDER)\build\PSDocker.Container" -NuGetApiKey $env:nuget_apikey
+	Publish-Module -Path "$root\build\PSDocker.Container" -NuGetApiKey $env:nuget_apikey
 }
