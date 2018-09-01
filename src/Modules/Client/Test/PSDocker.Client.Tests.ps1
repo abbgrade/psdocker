@@ -106,7 +106,7 @@ Describe 'Module Tests' {
                 }
 
                 # $container = New-DockerContainer -Image $image -Detach
-                $container = New-DockerContainer -Image $image -Interactive -Detach
+                $container = New-DockerContainer -Image $image -Interactive -Detach -Verbose -Debug
             } catch {
                 Write-Error $_.Exception -ErrorAction 'Continue'
                 throw

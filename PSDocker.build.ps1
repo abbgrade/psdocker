@@ -52,7 +52,7 @@ task Publish {
 
 	# Publish module to PowerShell Gallery
 	Write-Output "Publish module PSDocker.Client to PSGallery"
-	Publish-Module -Path x -NuGetApiKey $env:nuget_apikey
+	Publish-Module -Path "$root\build\PSDocker.Client" -NuGetApiKey $env:nuget_apikey
 
 	Write-Output "Install module PSDocker.Client from PSGallery"
 	Import-Module -Path "$root\build\PSDocker.Client\PSDocker.Client.psd1" -Verbose
