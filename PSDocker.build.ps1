@@ -46,6 +46,9 @@ task Publish {
 	Write-Output "Publish module PSDocker.Client to PSGallery"
 	Publish-Module -Path "$($env:APPVEYOR_BUILD_FOLDER)\build\PSDocker.Client" -NuGetApiKey $env:nuget_apikey
 
+	Write-Output "Install module PSDocker.Client from PSGallery"
+	Import-Module 'PSDocker.Client' -Verbose
+
 	Write-Output "Publish module PSDocker.Container to PSGallery"
 	Publish-Module -Path "$($env:APPVEYOR_BUILD_FOLDER)\build\PSDocker.Container" -NuGetApiKey $env:nuget_apikey
 }
