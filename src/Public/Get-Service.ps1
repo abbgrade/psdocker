@@ -1,14 +1,18 @@
 function Get-Service {
     [CmdletBinding()]
+
     param (
+        [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
         [string]
         $ContainerName,
 
+        [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
         [string]
         $Name,
 
+        [Parameter(Mandatory=$false)]
         [switch]
         $PowershellCore = $false
     )
@@ -26,7 +30,7 @@ function Get-Service {
     $json = Invoke-DockerCommand `
         -Name $ContainerName `
         -Command $powershell `
-        -Arguments "$command | Select Name, DisplayName, Status | ConvertTo-Json" `
+        -ArgumentList "$command | Select Name, DisplayName, Status | ConvertTo-Json" `
         -StringOutput | ConvertFrom-Json
 
     $services = $json | ForEach-Object {

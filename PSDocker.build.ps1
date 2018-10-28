@@ -4,59 +4,52 @@ function Get-BuildRoot {
 	} else {
 		Write-Output '.'
 	}
-
 }
 
-task Build {
-	[string] $root = Get-BuildRoot
+[string] $root = Get-BuildRoot
+[string] $sourcePath = "$root\src"
+[string] $buildPath = "$root\build"
+[string] $manifestFilePath = "$sourcePath\PSDocker.psd1"
+[string] $moduleBuildPath = "$buildPath\PSDocker"
 
-	New-Item -Path "$root\build" -ItemType Directory -Force | Out-Null
+task Build PrepareBuildPath, BuildManifest, CopyArtefacts
 
-	# Update the module version based on the build version and limit exported functions
+task PrepareBuildPath {
+	New-Item -Path $buildPath -ItemType Directory | Out-Null
+}
+
+task CleanBuildPath {
+	Remove-Item $buildPath -Recurse -ErrorAction 'Continue'
+}
+
+task BuildManifest {
 	$replacements = @{}
+
+	# Update the module version based on the build version
 	if ( $env:APPVEYOR ) {
 		$replacements["ModuleVersion = '.*'"] = "ModuleVersion = '$env:APPVEYOR_BUILD_VERSION'"
 	}
 
-	foreach( $module in @( 'Client', 'Container' )) {
-
-		Write-Output "Start build of module $module"
-
-		$moduleSourcePath = "$root\src\Modules\$module"
-		$moduleBuildPath = "$root\build\PSDocker.$module"
-		$manifestFilePath = "$moduleSourcePath\PSDocker.$module.psd1"
-
-		#region Update Manifest
-		$manifestContent = Get-Content -Path $manifestFilePath -Raw
-		$replacements.GetEnumerator() | ForEach-Object {
-			$manifestContent = $manifestContent -replace $_.Key, $_.Value
-		}
-		$manifestContent.Trim() | Set-Content -Path $manifestFilePath
-		#endregion
-
-		#region Copy Build Artefacts
-		if ( Test-Path $moduleBuildPath ) { Remove-Item $moduleBuildPath -Recurse }
-		Copy-Item -Path $moduleSourcePath -Destination $moduleBuildPath -Recurse
-		#endregion
-
-		Write-Output "Build of module $module is done"
+	# Update Manifest
+	$manifestContent = Get-Content -Path $manifestFilePath -Raw
+	$replacements.GetEnumerator() | ForEach-Object {
+		$manifestContent = $manifestContent -replace $_.Key, $_.Value
 	}
+	$manifestContent.Trim() | Set-Content -Path $manifestFilePath
+}
+
+task CopyArtefacts {
+	Copy-Item -Path $sourcePath -Destination $moduleBuildPath -Recurse
 }
 
 task Test {
-    Invoke-Pester -Script Test
+    Invoke-Pester $sourcePath
 }
 
-task Publish {
-	[string] $root = Get-BuildRoot
-
-	# Publish module to PowerShell Gallery
-	Write-Output "Publish module PSDocker.Client to PSGallery"
-	Publish-Module -Path "$root\build\PSDocker.Client" -NuGetApiKey $env:nuget_apikey
-
-	Write-Output "Install module PSDocker.Client from PSGallery"
-	Import-Module -Path "$root\build\PSDocker.Client\PSDocker.Client.psd1" -Verbose
-
-	Write-Output "Publish module PSDocker.Container to PSGallery"
-	Publish-Module -Path "$root\build\PSDocker.Container" -NuGetApiKey $env:nuget_apikey
+task Publish Build, {
+	Publish-Module -Path $moduleBuildPath -NuGetApiKey $env:nuget_apikey
 }
+
+task Clean CleanBuildPath
+
+task . Clean, Build

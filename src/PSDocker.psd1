@@ -1,5 +1,5 @@
 #
-# Modulmanifest für das Modul "PSDocker.Container"
+# Modulmanifest für das Modul "PSDocker"
 #
 # Generiert von: s.kampmann
 #
@@ -9,7 +9,7 @@
 @{
 
 # Die diesem Manifest zugeordnete Skript- oder Binärmoduldatei.
-RootModule = 'PSDocker.Container.psm1'
+RootModule = 'PSDocker.psm1'
 
 # Die Versionsnummer dieses Moduls
 ModuleVersion = '0.0.1'
@@ -18,7 +18,7 @@ ModuleVersion = '0.0.1'
 # CompatiblePSEditions = @()
 
 # ID zur eindeutigen Kennzeichnung dieses Moduls
-GUID = '1f57a460-0c77-4eef-b228-275f63c9ea82'
+GUID = '22cb8e1e-1c64-446b-960c-7c5e8529eb31'
 
 # Autor dieses Moduls
 Author = 'Steffen Kampmann'
@@ -30,7 +30,7 @@ CompanyName = ''
 Copyright = '(c) 2018 s.kampmann. Alle Rechte vorbehalten.'
 
 # Beschreibung der von diesem Modul bereitgestellten Funktionen
-Description = 'Cmdlets that access container ressources powershell style.'
+Description = 'Cmdlets that wraps the docker client and supports the interaction with containers.'
 
 # Die für dieses Modul mindestens erforderliche Version des Windows PowerShell-Moduls
 # PowerShellVersion = ''
@@ -51,7 +51,7 @@ Description = 'Cmdlets that access container ressources powershell style.'
 # ProcessorArchitecture = ''
 
 # Die Module, die vor dem Importieren dieses Moduls in die globale Umgebung geladen werden müssen
-RequiredModules = @('PSDocker.Client')
+# RequiredModules = @()
 
 # Die Assemblys, die vor dem Importieren dieses Moduls geladen werden müssen
 # RequiredAssemblies = @()

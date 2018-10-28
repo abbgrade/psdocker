@@ -28,10 +28,27 @@
     },
     "tasks": [
         {
+            "label": "Build",
+            "type": "shell",
+            "group": "build",
+            "command": "$DebugPreference = 'Continue'; Invoke-Build Clean,Build",
+            "problemMatcher": [
+                "$pester"
+            ]
+        },
+        {
+            "label": "Clean",
+            "type": "shell",
+            "command": "$DebugPreference = 'Continue'; Invoke-Build Clean",
+            "problemMatcher": [
+                "$pester"
+            ]
+        },
+        {
             "label": "Test",
             "type": "shell",
             "group": "test",
-            "command": "$DebugPreference = 'Continue'; Invoke-Pester -Script Test -PesterOption @{ IncludeVSCodeMarker = $true }",
+            "command": "Invoke-Build Test",
             "problemMatcher": [
                 "$pester"
             ]

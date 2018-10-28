@@ -1,18 +1,25 @@
 function Invoke-ClientCommand {
     [CmdletBinding()]
+
     param (
+        [Parameter(Mandatory=$true)]
         [string[]]
         $ArgumentList,
 
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNullOrEmpty()]
         [int]
-        $TimeoutMS = 10000,
+        $TimeoutMS,
 
+        [Parameter(Mandatory=$false)]
         [switch]
         $StringOutput,
 
+        [Parameter(Mandatory=$false)]
         [switch]
         $TableOutput,
 
+        [Parameter(Mandatory=$false)]
         [hashtable]
         $ColumnNames
     )
@@ -52,13 +59,12 @@ function Invoke-ClientCommand {
         $process.BeginErrorReadLine()
 
         # Wait for exit
-        [bool] $timeout = $false
-        if (( -not $TimeoutMS ) -or $process.WaitForExit( $TimeoutMS )) {
-            $process.WaitForExit() # Ensure streams are flushed
-            Write-Verbose "Process exited (code $( $process.ExitCode )) after $( $process.ExitTime - $process.StartTime )."
-        } else {
-            $timeout = $true
+        if ( $TimeoutMS ) {
+            $process.WaitForExit( $TimeoutMS ) | Out-Null
         }
+        $process.WaitForExit() | Out-Null # Ensure streams are flushed
+
+        Write-Verbose "Process exited (code $( $process.ExitCode )) after $( $process.TotalProcessorTime )."
     } catch {
         throw
     } finally {
@@ -83,14 +89,14 @@ function Invoke-ClientCommand {
     if ( $standardErrorBuffer.Count -or $process.ExitCode ) {
         foreach ( $line in $standardErrorBuffer.Values ) {
             if ( $line ) {
-                Write-Debug "Process error: $line"
+                Write-Warning "Process error: $line" -ErrorAction 'Continue'
             }
         }
-        throw "Proccess failed ($processCall) after $( $process.ExitTime - $process.StartTime )."
+        throw "Proccess failed ($processCall) after $( $process.TotalProcessorTime )."
     } else {
         Write-Verbose "No process error output"
     }
-    if ( $timeout ) {
-        throw "Process timed out ($processCall) after $( $process.ExitTime - $process.StartTime )."
+    if ( $process.TotalProcessorTime.TotalMilliseconds -ge $TimeoutMS ) {
+        throw "Process timed out ($processCall) after $( $process.TotalProcessorTime )."
     }
 }

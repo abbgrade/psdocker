@@ -1,9 +1,14 @@
 function Convert-ToTable {
     [CmdletBinding()]
+
     param (
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNullOrEmpty()]
         [string[]]
         $Content,
 
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNullOrEmpty()]
         [hashtable]
         $ColumnNames
     )

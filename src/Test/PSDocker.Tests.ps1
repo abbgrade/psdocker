@@ -3,8 +3,8 @@ $DebugPreference = "SilentlyContinue"
 $VerbosePreference = "SilentlyContinue"
 
 if ( $PSScriptRoot ) { $ScriptRoot = $PSScriptRoot } else { $ScriptRoot = Get-Location }
-$ModuleManifestPath = "$ScriptRoot\..\PSDocker.Client.psd1"
-Import-Module "$ScriptRoot\..\PSDocker.Client.psm1" -Prefix 'Docker' -Force
+$ModuleManifestPath = "$ScriptRoot\..\PSDocker.psd1"
+Import-Module "$ScriptRoot\..\PSDocker.psm1" -Prefix 'Docker' -Force
 
 Describe 'Module Tests' {
 
@@ -58,7 +58,6 @@ Describe 'Module Tests' {
                 ( New-DockerContainer -Image $image )
             )
 
-
             $afterCount = ( Get-DockerContainer ).Count
 
             $afterCount | Should -Be $( $previousCount + 4 )
@@ -66,11 +65,6 @@ Describe 'Module Tests' {
             ( $baseLineContainer + $container ) | ForEach-Object {
                 Remove-DockerContainer -Name $_.Name
             }
-        }
-        It 'docker run throws without image' {
-            {
-                New-DockerContainer
-            } | Should -Throw
         }
         It 'docker run works' {
             $container = New-DockerContainer -Image $image -Environment @{"A" = 1; "B" = "C"}
@@ -87,36 +81,84 @@ Describe 'Module Tests' {
     Context 'Container Commands' {
         BeforeAll {
             try {
-                $dockerArch = ( Get-DockerVersion ).Server.OSArch
-                [string] $image = $null
-                [string] $service = $null
-                [string] $printCommand = $null
-                switch ( $dockerArch ) {
-                    'windows/amd64' {
-                        $image = 'microsoft/iis'
-                        $printCommand = 'powershell -c Write-Host'
+                $testConfig = New-Object -Type PsObject -Property $(
+                    switch ( ( Get-DockerVersion ).Server.OSArch ) {
+                        'windows/amd64' {
+                            @{
+                                Image = 'microsoft/iis'
+                                PrintCommand = 'powershell -c Write-Host'
+                            } | Write-Output
+                        }
+                        'linux/amd64' {
+                            @{
+                                Image = 'microsoft/powershell'
+                                PrintCommand = 'echo'
+                            } | Write-Output
+                        }
+                        default {
+                            Write-Error "Missing test for $_"
+                        }
                     }
-                    'linux/amd64' {
-                        $image = 'microsoft/powershell'
-                        $printCommand = 'echo'
-                    }
-                    default {
-                        throw "missing test for $dockerArch"
-                    }
-                }
+                )
 
-                # $container = New-DockerContainer -Image $image -Detach
-                $container = New-DockerContainer -Image $image -Interactive -Detach -Verbose -Debug
+                $container = New-DockerContainer -Image $testConfig.Image -Interactive -Detach
             } catch {
                 Write-Error $_.Exception -ErrorAction 'Continue'
                 throw
             }
         }
         It 'docker exec does not throw' {
-            Invoke-DockerCommand -Name $container.Name 'hostname'
+            Invoke-DockerCommand -Name $container.Name -Command 'hostname'
         }
         It 'docker exec returns a valid output' {
-            Invoke-DockerCommand -Name $container.Name -Command $printCommand -Arguments 'foobar' -StringOutput | Should -Be 'foobar'
+            Invoke-DockerCommand -Name $container.Name `
+                -Command $testConfig.PrintCommand `
+                -ArgumentList 'foobar' -StringOutput | Should -Be 'foobar'
+        }
+        AfterAll {
+            try {
+                if ( $container ) {
+                    Remove-DockerContainer -Name $container.Name -Force
+                }
+            } catch {
+                Write-Error $_.Exception -ErrorAction 'Continue'
+                throw
+            }
+        }
+    }
+    Context 'Container Cmdlets' {
+        BeforeAll {
+            try {
+                $dockerArch = ( Get-DockerVersion ).Server.OSArch
+                $testConfig = New-Object -Type PsObject -Property $(
+                    switch ( $dockerArch ) {
+                        'windows/amd64' {
+                            @{
+                                Image = 'microsoft/iis'
+                                Service = 'W3SVC'
+                            }
+                        }
+                        'linux/amd64' {
+                            @{
+                                Image = 'microsoft/powershell'
+                                Service = 'nginx'
+                            }
+                        }
+                        default {
+                            throw "Missing test for $_"
+                        }
+                    }
+                )
+
+                $container = New-DockerContainer -Image $testConfig.Image -Interactive -Detach
+            } catch {
+                Write-Error $_.Exception -ErrorAction 'Continue'
+                throw
+            }
+        }
+        It 'docker exec powershell' {
+            $service = Get-DockerService -ContainerName $container.Name -Name $testConfig.Service
+            $service.Name | Should -Be 'W3SVC'
         }
         AfterAll {
             try {

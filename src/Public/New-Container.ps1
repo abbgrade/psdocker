@@ -1,25 +1,36 @@
 function New-Container {
     [CmdletBinding()]
+
     param (
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
         [string]
         $Name,
 
+        [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
         [string]
         $Image,
 
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
         [hashtable]
         $Environment,
 
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
         [hashtable]
         $Ports,
 
+        [Parameter(Mandatory=$false)]
         [int]
-        $TimeoutMS = $null,
+        $TimeoutMS = 30 * 1000,
 
+        [Parameter(Mandatory=$false)]
         [switch]
         $Detach,
 
+        [Parameter(Mandatory=$false)]
         [switch]
         $Interactive
     )
@@ -59,11 +70,11 @@ function New-Container {
     Invoke-ClientCommand -ArgumentList $arguments -TimeoutMS $TimeoutMS
 
     # check container
-    $container = Get-Container -Latest
+    $container = Get-Container -Latest -TimeoutMS $TimeoutMS
     if ( -not $container.Name ) {
         throw "Failed to create container"
     }
-    Write-Debug "Docker container '$( $container.Name )' created."
+    Write-Verbose "Docker container '$( $container.Name )' created."
 
     # return result
     $container

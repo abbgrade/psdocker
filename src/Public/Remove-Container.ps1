@@ -1,15 +1,19 @@
 function Remove-Container {
     [CmdletBinding()]
+
     param (
+        [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
         [string]
         $Name,
 
+        [Parameter(Mandatory=$false)]
         [switch]
         $Force,
 
+        [Parameter(Mandatory=$false)]
         [int]
-        $TimeoutMS = 10000
+        $TimeoutMS = 10 * 1000
     )
 
     if ( $Force ) {
@@ -17,5 +21,5 @@ function Remove-Container {
     }
 
     Invoke-ClientCommand 'rm', $Name -TimeoutMS $TimeoutMS
-    Write-Debug "Docker container removed."
+    Write-Verbose "Docker container removed."
 }
