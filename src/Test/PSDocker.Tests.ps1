@@ -101,7 +101,7 @@ Describe 'Module Tests' {
                         }
                     }
                 )
-
+                Install-DockerImage -Image $testConfig.Image -TimeoutMS = 10 * 60 * 1000
                 $container = New-DockerContainer -Image $testConfig.Image -Interactive -Detach
             } catch {
                 Write-Error $_.Exception -ErrorAction 'Continue'
