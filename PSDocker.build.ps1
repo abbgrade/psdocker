@@ -46,7 +46,7 @@ task Test {
     Invoke-Pester $sourcePath
 }
 
-task Publish Build, {
+task Publish {
 	Publish-Module -Path $moduleBuildPath -NuGetApiKey $env:nuget_apikey
 }
 
