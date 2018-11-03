@@ -6,6 +6,7 @@ if ( $PSScriptRoot ) { $ScriptRoot = $PSScriptRoot } else { $ScriptRoot = Get-Lo
 $ModuleManifestPath = "$ScriptRoot\..\PSDocker.psd1"
 Import-Module "$ScriptRoot\..\PSDocker.psm1" -Prefix 'Docker' -Force
 
+
 Describe 'Module Tests' {
 
     Context 'Module' {
@@ -29,6 +30,12 @@ Describe 'Module Tests' {
             $dockerVersion = Get-DockerVersion
             $dockerVersion.Server.OSArch | Should -BeIn @( "windows/amd64", "linux/amd64" )
             Write-Host "Running on $( $dockerVersion.Server.OSArch )."
+        }
+    }
+    Context "Repository Cmdlets" {
+        It 'docker search returns a valid output' {
+            [PsObject[]] $images = Search-DockerImage -Term 'Hello'
+            $images.Count | Should -BeGreaterThan 0
         }
     }
     Context 'Lifecycle Cmdlets' {
@@ -127,7 +134,7 @@ Describe 'Module Tests' {
             }
         }
     }
-    Context 'Container Cmdlets' {
+    Context 'Container Service Cmdlets' {
         BeforeAll {
             try {
                 $dockerArch = ( Get-DockerVersion ).Server.OSArch

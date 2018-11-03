@@ -10,6 +10,10 @@ Install PSDocker from [PowerShell Gallery](https://www.powershellgallery.com/pac
 
 ## Usage
 
+Search a image in the repository by a search term
+
+    Search-DockerImage 'nanoserver'
+
 Get a image from the docker repository
 
     Install-DockerImage -Image 'microsoft/nanoserver'

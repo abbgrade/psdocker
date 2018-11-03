@@ -1,6 +1,6 @@
 function Get-Container {
-    [CmdletBinding()]
 
+    [CmdletBinding()]
     param (
         [Parameter(Mandatory=$false)]
         [switch]

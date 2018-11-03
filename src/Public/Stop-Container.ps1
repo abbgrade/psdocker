@@ -1,6 +1,6 @@
 function Stop-Container {
-    [CmdletBinding()]
 
+    [CmdletBinding()]
     param (
         [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]

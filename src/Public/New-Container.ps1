@@ -1,6 +1,6 @@
 function New-Container {
-    [CmdletBinding()]
 
+    [CmdletBinding()]
     param (
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]

@@ -1,6 +1,6 @@
 function Get-Service {
-    [CmdletBinding()]
 
+    [CmdletBinding()]
     param (
         [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]

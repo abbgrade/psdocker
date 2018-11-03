@@ -1,6 +1,6 @@
 function Get-Version {
-    [CmdletBinding()]
 
+    [CmdletBinding()]
     param (
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
