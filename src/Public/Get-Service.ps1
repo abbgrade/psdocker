@@ -15,6 +15,10 @@ function Get-Service {
         [Parameter(Mandatory=$false)]
         [switch]
         $PowershellCore = $false
+
+        # [Parameter(Mandatory=$false)]
+        # [switch]
+        # $PowershellClassic = $false
     )
 
     $command = 'Get-Service'
@@ -27,10 +31,15 @@ function Get-Service {
         $powershell = 'pwsh'
     }
 
+    # $powershell = 'pwsh'
+    # if ( $PowershellClassic ) {
+    #     $powershell = 'powershell'
+    # }
+
     $json = Invoke-DockerCommand `
         -Name $ContainerName `
         -Command $powershell `
-        -ArgumentList "$command | Select Name, DisplayName, Status | ConvertTo-Json" `
+        -ArgumentList '-Command', "`"$command | Select Name, DisplayName, Status | ConvertTo-Json`"" `
         -StringOutput | ConvertFrom-Json
 
     $services = $json | ForEach-Object {

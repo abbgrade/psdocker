@@ -93,7 +93,7 @@ Describe 'Module Tests' {
                     switch ( ( Get-DockerVersion ).Server.OSArch ) {
                         'windows/amd64' {
                             @{
-                                Image = 'microsoft/iis'
+                                Image = 'microsoft/nanoserver'
                                 PrintCommand = 'powershell -c Write-Host'
                             } | Write-Output
                         }
@@ -165,8 +165,8 @@ Describe 'Module Tests' {
             }
         }
         It 'docker exec powershell' {
-            $service = Get-DockerService -ContainerName $container.Name -Name $testConfig.Service
-            $service.Name | Should -Be 'W3SVC'
+            $service = Get-DockerService -ContainerName $container.Name -Name $testConfig.Service -Verbose
+            $service.Name | Should -Be $testConfig.Service
         }
         AfterAll {
             try {
