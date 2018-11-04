@@ -26,11 +26,13 @@ test_script:
           throw "$($res.FailedCount) tests failed."
       }
 
-# master branch specific configuration
--
+# branch specific configuration
+for:
+
+- # master
   branches:
     only:
       - master
 
-  deploy:
+  deploy_script:
     - ps: Invoke-Build Publish
