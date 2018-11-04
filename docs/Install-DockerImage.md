@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-Image
+# Install-DockerImage
 
 ## SYNOPSIS
 {{Fill in the Synopsis}}
@@ -13,7 +13,7 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Get-Image [[-Repository] <String>] [[-Tag] <String>] [[-Timeout] <Int32>] [<CommonParameters>]
+Install-DockerImage [-Name] <String> [[-Timeout] <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,31 +30,16 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -Repository
-{{Fill Repository Description}}
+### -Name
+{{Fill Name Description}}
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: 0
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Tag
-{{Fill Tag Description}}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -69,7 +54,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

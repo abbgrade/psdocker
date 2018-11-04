@@ -1,11 +1,11 @@
 ---
 external help file: PSDocker-help.xml
 Module Name: PSDocker
-online version: http://go.microsoft.com/fwlink/?LinkId=821493
+online version:
 schema: 2.0.0
 ---
 
-# New-Container
+# Remove-DockerContainer
 
 ## SYNOPSIS
 {{Fill in the Synopsis}}
@@ -13,8 +13,8 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-New-Container [[-Name] <String>] [-Image] <String> [[-Environment] <Hashtable>] [[-Ports] <Hashtable>]
- [[-Timeout] <Int32>] [[-StatusTimeout] <Int32>] [-Detach] [-Interactive] [<CommonParameters>]
+Remove-DockerContainer [-Name] <String> [-Force] [[-Timeout] <Int32>] [[-StopTimeout] <Int32>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -31,53 +31,8 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -Detach
-{{Fill Detach Description}}
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Benannt
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Environment
-{{Fill Environment Description}}
-
-```yaml
-Type: Hashtable
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 2
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Image
-{{Fill Image Description}}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Interactive
-{{Fill Interactive Description}}
+### -Force
+{{Fill Force Description}}
 
 ```yaml
 Type: SwitchParameter
@@ -99,30 +54,15 @@ Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: 0
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Ports
-{{Fill Ports Description}}
-
-```yaml
-Type: Hashtable
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 3
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -StatusTimeout
-{{Fill StatusTimeout Description}}
+### -StopTimeout
+{{Fill StopTimeout Description}}
 
 ```yaml
 Type: Int32
@@ -130,7 +70,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 5
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -145,7 +85,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 4
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

@@ -1,5 +1,16 @@
 function Get-Service {
 
+    <#
+
+    .EXAMPLE
+    C:\> $container = New-DockerContainer -Image 'microsoft/iis' -Detach
+    C:\> Get-DockerService -ContainerName $container.Name -Name 'W3SVC'
+     Status Name  DisplayName
+     ------ ----  -----------
+    Running W3SVC World Wide Web Publishing Service
+
+    #>
+
     [CmdletBinding()]
     param (
         [Parameter(Mandatory=$true)]

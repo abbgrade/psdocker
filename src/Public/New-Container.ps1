@@ -33,6 +33,16 @@ function New-Container {
     .PARAMETER Interactive
     Specifies if the container should be interactive.
 
+    .EXAMPLE
+    C:\> New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer'
+    Image       : microsoft/nanoserver
+    Ports       :
+    Command     : "c:\\windows\\system32\\cmd.exe"
+    Created     : 14 seconds ago
+    Name        : mycontainer
+    ContainerID : 1a0b70cfcfba78e46468dbfa72b0b36fae4c30282367482bc348b5fcee0b85d3
+    Status      : Exited (0) 1 second ago
+
     #>
 
     [CmdletBinding()]

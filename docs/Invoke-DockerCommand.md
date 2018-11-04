@@ -1,11 +1,11 @@
 ---
 external help file: PSDocker-help.xml
 Module Name: PSDocker
-online version: http://go.microsoft.com/fwlink/?LinkId=821593
+online version:
 schema: 2.0.0
 ---
 
-# Install-Image
+# Invoke-DockerCommand
 
 ## SYNOPSIS
 {{Fill in the Synopsis}}
@@ -13,7 +13,8 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Install-Image [-Name] <String> [[-Timeout] <Int32>] [<CommonParameters>]
+Invoke-DockerCommand [-Name] <String> [-Command] <String> [[-ArgumentList] <String[]>] [[-Timeout] <Int32>]
+ [-StringOutput] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,6 +31,36 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
+### -ArgumentList
+{{Fill ArgumentList Description}}
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Command
+{{Fill Command Description}}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Name
 {{Fill Name Description}}
 
@@ -45,6 +76,21 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -StringOutput
+{{Fill StringOutput Description}}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Benannt
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Timeout
 {{Fill Timeout Description}}
 
@@ -54,7 +100,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 1
+Position: 3
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
