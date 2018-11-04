@@ -46,7 +46,7 @@ function Search-Image {
     $resultTable = Invoke-ClientCommand `
         -ArgumentList $arguments `
         -Timeout $Timeout `
-        -TableOutput -ColumnNames @{
+        -TableOutput @{
         'NAME' = 'Name'
         'DESCRIPTION' = 'Description'
         'STARS' = 'Stars'

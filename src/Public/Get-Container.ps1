@@ -1,5 +1,28 @@
 function Get-Container {
 
+    <#
+
+    .SYNOPSIS Get docker container
+
+    .DESCRIPTION
+    Returns references to docker containers of a docker service.
+    It can be filtered by name and status.
+    Wraps the docker command [ps](https://docs.docker.com/engine/reference/commandline/ps/).
+
+    .PARAMETER Running
+    Specifies if only running containers should be returned.
+
+    .PARAMETER Latest
+    Specifies if only the latest created container should be returned.
+
+    .PARAMETER Name
+    Specifies if only the container with the given name should be returned.
+
+    .PARAMETER Timeout
+    Specifies the timeout of the docker client command.
+
+    #>
+
     [CmdletBinding()]
     param (
         [Parameter(Mandatory=$false)]
@@ -42,8 +65,7 @@ function Get-Container {
     Invoke-ClientCommand `
         -ArgumentList $arguments `
         -Timeout $Timeout `
-        -TableOutput `
-        -ColumnNames @{
+        -TableOutput @{
             'CONTAINER ID' = 'ContainerID'
             'IMAGE' = 'Image'
             'COMMAND' = 'Command'

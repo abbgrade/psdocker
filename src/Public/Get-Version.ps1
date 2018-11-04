@@ -1,5 +1,18 @@
 function Get-Version {
 
+    <#
+
+    .SYNOPSIS Get version information
+
+    .DESCRIPTION
+    Returns version information of the docker client and service.
+    Wraps the docker command [version](https://docs.docker.com/engine/reference/commandline/version/).
+
+    .PARAMETER Timeout
+    Specifies the timeout of the docker client command.
+
+    #>
+
     [CmdletBinding()]
     param (
         [Parameter(Mandatory=$false)]

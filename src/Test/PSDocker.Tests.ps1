@@ -25,7 +25,6 @@ Describe 'Module Tests' {
         It "Linux or Windows mode" {
             $dockerVersion = Get-DockerVersion
             $dockerVersion.Server.OSArch | Should -BeIn @( "windows/amd64", "linux/amd64" )
-            Write-Warning "Running containers on '$( $dockerVersion.Server.OSArch )'."
         }
     }
     Context "Repository Cmdlets" {
@@ -46,7 +45,7 @@ Describe 'Module Tests' {
         }
         It 'docker pull throws on invalid image' {
             {
-                Install-DockerImage -Image 'foobar'
+                Install-DockerImage -Image 'foobar' -WarningAction 'SilentlyContinue'
             } | Should Throw
         }
         It 'docker ps returns the correct number of containers' {
