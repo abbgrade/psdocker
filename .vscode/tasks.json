@@ -45,6 +45,14 @@
             ]
         },
         {
+            "label": "Update docs",
+            "type": "shell",
+            "command": "$DebugPreference = 'Continue'; Invoke-Build UpdateDocs",
+            "problemMatcher": [
+                "$pester"
+            ]
+        },
+        {
             "label": "Test",
             "type": "shell",
             "group": "test",
