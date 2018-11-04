@@ -34,5 +34,5 @@ for:
     only:
       - master
 
-  deploy:
+  deploy_script:
     - ps: Invoke-Build Publish
