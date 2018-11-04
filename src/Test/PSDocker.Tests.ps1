@@ -1,11 +1,7 @@
-$ErrorActionPreference = "Continue"
-$DebugPreference = "SilentlyContinue"
-$VerbosePreference = "SilentlyContinue"
-
+# general test setup
 if ( $PSScriptRoot ) { $ScriptRoot = $PSScriptRoot } else { $ScriptRoot = Get-Location }
 $ModuleManifestPath = "$ScriptRoot\..\PSDocker.psd1"
 Import-Module "$ScriptRoot\..\PSDocker.psm1" -Prefix 'Docker' -Force
-
 
 Describe 'Module Tests' {
 
@@ -29,7 +25,7 @@ Describe 'Module Tests' {
         It "Linux or Windows mode" {
             $dockerVersion = Get-DockerVersion
             $dockerVersion.Server.OSArch | Should -BeIn @( "windows/amd64", "linux/amd64" )
-            Write-Host "Running on $( $dockerVersion.Server.OSArch )."
+            Write-Warning "Running containers on '$( $dockerVersion.Server.OSArch )'."
         }
     }
     Context "Repository Cmdlets" {
@@ -110,7 +106,7 @@ Describe 'Module Tests' {
                         }
                     }
                 )
-                Install-DockerImage -Image $testConfig.Image -TimeoutMS ( 10 * 60 * 1000 )
+                Install-DockerImage -Image $testConfig.Image -Timeout ( 10 * 60)
                 $container = New-DockerContainer -Image $testConfig.Image -Interactive -Detach
             } catch {
                 Write-Error $_.Exception -ErrorAction 'Continue'
@@ -160,7 +156,7 @@ Describe 'Module Tests' {
                     }
                 )
 
-                Install-DockerImage -Image $testConfig.Image -TimeoutMS ( 10 * 60 * 1000 )
+                Install-DockerImage -Image $testConfig.Image -Timeout ( 10 * 60 )
                 $container = New-DockerContainer -Image $testConfig.Image -Interactive -Detach
             } catch {
                 Write-Error $_.Exception -ErrorAction 'Continue'
@@ -168,7 +164,7 @@ Describe 'Module Tests' {
             }
         }
         It 'docker exec powershell' {
-            $service = Get-DockerService -ContainerName $container.Name -Name $testConfig.Service -Verbose
+            $service = Get-DockerService -ContainerName $container.Name -Name $testConfig.Service
             $service.Name | Should -Be $testConfig.Service
         }
         AfterAll {

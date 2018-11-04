@@ -9,9 +9,9 @@ function Stop-Container {
 
         [Parameter(Mandatory=$false)]
         [int]
-        $TimeoutMS = 10 * 1000
+        $Timeout = 10
     )
 
-    Invoke-ClientCommand 'stop', $Name -TimeoutMS $TimeoutMS
+    Invoke-ClientCommand 'stop', $Name -Timeout $Timeout
     Write-Verbose "Docker container removed."
 }

@@ -24,7 +24,11 @@ function New-Container {
 
         [Parameter(Mandatory=$false)]
         [int]
-        $TimeoutMS = 30 * 1000,
+        $Timeout = 30,
+
+        [Parameter(Mandatory=$false)]
+        [int]
+        $StatusTimeout = 1,
 
         [Parameter(Mandatory=$false)]
         [switch]
@@ -67,10 +71,10 @@ function New-Container {
     $arguments.Add( $Image ) | Out-Null
 
     # create container
-    Invoke-ClientCommand -ArgumentList $arguments -TimeoutMS $TimeoutMS
+    Invoke-ClientCommand -ArgumentList $arguments -Timeout $Timeout
 
     # check container
-    $container = Get-Container -Latest -TimeoutMS $TimeoutMS
+    $container = Get-Container -Latest -Timeout $StatusTimeout
     if ( -not $container.Name ) {
         throw "Failed to create container"
     }

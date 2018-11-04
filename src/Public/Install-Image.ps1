@@ -9,9 +9,9 @@ function Install-Image {
 
         [Parameter(Mandatory=$false)]
         [int]
-        $TimeoutMS = 5 * 60 * 1000
+        $Timeout = 5 * 60
     )
 
-    Invoke-ClientCommand "pull", $Image -TimeoutMS $TimeoutMS
+    Invoke-ClientCommand "pull", $Image -Timeout $Timeout
     Write-Verbose "Docker image '$Image' pulled."
 }

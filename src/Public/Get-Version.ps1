@@ -5,11 +5,11 @@ function Get-Version {
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [int]
-        $TimeoutMS = 1000
+        $Timeout = 1
     )
 
     $output = (
-        Invoke-ClientCommand "version" -TimeoutMS $TimeoutMS -StringOutput
+        Invoke-ClientCommand "version" -Timeout $Timeout -StringOutput
     ).Split( [Environment]::NewLine )
 
     $dockerVersionTable = @{
