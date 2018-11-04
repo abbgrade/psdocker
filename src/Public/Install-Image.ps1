@@ -8,6 +8,9 @@ function Install-Image {
     Installs a docker image in the service from a repository.
     Wraps the docker command [pull](https://docs.docker.com/engine/reference/commandline/pull/).
 
+    .EXAMPLE
+    C:\PS> Install-DockerImage -Name 'microsoft/nanoserver'
+
     #>
 
     [CmdletBinding()]

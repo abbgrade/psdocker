@@ -20,6 +20,10 @@ function Remove-Container {
     .PARAMETER StopTimeout
     Specifies the timeout of the docker client command for the stop operation.
 
+    .EXAMPLE
+    C:\> New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer' | Out-Null
+    C:\> Remove-DockerContainer -Name 'mycontainer'
+
     #>
 
     [CmdletBinding()]

@@ -14,6 +14,21 @@ function Search-Image {
     Specifies the maximum number of results.
     If the limit is $null or 0 the docker default (25) is used instead.
 
+    .EXAMPLE
+    C:\PS> Search-DockerImage 'nanoserver' -Limit 2
+
+    IsAutomated : False
+    Description :
+    Name        : microsoft/nanoserver
+    Stars       : 431
+    IsOfficial  : False
+
+    IsAutomated : False
+    Description : Nano Server + IIS. Updated on 08/21/2018 -- …
+    Name        : nanoserver/iis
+    Stars       : 35
+    IsOfficial  : False
+
     #>
 
     [CmdletBinding()]

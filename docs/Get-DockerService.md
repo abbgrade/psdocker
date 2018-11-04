@@ -1,19 +1,18 @@
 ---
 external help file: PSDocker-help.xml
 Module Name: PSDocker
-online version: http://go.microsoft.com/fwlink/?LinkId=821493
+online version:
 schema: 2.0.0
 ---
 
-# Search-Image
+# Get-DockerService
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
 
 ## SYNTAX
 
 ```
-Search-Image [-Term] <String> [-Limit] <Int32> [[-Timeout] <Int32>] [<CommonParameters>]
+Get-DockerService [-ContainerName] <String> [-Name] <String> [-PowershellCore] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -21,20 +20,23 @@ Search-Image [-Term] <String> [-Limit] <Int32> [[-Timeout] <Int32>] [<CommonPara
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### BEISPIEL 1
+```
+$container = New-DockerContainer -Image 'microsoft/iis' -Detach
 ```
 
-{{ Add example description here }}
+C:\\\> Get-DockerService -ContainerName $container.Name -Name 'W3SVC'
+ Status Name  DisplayName
+ ------ ----  -----------
+Running W3SVC World Wide Web Publishing Service
 
 ## PARAMETERS
 
-### -Limit
-{{Fill Limit Description}}
+### -ContainerName
+{{Fill ContainerName Description}}
 
 ```yaml
-Type: Int32
+Type: String
 Parameter Sets: (All)
 Aliases:
 
@@ -45,8 +47,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Term
-{{Fill Term Description}}
+### -Name
+{{Fill Name Description}}
 
 ```yaml
 Type: String
@@ -54,23 +56,25 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 0
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Timeout
-{{Fill Timeout Description}}
+### -PowershellCore
+\[Parameter(Mandatory=$false)\]
+\[switch\]
+$PowershellClassic = $false
 
 ```yaml
-Type: Int32
+Type: SwitchParameter
 Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
-Default value: None
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -80,11 +84,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### Keine
-
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS

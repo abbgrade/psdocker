@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-Container
+# New-DockerContainer
 
 ## SYNOPSIS
 {{Fill in the Synopsis}}
@@ -13,7 +13,8 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Get-Container [-Running] [-Latest] [[-Name] <String>] [[-Timeout] <Int32>] [<CommonParameters>]
+New-DockerContainer [[-Name] <String>] [-Image] <String> [[-Environment] <Hashtable>] [[-Ports] <Hashtable>]
+ [[-Timeout] <Int32>] [[-StatusTimeout] <Int32>] [-Detach] [-Interactive] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,8 +31,53 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -Latest
-{{Fill Latest Description}}
+### -Detach
+{{Fill Detach Description}}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Benannt
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Environment
+{{Fill Environment Description}}
+
+```yaml
+Type: Hashtable
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Image
+{{Fill Image Description}}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Interactive
+{{Fill Interactive Description}}
 
 ```yaml
 Type: SwitchParameter
@@ -60,16 +106,31 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Running
-{{Fill Running Description}}
+### -Ports
+{{Fill Ports Description}}
 
 ```yaml
-Type: SwitchParameter
+Type: Hashtable
 Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Benannt
+Position: 3
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -StatusTimeout
+{{Fill StatusTimeout Description}}
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 5
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -84,7 +145,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 1
+Position: 4
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

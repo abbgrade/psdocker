@@ -11,6 +11,27 @@ function Get-Version {
     .PARAMETER Timeout
     Specifies the timeout of the docker client command.
 
+    .EXAMPLE
+    C:\> $version = Get-DockerVersion
+    C:\> $version.Client
+    Version      : 18.06.1-ce
+    Goversion    : go1.10.3
+    Experimental : false
+    APIversion   : 1.38
+    Gitcommit    : e68fc7a
+    Built        : Tue Aug 21 17:21:34 2018
+    OSArch       : windows/amd64
+
+    C:\> $version.Server
+    Version      : 18.06.1-ce
+    Built        : Tue Aug 21 17:36:40 2018
+    Experimental : false
+    Goversion    : go1.10.3
+    APIversion   : 1.38 (minimum version 1.24)
+    Gitcommit    : e68fc7a
+    Engine:      :
+    OSArch       : windows/amd64
+
     #>
 
     [CmdletBinding()]

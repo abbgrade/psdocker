@@ -1,7 +1,7 @@
 # general test setup
 if ( $PSScriptRoot ) { $ScriptRoot = $PSScriptRoot } else { $ScriptRoot = Get-Location }
 $ModuleManifestPath = "$ScriptRoot\..\PSDocker.psd1"
-Import-Module "$ScriptRoot\..\PSDocker.psm1" -Prefix 'Docker' -Force
+Import-Module "$ScriptRoot\..\PSDocker.psd1" -Force
 
 Describe 'Module Tests' {
 

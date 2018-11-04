@@ -1,11 +1,11 @@
 ---
 external help file: PSDocker-help.xml
 Module Name: PSDocker
-online version: http://go.microsoft.com/fwlink/?LinkId=821593
+online version:
 schema: 2.0.0
 ---
 
-# Get-Version
+# Search-DockerImage
 
 ## SYNOPSIS
 {{Fill in the Synopsis}}
@@ -13,7 +13,7 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Get-Version [[-Timeout] <Int32>] [<CommonParameters>]
+Search-DockerImage [-Term] <String> [-Limit] <Int32> [[-Timeout] <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,6 +30,36 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
+### -Limit
+{{Fill Limit Description}}
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Term
+{{Fill Term Description}}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Timeout
 {{Fill Timeout Description}}
 
@@ -39,7 +69,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 0
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

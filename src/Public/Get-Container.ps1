@@ -21,6 +21,17 @@ function Get-Container {
     .PARAMETER Timeout
     Specifies the timeout of the docker client command.
 
+    .EXAMPLE
+    C:\> New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer' | Out-Null
+    C:\> Get-DockerContainer -Name 'mycontainer'
+    Image       : microsoft/nanoserver
+    Ports       :
+    Command     : "c:\\windows\\system32\\cmd.exe"
+    Created     : 13 seconds ago
+    Name        : mycontainer
+    ContainerID : 1c3bd73d25552b41a677a99a15a9326ba72123096f9e10c3d36f72fb90e57f16
+    Status      : Exited (0) 5 seconds ago
+
     #>
 
     [CmdletBinding()]

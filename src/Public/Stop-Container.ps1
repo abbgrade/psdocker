@@ -13,6 +13,10 @@ function Stop-Container {
     .PARAMETER Timeout
     Specifies the timeout of the docker client command.
 
+    .EXAMPLE
+    C:\> New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer' | Out-Null
+    C:\> Stop-DockerContainer -Name 'mycontainer'
+
     #>
 
     [CmdletBinding()]

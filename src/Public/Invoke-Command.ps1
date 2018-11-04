@@ -23,6 +23,11 @@ function Invoke-Command {
     .PARAMETER StringOutput
     Specifies if the output of the container command should be returned as string.
 
+    .EXAMPLE
+    C:\> $container = New-DockerContainer -Image 'microsoft/iis' -Detach
+    C:\> Invoke-DockerCommand -Name $container.Name -Command "hostname" -StringOutput
+    88eb8fa9c07f
+
     #>
 
     [CmdletBinding()]
