@@ -18,7 +18,7 @@ function Get-Container {
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [int]
-        $TimeoutMS = 1000
+        $Timeout = 1
     )
 
     $arguments = New-Object System.Collections.ArrayList
@@ -41,7 +41,7 @@ function Get-Container {
 
     Invoke-ClientCommand `
         -ArgumentList $arguments `
-        -TimeoutMS $TimeoutMS `
+        -Timeout $Timeout `
         -TableOutput `
         -ColumnNames @{
             'CONTAINER ID' = 'ContainerID'

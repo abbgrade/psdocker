@@ -29,7 +29,7 @@ function Search-Image {
 
         [Parameter(Mandatory=$false)]
         [int]
-        $TimeoutMS = 30 * 1000
+        $Timeout = 30
     )
 
     # prepare arugments
@@ -43,7 +43,10 @@ function Search-Image {
 
     $arguments.Add( $Term ) | Out-Null
 
-    $resultTable = Invoke-ClientCommand -ArgumentList $arguments -TimeoutMS $TimeoutMS -TableOutput -ColumnNames @{
+    $resultTable = Invoke-ClientCommand `
+        -ArgumentList $arguments `
+        -Timeout $Timeout `
+        -TableOutput -ColumnNames @{
         'NAME' = 'Name'
         'DESCRIPTION' = 'Description'
         'STARS' = 'Stars'
