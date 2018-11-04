@@ -1,6 +1,18 @@
 function Convert-ToTable {
-    [CmdletBinding()]
 
+    <#
+
+    .SYNOPSIS Converts the output of the docker client to a table of PsObjects
+
+    .PARAMETER Content
+    Specifies the lines, returned from the docker client.
+
+    .PARAMETER Columns
+    Specifies the column name of the source and the property name in the result.
+
+    #>
+
+    [CmdletBinding()]
     param (
         [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
@@ -10,7 +22,7 @@ function Convert-ToTable {
         [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
         [hashtable]
-        $ColumnNames
+        $Columns
     )
 
     $header = $Content[0]
@@ -35,11 +47,11 @@ function Convert-ToTable {
             $length = $null
         }
 
-        if ( $ColumnNames ) {
-            if ( -not $ColumnNames.ContainsKey( $columnName ) ) {
+        if ( $Columns ) {
+            if ( -not $Columns.ContainsKey( $columnName ) ) {
                 throw "Unexpected column '$columnName'"
             }
-            $columnName = $ColumnNames[ $columnName ]
+            $columnName = $Columns[ $columnName ]
         }
 
         $schema.Add(@{

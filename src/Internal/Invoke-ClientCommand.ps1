@@ -11,6 +11,14 @@ function Invoke-ClientCommand {
     .PARAMETER Timeout
     Specifies a timeout in seconds for the command.
 
+    .PARAMETER StringOutput
+    Specifies if the output should be returned as string.
+
+    .PARAMETER TableOutput
+    Specifies if the output should be returned as table.
+    The value is a hashtable that specifies the column mapping
+    beween docker output and the properties of the result objects.
+
     #>
 
     [CmdletBinding()]
@@ -29,12 +37,8 @@ function Invoke-ClientCommand {
         $StringOutput,
 
         [Parameter(Mandatory=$false)]
-        [switch]
-        $TableOutput,
-
-        [Parameter(Mandatory=$false)]
         [hashtable]
-        $ColumnNames
+        $TableOutput
     )
 
     # Configure process
@@ -92,7 +96,7 @@ function Invoke-ClientCommand {
             Write-Verbose "Process output: $standardOutput"
             $standardOutput
         } elseif ( $TableOutput ) {
-            Convert-ToTable -Content $standardOutputBuffer.Values -ColumnNames $ColumnNames
+            Convert-ToTable -Content $standardOutputBuffer.Values -Columns $TableOutput
         }
     } else {
         Write-Verbose "No process output"
