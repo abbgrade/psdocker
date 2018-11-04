@@ -25,10 +25,6 @@ Describe 'Module Tests' {
         It "Linux or Windows mode" {
             $dockerVersion = Get-DockerVersion
             $dockerVersion.Server.OSArch | Should -BeIn @( "windows/amd64", "linux/amd64" )
-<<<<<<< HEAD
-            Write-Warning "Running on $( $dockerVersion.Server.OSArch )."
-=======
->>>>>>> release/1.1.0
         }
     }
     Context "Repository Cmdlets" {
