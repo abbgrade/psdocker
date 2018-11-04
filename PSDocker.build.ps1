@@ -53,7 +53,7 @@ task Publish {
 
 task Clean CleanBuildPath
 
-task UpdateDocs Clean, Build, {
+task UpdateDocs {
 	Import-Module $manifestFilePath -Force
 	# New-MarkdownHelp -Module PSDocker -OutputFolder .\docs
 	Update-MarkdownHelp $docPath
