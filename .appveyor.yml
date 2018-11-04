@@ -6,6 +6,12 @@ environment:
 
 image: Visual Studio 2017
 
+init:
+  - ps: |
+      if ( $env:appveyor_repo_tag_name ) {
+        Update-AppveyorBuild -Version "$( $env:appveyor_repo_tag_name )-$( $env:appveyor_build_version )"
+      }
+
 install:
   - ps: Install-Module InvokeBuild -Force
   - ps: Install-Module Pester -Force -SkipPublisherCheck
