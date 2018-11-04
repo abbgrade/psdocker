@@ -15,13 +15,13 @@ function Install-Image {
         [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
         [string]
-        $Image,
+        $Name,
 
         [Parameter(Mandatory=$false)]
         [int]
         $Timeout = 5 * 60
     )
 
-    Invoke-ClientCommand "pull", $Image -Timeout $Timeout
-    Write-Verbose "Docker image '$Image' pulled."
+    Invoke-ClientCommand "pull", $Name -Timeout $Timeout
+    Write-Verbose "Docker image '$Name' pulled."
 }

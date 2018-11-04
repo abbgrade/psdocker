@@ -28,7 +28,7 @@ Describe 'Module Tests' {
         }
     }
     Context "Repository Cmdlets" {
-        It 'docker search returns a valid output' {
+        It 'docker search works' {
             $images = Search-DockerImage -Term 'Hello' -Limit $null
             $images.Count | Should -BeGreaterThan 0
 
@@ -38,29 +38,35 @@ Describe 'Module Tests' {
     Context 'Lifecycle Cmdlets' {
 
         BeforeAll {
-            $image = 'hello-world:latest'
+            $imageName = 'hello-world'
         }
         It 'docker pull works' {
-            Install-DockerImage -Image $image
+            Install-DockerImage -Name $imageName
         }
         It 'docker pull throws on invalid image' {
             {
-                Install-DockerImage -Image 'foobar' -WarningAction 'SilentlyContinue'
+                Install-DockerImage -Name 'foobar' -WarningAction 'SilentlyContinue'
             } | Should Throw
         }
-        It 'docker ps returns the correct number of containers' {
+        It 'docker image ls works' {
+            Install-DockerImage -Name $imageName
+
+            Get-DockerImage | Where-Object Name -eq $imageName | Should -Be
+            ( Get-DockerImage -Repository $imageName ).Repository | Should -Be $imageName
+        }
+        It 'docker ps works' {
             $baseLineContainer = @(
-                ( New-DockerContainer -Image $image ),
-                ( New-DockerContainer -Image $image )
+                ( New-DockerContainer -Image $imageName ),
+                ( New-DockerContainer -Image $imageName )
             )
 
             $previousCount = ( Get-DockerContainer ).Count
 
             $container = @(
-                ( New-DockerContainer -Image $image ),
-                ( New-DockerContainer -Image $image ),
-                ( New-DockerContainer -Image $image ),
-                ( New-DockerContainer -Image $image )
+                ( New-DockerContainer -Image $imageName ),
+                ( New-DockerContainer -Image $imageName ),
+                ( New-DockerContainer -Image $imageName ),
+                ( New-DockerContainer -Image $imageName )
             )
 
             $afterCount = ( Get-DockerContainer ).Count
@@ -72,13 +78,13 @@ Describe 'Module Tests' {
             }
         }
         It 'docker run works' {
-            $container = New-DockerContainer -Image $image -Environment @{"A" = 1; "B" = "C"}
-            $container.Image | Should -Be $image
+            $container = New-DockerContainer -Image $imageName -Environment @{"A" = 1; "B" = "C"}
+            $container.Image | Should -Be $imageName
 
             Remove-DockerContainer -Name $container.Name
         }
         It 'docker remove works' {
-            $container = New-DockerContainer -Image $image
+            $container = New-DockerContainer -Image $imageName
 
             Remove-DockerContainer -Name $container.Name
         }
@@ -105,7 +111,11 @@ Describe 'Module Tests' {
                         }
                     }
                 )
-                Install-DockerImage -Image $testConfig.Image -Timeout ( 10 * 60)
+
+                if ( -not ( Get-DockerImage -Repository $testConfig.Image )) {
+                    Install-DockerImage -Name $testConfig.Image -Timeout ( 10 * 60)
+                }
+
                 $container = New-DockerContainer -Image $testConfig.Image -Interactive -Detach
             } catch {
                 Write-Error $_.Exception -ErrorAction 'Continue'
@@ -115,7 +125,7 @@ Describe 'Module Tests' {
         It 'docker exec does not throw' {
             Invoke-DockerCommand -Name $container.Name -Command 'hostname'
         }
-        It 'docker exec returns a valid output' {
+        It 'docker exec works' {
             Invoke-DockerCommand -Name $container.Name `
                 -Command $testConfig.PrintCommand `
                 -ArgumentList 'foobar' -StringOutput | Should -Be 'foobar'
@@ -155,7 +165,10 @@ Describe 'Module Tests' {
                     }
                 )
 
-                Install-DockerImage -Image $testConfig.Image -Timeout ( 10 * 60 )
+                if ( -not ( Get-DockerImage -Repository $testConfig.Image )) {
+                    Install-DockerImage -Name $testConfig.Image -Timeout ( 10 * 60)
+                }
+
                 $container = New-DockerContainer -Image $testConfig.Image -Interactive -Detach
             } catch {
                 Write-Error $_.Exception -ErrorAction 'Continue'
