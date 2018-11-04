@@ -29,7 +29,7 @@ Describe 'Module Tests' {
         It "Linux or Windows mode" {
             $dockerVersion = Get-DockerVersion
             $dockerVersion.Server.OSArch | Should -BeIn @( "windows/amd64", "linux/amd64" )
-            Write-Host "Running on $( $dockerVersion.Server.OSArch )."
+            Write-Warning "Running on $( $dockerVersion.Server.OSArch )."
         }
     }
     Context "Repository Cmdlets" {
