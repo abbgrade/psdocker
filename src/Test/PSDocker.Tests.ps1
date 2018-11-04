@@ -34,8 +34,10 @@ Describe 'Module Tests' {
     }
     Context "Repository Cmdlets" {
         It 'docker search returns a valid output' {
-            [PsObject[]] $images = Search-DockerImage -Term 'Hello'
+            $images = Search-DockerImage -Term 'Hello' -Limit $null
             $images.Count | Should -BeGreaterThan 0
+
+            ( Search-DockerImage -Term 'Hello' -Limit 5 ).Count | Should -BeLessOrEqual 5
         }
     }
     Context 'Lifecycle Cmdlets' {
