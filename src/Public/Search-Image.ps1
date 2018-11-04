@@ -1,5 +1,36 @@
 function Search-Image {
 
+    <#
+
+    .SYNOPSIS Search the Docker Hub for images
+
+    .DESCRIPTION
+    Wraps the docker command [search](https://docs.docker.com/engine/reference/commandline/search/).
+
+    .PARAMETER Term
+    Specifies the search term.
+
+    .PARAMETER Limit
+    Specifies the maximum number of results.
+    If the limit is $null or 0 the docker default (25) is used instead.
+
+    .EXAMPLE
+    C:\PS> Search-DockerImage 'nanoserver' -Limit 2
+
+    IsAutomated : False
+    Description :
+    Name        : microsoft/nanoserver
+    Stars       : 431
+    IsOfficial  : False
+
+    IsAutomated : False
+    Description : Nano Server + IIS. Updated on 08/21/2018 -- …
+    Name        : nanoserver/iis
+    Stars       : 35
+    IsOfficial  : False
+
+    #>
+
     [CmdletBinding()]
     param(
         [Parameter(Mandatory=$true)]
@@ -7,12 +38,30 @@ function Search-Image {
         [string]
         $Term,
 
+        [Parameter(Mandatory=$true)]
+        [int]
+        $Limit,
+
         [Parameter(Mandatory=$false)]
         [int]
-        $TimeoutMS = 30 * 1000
+        $Timeout = 30
     )
 
-    Invoke-ClientCommand 'search', $Term -TimeoutMS $TimeoutMS -TableOutput -ColumnNames @{
+    # prepare arugments
+    $arguments = New-Object System.Collections.ArrayList
+
+    $arguments.Add( 'search' ) | Out-Null
+
+    if ( $Limit ) {
+        $arguments.Add( "--limit $Limit" ) | Out-Null
+    }
+
+    $arguments.Add( $Term ) | Out-Null
+
+    $resultTable = Invoke-ClientCommand `
+        -ArgumentList $arguments `
+        -Timeout $Timeout `
+        -TableOutput @{
         'NAME' = 'Name'
         'DESCRIPTION' = 'Description'
         'STARS' = 'Stars'
@@ -28,4 +77,5 @@ function Search-Image {
         }
     }
 
+    Write-Output $resultTable
 }

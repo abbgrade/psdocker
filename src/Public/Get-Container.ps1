@@ -1,5 +1,39 @@
 function Get-Container {
 
+    <#
+
+    .SYNOPSIS Get docker container
+
+    .DESCRIPTION
+    Returns references to docker containers of a docker service.
+    It can be filtered by name and status.
+    Wraps the docker command [ps](https://docs.docker.com/engine/reference/commandline/ps/).
+
+    .PARAMETER Running
+    Specifies if only running containers should be returned.
+
+    .PARAMETER Latest
+    Specifies if only the latest created container should be returned.
+
+    .PARAMETER Name
+    Specifies if only the container with the given name should be returned.
+
+    .PARAMETER Timeout
+    Specifies the timeout of the docker client command.
+
+    .EXAMPLE
+    C:\> New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer' | Out-Null
+    C:\> Get-DockerContainer -Name 'mycontainer'
+    Image       : microsoft/nanoserver
+    Ports       :
+    Command     : "c:\\windows\\system32\\cmd.exe"
+    Created     : 13 seconds ago
+    Name        : mycontainer
+    ContainerID : 1c3bd73d25552b41a677a99a15a9326ba72123096f9e10c3d36f72fb90e57f16
+    Status      : Exited (0) 5 seconds ago
+
+    #>
+
     [CmdletBinding()]
     param (
         [Parameter(Mandatory=$false)]
@@ -18,7 +52,7 @@ function Get-Container {
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [int]
-        $TimeoutMS = 1000
+        $Timeout = 1
     )
 
     $arguments = New-Object System.Collections.ArrayList
@@ -41,9 +75,8 @@ function Get-Container {
 
     Invoke-ClientCommand `
         -ArgumentList $arguments `
-        -TimeoutMS $TimeoutMS `
-        -TableOutput `
-        -ColumnNames @{
+        -Timeout $Timeout `
+        -TableOutput @{
             'CONTAINER ID' = 'ContainerID'
             'IMAGE' = 'Image'
             'COMMAND' = 'Command'

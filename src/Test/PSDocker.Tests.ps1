@@ -1,11 +1,7 @@
-$ErrorActionPreference = "Continue"
-$DebugPreference = "SilentlyContinue"
-$VerbosePreference = "SilentlyContinue"
-
+# general test setup
 if ( $PSScriptRoot ) { $ScriptRoot = $PSScriptRoot } else { $ScriptRoot = Get-Location }
 $ModuleManifestPath = "$ScriptRoot\..\PSDocker.psd1"
-Import-Module "$ScriptRoot\..\PSDocker.psm1" -Prefix 'Docker' -Force
-
+Import-Module "$ScriptRoot\..\PSDocker.psd1" -Force
 
 Describe 'Module Tests' {
 
@@ -29,41 +25,52 @@ Describe 'Module Tests' {
         It "Linux or Windows mode" {
             $dockerVersion = Get-DockerVersion
             $dockerVersion.Server.OSArch | Should -BeIn @( "windows/amd64", "linux/amd64" )
+<<<<<<< HEAD
             Write-Warning "Running on $( $dockerVersion.Server.OSArch )."
+=======
+>>>>>>> release/1.1.0
         }
     }
     Context "Repository Cmdlets" {
-        It 'docker search returns a valid output' {
-            [PsObject[]] $images = Search-DockerImage -Term 'Hello'
+        It 'docker search works' {
+            $images = Search-DockerImage -Term 'Hello' -Limit $null
             $images.Count | Should -BeGreaterThan 0
+
+            ( Search-DockerImage -Term 'Hello' -Limit 5 ).Count | Should -BeLessOrEqual 5
         }
     }
     Context 'Lifecycle Cmdlets' {
 
         BeforeAll {
-            $image = 'hello-world:latest'
+            $imageName = 'hello-world'
         }
         It 'docker pull works' {
-            Install-DockerImage -Image $image
+            Install-DockerImage -Name $imageName
         }
         It 'docker pull throws on invalid image' {
             {
-                Install-DockerImage -Image 'foobar'
+                Install-DockerImage -Name 'foobar' -WarningAction 'SilentlyContinue'
             } | Should Throw
         }
-        It 'docker ps returns the correct number of containers' {
+        It 'docker image ls works' {
+            Install-DockerImage -Name $imageName
+
+            Get-DockerImage | Where-Object Name -eq $imageName | Should -Be
+            ( Get-DockerImage -Repository $imageName ).Repository | Should -Be $imageName
+        }
+        It 'docker ps works' {
             $baseLineContainer = @(
-                ( New-DockerContainer -Image $image ),
-                ( New-DockerContainer -Image $image )
+                ( New-DockerContainer -Image $imageName ),
+                ( New-DockerContainer -Image $imageName )
             )
 
             $previousCount = ( Get-DockerContainer ).Count
 
             $container = @(
-                ( New-DockerContainer -Image $image ),
-                ( New-DockerContainer -Image $image ),
-                ( New-DockerContainer -Image $image ),
-                ( New-DockerContainer -Image $image )
+                ( New-DockerContainer -Image $imageName ),
+                ( New-DockerContainer -Image $imageName ),
+                ( New-DockerContainer -Image $imageName ),
+                ( New-DockerContainer -Image $imageName )
             )
 
             $afterCount = ( Get-DockerContainer ).Count
@@ -75,13 +82,13 @@ Describe 'Module Tests' {
             }
         }
         It 'docker run works' {
-            $container = New-DockerContainer -Image $image -Environment @{"A" = 1; "B" = "C"}
-            $container.Image | Should -Be $image
+            $container = New-DockerContainer -Image $imageName -Environment @{"A" = 1; "B" = "C"}
+            $container.Image | Should -Be $imageName
 
             Remove-DockerContainer -Name $container.Name
         }
         It 'docker remove works' {
-            $container = New-DockerContainer -Image $image
+            $container = New-DockerContainer -Image $imageName
 
             Remove-DockerContainer -Name $container.Name
         }
@@ -108,7 +115,11 @@ Describe 'Module Tests' {
                         }
                     }
                 )
-                Install-DockerImage -Image $testConfig.Image -TimeoutMS ( 10 * 60 * 1000 )
+
+                if ( -not ( Get-DockerImage -Repository $testConfig.Image )) {
+                    Install-DockerImage -Name $testConfig.Image -Timeout ( 10 * 60)
+                }
+
                 $container = New-DockerContainer -Image $testConfig.Image -Interactive -Detach
             } catch {
                 Write-Error $_.Exception -ErrorAction 'Continue'
@@ -118,7 +129,7 @@ Describe 'Module Tests' {
         It 'docker exec does not throw' {
             Invoke-DockerCommand -Name $container.Name -Command 'hostname'
         }
-        It 'docker exec returns a valid output' {
+        It 'docker exec works' {
             Invoke-DockerCommand -Name $container.Name `
                 -Command $testConfig.PrintCommand `
                 -ArgumentList 'foobar' -StringOutput | Should -Be 'foobar'
@@ -158,7 +169,10 @@ Describe 'Module Tests' {
                     }
                 )
 
-                Install-DockerImage -Image $testConfig.Image -TimeoutMS ( 10 * 60 * 1000 )
+                if ( -not ( Get-DockerImage -Repository $testConfig.Image )) {
+                    Install-DockerImage -Name $testConfig.Image -Timeout ( 10 * 60)
+                }
+
                 $container = New-DockerContainer -Image $testConfig.Image -Interactive -Detach
             } catch {
                 Write-Error $_.Exception -ErrorAction 'Continue'
@@ -166,7 +180,7 @@ Describe 'Module Tests' {
             }
         }
         It 'docker exec powershell' {
-            $service = Get-DockerService -ContainerName $container.Name -Name $testConfig.Service -Verbose
+            $service = Get-DockerService -ContainerName $container.Name -Name $testConfig.Service
             $service.Name | Should -Be $testConfig.Service
         }
         AfterAll {

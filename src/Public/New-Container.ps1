@@ -1,5 +1,50 @@
 function New-Container {
 
+    <#
+
+    .SYNOPSIS New container
+
+    .DESCRIPTION
+    Creates a new container in the docker service.
+    Wraps the docker command [run](https://docs.docker.com/engine/reference/commandline/run/).
+
+    .PARAMETER Name
+    Specifies the name of the new container.
+    If not specified, a name will be generated.
+
+    .PARAMETER Image
+    Specifies the name if the image to create the container based on.
+
+    .PARAMETER Environment
+    Specifies the environment variables that are used during the container creation.
+
+    .PARAMETER Ports
+    Specifies the portmapping of the created container.
+
+    .PARAMETER Timeout
+    Specifies the timeout of the docker client for the container creation.
+
+    .PARAMETER StatusTimeout
+    Specifies the timeout of the docker client for the container lookup after creation.
+
+    .PARAMETER Detach
+    Specifies if the container should be detached.
+
+    .PARAMETER Interactive
+    Specifies if the container should be interactive.
+
+    .EXAMPLE
+    C:\> New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer'
+    Image       : microsoft/nanoserver
+    Ports       :
+    Command     : "c:\\windows\\system32\\cmd.exe"
+    Created     : 14 seconds ago
+    Name        : mycontainer
+    ContainerID : 1a0b70cfcfba78e46468dbfa72b0b36fae4c30282367482bc348b5fcee0b85d3
+    Status      : Exited (0) 1 second ago
+
+    #>
+
     [CmdletBinding()]
     param (
         [Parameter(Mandatory=$false)]
@@ -24,7 +69,11 @@ function New-Container {
 
         [Parameter(Mandatory=$false)]
         [int]
-        $TimeoutMS = 30 * 1000,
+        $Timeout = 30,
+
+        [Parameter(Mandatory=$false)]
+        [int]
+        $StatusTimeout = 1,
 
         [Parameter(Mandatory=$false)]
         [switch]
@@ -67,10 +116,10 @@ function New-Container {
     $arguments.Add( $Image ) | Out-Null
 
     # create container
-    Invoke-ClientCommand -ArgumentList $arguments -TimeoutMS $TimeoutMS
+    Invoke-ClientCommand -ArgumentList $arguments -Timeout $Timeout
 
     # check container
-    $container = Get-Container -Latest -TimeoutMS $TimeoutMS
+    $container = Get-Container -Latest -Timeout $StatusTimeout
     if ( -not $container.Name ) {
         throw "Failed to create container"
     }

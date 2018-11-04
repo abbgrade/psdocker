@@ -9,6 +9,7 @@ function Get-BuildRoot {
 [string] $root = Get-BuildRoot
 [string] $sourcePath = "$root\src"
 [string] $buildPath = "$root\build"
+[string] $docPath = "$root\docs"
 [string] $manifestFilePath = "$sourcePath\PSDocker.psd1"
 [string] $moduleBuildPath = "$buildPath\PSDocker"
 
@@ -51,5 +52,11 @@ task Publish {
 }
 
 task Clean CleanBuildPath
+
+task UpdateDocs {
+	Import-Module $manifestFilePath -Force
+	# New-MarkdownHelp -Module PSDocker -OutputFolder .\docs
+	Update-MarkdownHelp $docPath
+}
 
 task . Clean, Build

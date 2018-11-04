@@ -1,27 +1,44 @@
 function Invoke-ClientCommand {
-    [CmdletBinding()]
 
+    <#
+
+    .SYNOPSIS Invokes a docker client command
+
+    .PARAMETER ArgumentList
+    Specifies the arguments that are passed to the docker client.
+    All arguments are casted to string.
+
+    .PARAMETER Timeout
+    Specifies a timeout in seconds for the command.
+
+    .PARAMETER StringOutput
+    Specifies if the output should be returned as string.
+
+    .PARAMETER TableOutput
+    Specifies if the output should be returned as table.
+    The value is a hashtable that specifies the column mapping
+    beween docker output and the properties of the result objects.
+
+    #>
+
+    [CmdletBinding()]
     param (
         [Parameter(Mandatory=$true)]
         [string[]]
         $ArgumentList,
 
         [Parameter(Mandatory=$true)]
-        [ValidateNotNullOrEmpty()]
+        [ValidateNotNull()]
         [int]
-        $TimeoutMS,
+        $Timeout,
 
         [Parameter(Mandatory=$false)]
         [switch]
         $StringOutput,
 
         [Parameter(Mandatory=$false)]
-        [switch]
-        $TableOutput,
-
-        [Parameter(Mandatory=$false)]
         [hashtable]
-        $ColumnNames
+        $TableOutput
     )
 
     # Configure process
@@ -59,8 +76,8 @@ function Invoke-ClientCommand {
         $process.BeginErrorReadLine()
 
         # Wait for exit
-        if ( $TimeoutMS ) {
-            $process.WaitForExit( $TimeoutMS ) | Out-Null
+        if ( $Timeout ) {
+            $process.WaitForExit( $Timeout * 1000 ) | Out-Null
         }
         $process.WaitForExit() | Out-Null # Ensure streams are flushed
 
@@ -79,7 +96,7 @@ function Invoke-ClientCommand {
             Write-Verbose "Process output: $standardOutput"
             $standardOutput
         } elseif ( $TableOutput ) {
-            Convert-ToTable -Content $standardOutputBuffer.Values -ColumnNames $ColumnNames
+            Convert-ToTable -Content $standardOutputBuffer.Values -Columns $TableOutput
         }
     } else {
         Write-Verbose "No process output"
@@ -96,7 +113,7 @@ function Invoke-ClientCommand {
     } else {
         Write-Verbose "No process error output"
     }
-    if ( $process.TotalProcessorTime.TotalMilliseconds -ge $TimeoutMS ) {
+    if ( $process.TotalProcessorTime.TotalSeconds -ge $Timeout ) {
         throw "Process timed out ($processCall) after $( $process.TotalProcessorTime )."
     }
 }
