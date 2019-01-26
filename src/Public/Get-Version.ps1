@@ -53,10 +53,10 @@ function Get-Version {
 
     $component = $null
     foreach ( $line in $output ) {
-        switch ( $line ) {
+        switch -Wildcard ( $line ) {
             "" {}
-            "Client:" { $component = 'Client' }
-            "Server:" { $component = 'Server' }
+            "Client:*" { $component = 'Client' }
+            "Server:*" { $component = 'Server' }
             Default {
                 if ( -not $component ) {
                     throw "unexpected response from 'docker version'"
