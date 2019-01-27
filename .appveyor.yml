@@ -1,16 +1,10 @@
-version: '1.1.{build}'
+version: '1.1.1.{build}'
 
 environment:
   nuget_apikey:
     secure: AWSfDUQgVaMF1fhfsaVx5Hy/qIa9lwyPwXQ9kYTYUJV4qdEeFHMIggk2COOD6DH2
 
 image: Visual Studio 2017
-
-init:
-  - ps: |
-      if ( $env:appveyor_repo_tag_name ) {
-        Update-AppveyorBuild -Version "$( $env:appveyor_repo_tag_name )"
-      }
 
 install:
   - ps: Install-Module InvokeBuild -Force
@@ -22,7 +16,11 @@ platform:
   - x64
 
 before_build:
-  -ps: Invoke-Build UpdateDocs
+  - ps: |
+      if ( $env:appveyor_repo_tag_name ) {
+        Update-AppveyorBuild -Version "$( $env:appveyor_repo_tag_name )"
+      }
+  - ps: Invoke-Build UpdateDocs
 
 build_script:
   - ps: Invoke-Build Build
