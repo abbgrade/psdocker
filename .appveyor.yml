@@ -1,4 +1,4 @@
-version: '1.1.7.{build}'
+version: '1.1.8.{build}'
 
 environment:
   nuget_apikey:
@@ -10,8 +10,9 @@ init:
   - ps: |
       # Update build version if tag is set
       if ( $env:APPVEYOR_REPO_TAG_NAME ) {
-        $env:APPVEYOR_BUILD_VERSION = "$( $env:APPVEYOR_REPO_TAG_NAME )"
-        Update-AppveyorBuild -Version $env:APPVEYOR_BUILD_VERSION
+        $newVersion = "$( $env:APPVEYOR_REPO_TAG_NAME )"
+        Update-AppveyorBuild -Version $newVersion
+        Set-AppveyorBuildVariable 'APPVEYOR_BUILD_VERSION' $newVersion
       }
 
 install:
