@@ -13,7 +13,7 @@ function Get-BuildRoot {
 [string] $manifestFilePath = "$sourcePath\PSDocker.psd1"
 [string] $moduleBuildPath = "$buildPath\PSDocker"
 
-task Build PrepareBuildPath, BuildManifest, CopyArtefacts
+task Build PrepareBuildPath, CopyArtefacts
 
 task PrepareBuildPath {
 	New-Item -Path $buildPath -ItemType Directory | Out-Null
@@ -21,22 +21,6 @@ task PrepareBuildPath {
 
 task CleanBuildPath {
 	Remove-Item $buildPath -Recurse -ErrorAction 'Continue'
-}
-
-task BuildManifest {
-	$replacements = @{}
-
-	# Update the module version based on the build version
-	if ( $env:APPVEYOR ) {
-		$replacements["ModuleVersion = '.*'"] = "ModuleVersion = '$env:APPVEYOR_BUILD_VERSION'"
-	}
-
-	# Update Manifest
-	$manifestContent = Get-Content -Path $manifestFilePath -Raw
-	$replacements.GetEnumerator() | ForEach-Object {
-		$manifestContent = $manifestContent -replace $_.Key, $_.Value
-	}
-	$manifestContent.Trim() | Set-Content -Path $manifestFilePath
 }
 
 task CopyArtefacts {
