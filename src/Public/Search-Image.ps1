@@ -2,20 +2,30 @@ function Search-Image {
 
     <#
 
-    .SYNOPSIS Search the Docker Hub for images
+    .SYNOPSIS
+
+    Search the Docker Hub for images
 
     .DESCRIPTION
-    Wraps the docker command [search](https://docs.docker.com/engine/reference/commandline/search/).
+
+    Wraps the command [docker search](https://docs.docker.com/engine/reference/commandline/search/).
 
     .PARAMETER Term
+
     Specifies the search term.
 
     .PARAMETER Limit
+
     Specifies the maximum number of results.
     If the limit is $null or 0 the docker default (25) is used instead.
 
+    .PARAMETER Timeout
+
+    Specifies the number of seconds to wait for the command to finish.
+
     .EXAMPLE
-    C:\PS> Search-DockerImage 'nanoserver' -Limit 2
+
+    PS C:\> Search-DockerImage 'nanoserver' -Limit 2
 
     IsAutomated : False
     Description :

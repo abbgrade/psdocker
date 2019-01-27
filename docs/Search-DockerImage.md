@@ -8,7 +8,7 @@ schema: 2.0.0
 # Search-DockerImage
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Search the Docker Hub for images
 
 ## SYNTAX
 
@@ -17,24 +17,35 @@ Search-DockerImage [-Term] <String> [-Limit] <Int32> [[-Timeout] <Int32>] [<Comm
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Wraps the command \[docker search\](https://docs.docker.com/engine/reference/commandline/search/).
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### BEISPIEL 1
+```
+Search-DockerImage 'nanoserver' -Limit 2
 ```
 
-{{ Add example description here }}
+IsAutomated : False
+Description :
+Name        : microsoft/nanoserver
+Stars       : 431
+IsOfficial  : False
+
+IsAutomated : False
+Description : Nano Server + IIS.
+Updated on 08/21/2018 -- â€¦
+Name        : nanoserver/iis
+Stars       : 35
+IsOfficial  : False
 
 ## PARAMETERS
 
-### -Limit
-{{Fill Limit Description}}
+### -Term
+Specifies the search term.
 
 ```yaml
-Type: Int32
+Type: String
 Parameter Sets: (All)
 Aliases:
 
@@ -45,23 +56,24 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Term
-{{Fill Term Description}}
+### -Limit
+Specifies the maximum number of results.
+If the limit is $null or 0 the docker default (25) is used instead.
 
 ```yaml
-Type: String
+Type: Int32
 Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 0
-Default value: None
+Position: 2
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Timeout
-{{Fill Timeout Description}}
+Specifies the number of seconds to wait for the command to finish.
 
 ```yaml
 Type: Int32
@@ -69,22 +81,20 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
-Default value: None
+Position: 3
+Default value: 30
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
+For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### Keine
-
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS

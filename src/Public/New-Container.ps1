@@ -2,39 +2,51 @@ function New-Container {
 
     <#
 
-    .SYNOPSIS New container
+    .SYNOPSIS
+
+    New container
 
     .DESCRIPTION
+
     Creates a new container in the docker service.
-    Wraps the docker command [run](https://docs.docker.com/engine/reference/commandline/run/).
+    Wraps the command [docker run](https://docs.docker.com/engine/reference/commandline/run/).
 
     .PARAMETER Name
+
     Specifies the name of the new container.
     If not specified, a name will be generated.
 
     .PARAMETER Image
+
     Specifies the name if the image to create the container based on.
 
     .PARAMETER Environment
+
     Specifies the environment variables that are used during the container creation.
 
     .PARAMETER Ports
+
     Specifies the portmapping of the created container.
 
     .PARAMETER Timeout
-    Specifies the timeout of the docker client for the container creation.
+
+    Specifies the number of seconds to wait for the command to finish.
 
     .PARAMETER StatusTimeout
+
     Specifies the timeout of the docker client for the container lookup after creation.
 
     .PARAMETER Detach
+
     Specifies if the container should be detached.
 
     .PARAMETER Interactive
+
     Specifies if the container should be interactive.
 
     .EXAMPLE
-    C:\> New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer'
+
+    PS C:\> New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer'
     Image       : microsoft/nanoserver
     Ports       :
     Command     : "c:\\windows\\system32\\cmd.exe"
