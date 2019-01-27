@@ -55,8 +55,9 @@ task Clean CleanBuildPath
 
 task UpdateDocs {
 	Import-Module $manifestFilePath -Force
-	# New-MarkdownHelp -Module PSDocker -OutputFolder .\docs
-	Update-MarkdownHelp $docPath
+	Remove-Item -Path $docPath/*
+	New-MarkdownHelp -Module PSDocker -OutputFolder $docPath
+	# Update-MarkdownHelp -Path $docPath -AlphabeticParamsOrder -Force
 }
 
 task . Clean, Build

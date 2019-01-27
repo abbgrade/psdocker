@@ -8,7 +8,7 @@ schema: 2.0.0
 # Remove-DockerContainer
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Remove container
 
 ## SYNTAX
 
@@ -18,36 +18,22 @@ Remove-DockerContainer [-Name] <String> [-Force] [[-Timeout] <Int32>] [[-StopTim
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Removes a docker container from the service.
+Wraps the command \[docker rm\](https://docs.docker.com/engine/reference/commandline/rm/).
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### BEISPIEL 1
+```
+New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer' | Out-Null
 ```
 
-{{ Add example description here }}
+PS C:\\\> Remove-DockerContainer -Name 'mycontainer'
 
 ## PARAMETERS
 
-### -Force
-{{Fill Force Description}}
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Benannt
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Name
-{{Fill Name Description}}
+Specifies the name of the container, that should be removed.
 
 ```yaml
 Type: String
@@ -55,14 +41,29 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 0
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -StopTimeout
-{{Fill StopTimeout Description}}
+### -Force
+Specifies if the container should be stopped before removal.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Timeout
+Specifies the number of seconds to wait for the command to finish.
 
 ```yaml
 Type: Int32
@@ -71,13 +72,13 @@ Aliases:
 
 Required: False
 Position: 2
-Default value: None
+Default value: 10
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Timeout
-{{Fill Timeout Description}}
+### -StopTimeout
+Specifies the timeout of the docker client command for the stop operation.
 
 ```yaml
 Type: Int32
@@ -85,22 +86,20 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 1
-Default value: None
+Position: 3
+Default value: 10
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
+For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### Keine
-
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS

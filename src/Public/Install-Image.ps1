@@ -2,14 +2,26 @@ function Install-Image {
 
     <#
 
-    .SYNOPSIS Install image
+    .SYNOPSIS
+
+    Install image
 
     .Description
+
     Installs a docker image in the service from a repository.
-    Wraps the docker command [pull](https://docs.docker.com/engine/reference/commandline/pull/).
+    Wraps the command [docker pull](https://docs.docker.com/engine/reference/commandline/pull/).
+
+    .PARAMETER Name
+
+    Specifies the name of the repository of the image to install.
+
+    .PARAMETER Timeout
+
+    Specifies the number of seconds to wait for the command to finish.
 
     .EXAMPLE
-    C:\PS> Install-DockerImage -Name 'microsoft/nanoserver'
+
+    PS C:\> Install-DockerImage -Name 'microsoft/nanoserver'
 
     #>
 

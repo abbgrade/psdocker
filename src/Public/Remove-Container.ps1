@@ -2,27 +2,35 @@ function Remove-Container {
 
     <#
 
-    .SYNOPSIS Remove container
+    .SYNOPSIS
+
+    Remove container
 
     .DESCRIPTION
+
     Removes a docker container from the service.
-    Wraps the docker command [rm](https://docs.docker.com/engine/reference/commandline/rm/).
+    Wraps the command [docker rm](https://docs.docker.com/engine/reference/commandline/rm/).
 
     .PARAMETER Name
+
     Specifies the name of the container, that should be removed.
 
     .PARAMETER Force
+
     Specifies if the container should be stopped before removal.
 
     .PARAMETER Timeout
-    Specifies the timeout of the docker client command for the removal.
+
+    Specifies the number of seconds to wait for the command to finish.
 
     .PARAMETER StopTimeout
+
     Specifies the timeout of the docker client command for the stop operation.
 
     .EXAMPLE
-    C:\> New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer' | Out-Null
-    C:\> Remove-DockerContainer -Name 'mycontainer'
+
+    PS C:\> New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer' | Out-Null
+    PS C:\> Remove-DockerContainer -Name 'mycontainer'
 
     #>
 

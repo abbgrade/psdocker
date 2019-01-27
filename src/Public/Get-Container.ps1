@@ -2,28 +2,36 @@ function Get-Container {
 
     <#
 
-    .SYNOPSIS Get docker container
+    .SYNOPSIS
+
+    Get docker container
 
     .DESCRIPTION
+
     Returns references to docker containers of a docker service.
     It can be filtered by name and status.
-    Wraps the docker command [ps](https://docs.docker.com/engine/reference/commandline/ps/).
+    Wraps the command [docker ps](https://docs.docker.com/engine/reference/commandline/ps/).
 
     .PARAMETER Running
+
     Specifies if only running containers should be returned.
 
     .PARAMETER Latest
+
     Specifies if only the latest created container should be returned.
 
     .PARAMETER Name
+
     Specifies if only the container with the given name should be returned.
 
     .PARAMETER Timeout
-    Specifies the timeout of the docker client command.
+
+    Specifies the number of seconds to wait for the command to finish.
 
     .EXAMPLE
-    C:\> New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer' | Out-Null
-    C:\> Get-DockerContainer -Name 'mycontainer'
+
+    PS C:\> New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer' | Out-Null
+    PS C:\> Get-DockerContainer -Name 'mycontainer'
     Image       : microsoft/nanoserver
     Ports       :
     Command     : "c:\\windows\\system32\\cmd.exe"

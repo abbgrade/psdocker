@@ -2,20 +2,26 @@ function Stop-Container {
 
     <#
 
-    .SYNOPSIS Stop container
+    .SYNOPSIS
+
+    Stop container
 
     .DESCRIPTION
-    Wraps the docker command [stop](https://docs.docker.com/engine/reference/commandline/stop/).
+
+    Wraps the command [docker stop](https://docs.docker.com/engine/reference/commandline/stop/).
 
     .PARAMETER Name
+
     Specifies the name of the container to stop.
 
     .PARAMETER Timeout
-    Specifies the timeout of the docker client command.
+
+    Specifies the number of seconds to wait for the command to finish.
 
     .EXAMPLE
-    C:\> New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer' | Out-Null
-    C:\> Stop-DockerContainer -Name 'mycontainer'
+
+    PS C:\> New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer' | Out-Null
+    PS C:\> Stop-DockerContainer -Name 'mycontainer'
 
     #>
 

@@ -2,18 +2,23 @@ function Get-Version {
 
     <#
 
-    .SYNOPSIS Get version information
+    .SYNOPSIS
+
+    Get version information
 
     .DESCRIPTION
+
     Returns version information of the docker client and service.
-    Wraps the docker command [version](https://docs.docker.com/engine/reference/commandline/version/).
+    Wraps the command [docker version](https://docs.docker.com/engine/reference/commandline/version/).
 
     .PARAMETER Timeout
-    Specifies the timeout of the docker client command.
+
+    Specifies the number of seconds to wait for the command to finish.
 
     .EXAMPLE
-    C:\> $version = Get-DockerVersion
-    C:\> $version.Client
+
+    PS C:\> $version = Get-DockerVersion
+    PS C:\> $version.Client
     Version      : 18.06.1-ce
     Goversion    : go1.10.3
     Experimental : false
@@ -22,7 +27,7 @@ function Get-Version {
     Built        : Tue Aug 21 17:21:34 2018
     OSArch       : windows/amd64
 
-    C:\> $version.Server
+    PS C:\> $version.Server
     Version      : 18.06.1-ce
     Built        : Tue Aug 21 17:36:40 2018
     Experimental : false
@@ -53,10 +58,10 @@ function Get-Version {
 
     $component = $null
     foreach ( $line in $output ) {
-        switch ( $line ) {
+        switch -Wildcard ( $line ) {
             "" {}
-            "Client:" { $component = 'Client' }
-            "Server:" { $component = 'Server' }
+            "Client:*" { $component = 'Client' }
+            "Server:*" { $component = 'Server' }
             Default {
                 if ( -not $component ) {
                     throw "unexpected response from 'docker version'"
