@@ -1,19 +1,10 @@
-version: '1.1.8.{build}'
+version: '1.1.9.{build}'
 
 environment:
   nuget_apikey:
     secure: AWSfDUQgVaMF1fhfsaVx5Hy/qIa9lwyPwXQ9kYTYUJV4qdEeFHMIggk2COOD6DH2
 
 image: Visual Studio 2017
-
-init:
-  - ps: |
-      # Update build version if tag is set
-      if ( $env:APPVEYOR_REPO_TAG_NAME ) {
-        $newVersion = "$( $env:APPVEYOR_REPO_TAG_NAME )"
-        Update-AppveyorBuild -Version $newVersion
-        Set-AppveyorBuildVariable 'APPVEYOR_BUILD_VERSION' $newVersion
-      }
 
 install:
   - ps: Install-Module InvokeBuild -Force
@@ -26,10 +17,19 @@ platform:
 
 before_build:
   - ps: |
-      # Update manifest
-      $replacements = @{
-        "ModuleVersion = '.*'" = "ModuleVersion = '$env:APPVEYOR_BUILD_VERSION'"
+      # Define replacements for manifest file
+      $replacements = @{}
+
+      # Update build version if tag is set
+      if ( $env:APPVEYOR_REPO_TAG_NAME ) {
+        $newVersion = $env:APPVEYOR_REPO_TAG_NAME
+        Update-AppveyorBuild -Version $newVersion
+      } else {
+        $newVersion = $env:APPVEYOR_BUILD_VERSION
       }
+      $replacements["ModuleVersion = '.*'"] = "ModuleVersion = '$env:APPVEYOR_BUILD_VERSION'"
+
+      # Update manifest file
       $manifestPath = "$env:APPVEYOR_BUILD_FOLDER\src\PSDocker.psd1"
       $manifestContent = Get-Content -Path $manifestPath -Raw
       $replacements.GetEnumerator() | ForEach-Object {
