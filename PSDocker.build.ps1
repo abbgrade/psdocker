@@ -32,7 +32,7 @@ task Test {
 }
 
 task Publish {
-	Publish-Module -Path $moduleBuildPath -NuGetApiKey $env:nuget_apikey
+	Publish-Module -Path $moduleBuildPath -Name 'PSDocker' -NuGetApiKey $env:nuget_apikey
 }
 
 task Clean CleanBuildPath
