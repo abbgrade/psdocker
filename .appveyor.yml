@@ -14,7 +14,6 @@ init:
         Update-AppveyorBuild -Version $env:APPVEYOR_BUILD_VERSION
       }
 
-
 install:
   - ps: Install-Module InvokeBuild -Force
   - ps: Install-Module Pester -Force -SkipPublisherCheck
