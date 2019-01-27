@@ -1,4 +1,4 @@
-version: '1.1.4.{build}'
+version: '1.1.5.{build}'
 
 environment:
   nuget_apikey:
@@ -14,17 +14,6 @@ init:
         Update-AppveyorBuild -Version $env:APPVEYOR_BUILD_VERSION
       }
 
-      # Update manifest
-      $replacements = @{
-        "ModuleVersion = '.*'" = "ModuleVersion = '$env:APPVEYOR_BUILD_VERSION'"
-      }
-      $manifestPath = "$env:APPVEYOR_BUILD_FOLDER\src\PSDocker.psd1"
-      $manifestContent = Get-Content -Path $manifestPath -Raw
-      $replacements.GetEnumerator() | ForEach-Object {
-        $manifestContent = $manifestContent -replace $_.Key, $_.Value
-      }
-      $manifestContent.Trim() | Set-Content -Path $manifestPath
-
 
 install:
   - ps: Install-Module InvokeBuild -Force
@@ -36,7 +25,20 @@ platform:
   - x64
 
 before_build:
-  -ps: Invoke-Build UpdateDocs
+  - ps: |
+      # Update manifest
+      $replacements = @{
+        "ModuleVersion = '.*'" = "ModuleVersion = '$env:APPVEYOR_BUILD_VERSION'"
+      }
+      $manifestPath = "$env:APPVEYOR_BUILD_FOLDER\src\PSDocker.psd1"
+      $manifestContent = Get-Content -Path $manifestPath -Raw
+      $replacements.GetEnumerator() | ForEach-Object {
+        $manifestContent = $manifestContent -replace $_.Key, $_.Value
+      }
+      $manifestContent.Trim() | Set-Content -Path $manifestPath
+
+      # Update docs
+      Invoke-Build UpdateDocs
 
 build_script:
   - ps: Invoke-Build Build
