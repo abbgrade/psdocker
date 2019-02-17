@@ -4,4 +4,10 @@ class Image {
     [int] $Stars
     [bool] $IsAutomated
     [bool] $IsOfficial
+
+    [string] $Repository
+    [string] $Tag
+    [string] $Id
+    [string] $CreatedAt
+    [string] $Size
 }

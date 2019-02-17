@@ -54,6 +54,7 @@ function Get-Image {
     $arguments.Add('image')
     $arguments.Add('ls')
     $arguments.Add('--no-trunc')
+    $arguments.Add('--format="{{json .}}"')
 
     if ( $Repository ) {
         if ( $Tag ) {
@@ -63,11 +64,14 @@ function Get-Image {
         }
     }
 
-    Invoke-ClientCommand $arguments -Timeout $Timeout -TableOutput @{
-        'REPOSITORY' = 'Repository'
-        'TAG' = 'Tag'
-        'IMAGE ID' = 'ImageId'
-        'CREATED' = 'Created'
-        'SIZE' = 'Size'
+    Invoke-ClientCommand $arguments -Timeout $Timeout -JsonOutput |
+    ForEach-Object {
+        New-Object -TypeName Image -Property @{
+            Repository = $_.Repository
+            Tag = $_.Tag
+            Id = $_.ID
+            CreatedAt = $_.CreatedAt
+            Size = $_.Size
+        } | Write-Output
     } | Write-Output
 }
