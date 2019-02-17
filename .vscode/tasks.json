@@ -31,26 +31,17 @@
             "label": "Build",
             "type": "shell",
             "group": "build",
-            "command": "$DebugPreference = 'Continue'; Invoke-Build Clean,Build",
-            "problemMatcher": [
-                "$pester"
-            ]
+            "command": "$DebugPreference = 'Continue'; Invoke-Build Clean,Build"
         },
         {
             "label": "Clean",
             "type": "shell",
-            "command": "$DebugPreference = 'Continue'; Invoke-Build Clean",
-            "problemMatcher": [
-                "$pester"
-            ]
+            "command": "$DebugPreference = 'Continue'; Invoke-Build Clean"
         },
         {
             "label": "Update docs",
             "type": "shell",
-            "command": "$DebugPreference = 'Continue'; Invoke-Build UpdateDocs",
-            "problemMatcher": [
-                "$pester"
-            ]
+            "command": "$DebugPreference = 'Continue'; Invoke-Build UpdateDocs"
         },
         {
             "label": "Test",

@@ -138,5 +138,5 @@ function New-Container {
     Write-Verbose "Docker container '$( $container.Name )' created."
 
     # return result
-    $container
+    Write-Output $container
 }
