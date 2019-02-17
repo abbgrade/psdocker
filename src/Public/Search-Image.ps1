@@ -23,20 +23,41 @@ function Search-Image {
 
     Specifies the number of seconds to wait for the command to finish.
 
+    .PARAMETER IsAutomated
+
+    Returns only images with automated build.
+
+    .PARAMETER IsOfficial
+
+    Returns only official images.
+
+    .PARAMETER MininumStars
+
+    Returns only images with at least specified stars.
+
+    .OUTPUTS
+
+    Returns objects of type `Image` that has the following properties:
+    - Name
+    - Description
+    - Stars
+    - IsAutomated
+    - IsOfficial
+
     .EXAMPLE
 
     PS C:\> Search-DockerImage 'nanoserver' -Limit 2
 
-    IsAutomated : False
-    Description :
     Name        : microsoft/nanoserver
-    Stars       : 431
+    Description : The official Nano Server base image
+    Stars       : 479
+    IsAutomated : False
     IsOfficial  : False
 
-    IsAutomated : False
-    Description : Nano Server + IIS. Updated on 08/21/2018 -- …
     Name        : nanoserver/iis
-    Stars       : 35
+    Description : Nano Server + IIS. Updated on 08/21/2018 -- Version: 10.0.14393.2312
+    Stars       : 42
+    IsAutomated : False
     IsOfficial  : False
 
     #>
@@ -54,21 +75,46 @@ function Search-Image {
 
         [Parameter(Mandatory=$false)]
         [int]
-        $Timeout = 30
+        $Timeout = 30,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $IsAutomated,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $IsOfficial,
+
+        [Parameter(Mandatory=$false)]
+        [int]
+        $MinimumStars
     )
 
     # prepare arugments
     $arguments = New-Object System.Collections.ArrayList
 
     $arguments.Add( 'search' ) | Out-Null
+    $arguments.Add( '--no-trunc' ) | Out-Null
 
     if ( $Limit ) {
         $arguments.Add( "--limit $Limit" ) | Out-Null
     }
 
+    if ( $IsOfficial ) {
+        $arguments.Add( "--filter `"is-official=true`"" ) | Out-Null
+    }
+
+    if ( $IsAutomated ) {
+        $arguments.Add( "--filter `"is-automated=true`"" ) | Out-Null
+    }
+
+    if ( $MinimumStars ) {
+        $arguments.Add( "--filter `"stars=$MinimumStars`"" ) | Out-Null
+    }
+
     $arguments.Add( $Term ) | Out-Null
 
-    $resultTable = Invoke-ClientCommand `
+    [Image[]] $resultTable = Invoke-ClientCommand `
         -ArgumentList $arguments `
         -Timeout $Timeout `
         -TableOutput @{
@@ -78,7 +124,7 @@ function Search-Image {
         'OFFICIAL' = 'IsOfficial'
         'AUTOMATED' = 'IsAutomated'
     } | Foreach-Object {
-        New-Object -Type PsObject -Property @{
+        New-Object -Type Image -Property @{
             Name = $_.Name
             Description = $_.Description
             Stars = [int] $_.Stars
