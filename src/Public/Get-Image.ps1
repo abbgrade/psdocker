@@ -51,16 +51,16 @@ function Get-Image {
     )
 
     $arguments = New-Object System.Collections.ArrayList
-    $arguments.Add('image')
-    $arguments.Add('ls')
-    $arguments.Add('--no-trunc')
-    $arguments.Add('--format="{{json .}}"')
+    $arguments.Add('image') | Out-Null
+    $arguments.Add('ls') | Out-Null
+    $arguments.Add('--no-trunc') | Out-Null
+    $arguments.Add('--format="{{json .}}"') | Out-Null
 
     if ( $Repository ) {
         if ( $Tag ) {
-            $arguments.Add( $Repository + ':' + $Tag )
+            $arguments.Add( $Repository + ':' + $Tag ) | Out-Null
         } else {
-            $arguments.Add( $Repository )
+            $arguments.Add( $Repository ) | Out-Null
         }
     }
 

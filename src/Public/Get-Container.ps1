@@ -80,17 +80,27 @@ function Get-Container {
     }
 
     $arguments.Add( '--no-trunc' ) | Out-Null
+    $arguments.Add('--format="{{json .}}"') | Out-Null
 
     Invoke-ClientCommand `
         -ArgumentList $arguments `
         -Timeout $Timeout `
-        -TableOutput @{
-            'CONTAINER ID' = 'ContainerID'
-            'IMAGE' = 'Image'
-            'COMMAND' = 'Command'
-            'CREATED' = 'Created'
-            'STATUS' = 'Status'
-            'PORTS' = 'Ports'
-            'NAMES' = 'Name'
+        -JsonOutput |
+    ForEach-Object {
+        New-Object -TypeName Container -Property @{
+            Command = $_.Command
+            CreatedAt = $_.CreatedAt
+            Id = $_.ID
+            Image = $_.Image
+            Labels = $_.Labels
+            LocalVolumes = $_.LocalVolumes
+            Mounts = $_.Mounts
+            Names = $_.Names -split ','
+            Networks = $_.Networks
+            Ports = $_.Ports
+            RunningFor = $_.RunningFor
+            Size = $_.Size
+            Status = $_.Status
+        } | Write-Output
     } | Write-Output
 }

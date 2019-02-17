@@ -132,7 +132,7 @@ function New-Container {
 
     # check container
     $container = Get-Container -Latest -Timeout $StatusTimeout
-    if ( -not $container.Name ) {
+    if ( -not $container.Names ) {
         throw "Failed to create container"
     }
     Write-Verbose "Docker container '$( $container.Name )' created."
