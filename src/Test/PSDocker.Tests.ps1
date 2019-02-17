@@ -53,10 +53,13 @@ Describe 'Search-DockerImage' {
 
 Describe 'Install-DockerImage' {
 
-    It 'docker pull works' {
+    It 'works with named parameters' {
         Install-DockerImage -Name $imageName
     }
-    It 'docker pull throws on invalid image' {
+    It 'works with pipeline parameters' {
+        Search-DockerImage -Term $imageName -Limit 1 -IsOfficial | Install-DockerImage
+    }
+    It 'throws on invalid image' {
         {
             Install-DockerImage -Name 'foobar' -WarningAction 'SilentlyContinue'
         } | Should Throw

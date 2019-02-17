@@ -27,12 +27,12 @@ function Install-Image {
 
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
         [string]
         $Name,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter(ValueFromPipelineByPropertyName = $true)]
         [int]
         $Timeout = 5 * 60
     )
