@@ -77,6 +77,6 @@ function Get-Version {
     New-Object PSObject -Property @{
         Client = ( New-Object PSObject -Property $dockerVersionTable['Client'] )
         Server = ( New-Object PSObject -Property $dockerVersionTable['Server'] )
-    }
+    } | Write-Output
 
 }

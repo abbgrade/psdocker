@@ -94,9 +94,10 @@ function Invoke-ClientCommand {
         if ( $StringOutput ) {
             $standardOutput = $standardOutputBuffer.Values -join "`r`n"
             Write-Verbose "Process output: $standardOutput"
-            $standardOutput
+            Write-Output $standardOutput
         } elseif ( $TableOutput ) {
-            Convert-ToTable -Content $standardOutputBuffer.Values -Columns $TableOutput
+            Convert-ToTable -Content $standardOutputBuffer.Values -Columns $TableOutput |
+            Write-Output
         }
     } else {
         Write-Verbose "No process output"
