@@ -1,10 +1,10 @@
-function Search-Image {
+function Search-Repository {
 
     <#
 
     .SYNOPSIS
 
-    Search the Docker Hub for images
+    Search the Docker Hub for repositories
 
     .DESCRIPTION
 
@@ -25,19 +25,19 @@ function Search-Image {
 
     .PARAMETER IsAutomated
 
-    Returns only images with automated build.
+    Returns only repositories with automated build.
 
     .PARAMETER IsOfficial
 
-    Returns only official images.
+    Returns only official repositories.
 
     .PARAMETER MininumStars
 
-    Returns only images with at least specified stars.
+    Returns only repositories with at least specified stars.
 
     .OUTPUTS
 
-    Returns objects of type `Image` that has the following properties:
+    Returns objects of type `Repository` that has the following properties:
     - Name
     - Description
     - Stars
@@ -46,7 +46,7 @@ function Search-Image {
 
     .EXAMPLE
 
-    PS C:\> Search-DockerImage 'nanoserver' -Limit 2
+    PS C:\> Search-DockerRepository 'nanoserver' -Limit 2
 
     Name        : microsoft/nanoserver
     Description : The official Nano Server base image
@@ -120,7 +120,7 @@ function Search-Image {
         -Timeout $Timeout `
         -JsonOutput |
     Foreach-Object {
-        New-Object -Type Image -Property @{
+        New-Object -Type Repository -Property @{
             Name = $_.Name
             Description = $_.Description
             Stars = [int] $_.Stars

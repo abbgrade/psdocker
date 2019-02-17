@@ -39,13 +39,13 @@ $imageName = 'hello-world'
 
 #region Image
 
-Describe 'Search-DockerImage' {
+Describe 'Search-DockerRepository' {
     It 'returns a list of images' {
-        $images = Search-DockerImage -Term 'Hello' -Limit $null
+        $images = Search-DockerRepository -Term 'Hello' -Limit $null
         $images.Count | Should -BeGreaterThan 0
     }
     It 'returns a limited list of images' {
-        $images = Search-DockerImage -Term 'Hello' -Limit 5
+        $images = Search-DockerRepository -Term 'Hello' -Limit 5
         $images.Count | Should -BeLessOrEqual 5
     }
 }
@@ -56,7 +56,7 @@ Describe 'Install-DockerImage' {
         Install-DockerImage -Name $imageName
     }
     It 'works with pipeline parameters' {
-        Search-DockerImage -Term $imageName -Limit 1 -IsOfficial | Install-DockerImage
+        Search-DockerRepository -Term $imageName -Limit 1 -IsOfficial | Install-DockerImage
     }
     It 'throws on invalid image' {
         {
