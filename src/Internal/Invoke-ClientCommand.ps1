@@ -38,7 +38,11 @@ function Invoke-ClientCommand {
 
         [Parameter(Mandatory=$false)]
         [hashtable]
-        $TableOutput
+        $TableOutput,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $JsonOutput
     )
 
     # Configure process
@@ -95,9 +99,10 @@ function Invoke-ClientCommand {
             $standardOutput = $standardOutputBuffer.Values -join "`r`n"
             Write-Verbose "Process output: $standardOutput"
             Write-Output $standardOutput
+        } elseif ( $JsonOutput ) {
+            $standardOutputBuffer.Values | ConvertFrom-Json | Write-Output
         } elseif ( $TableOutput ) {
-            Convert-ToTable -Content $standardOutputBuffer.Values -Columns $TableOutput |
-            Write-Output
+            Convert-ToTable -Content $standardOutputBuffer.Values -Columns $TableOutput | Write-Output
         }
     } else {
         Write-Verbose "No process output"
