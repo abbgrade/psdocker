@@ -45,9 +45,8 @@ Describe 'Search-DockerImage' {
         $images.Count | Should -BeGreaterThan 0
     }
     It 'returns a limited list of images' {
-        (
-            Search-DockerImage -Term 'Hello' -Limit 5
-        ).Count | Should -BeLessOrEqual 5
+        $images = Search-DockerImage -Term 'Hello' -Limit 5
+        $images.Count | Should -BeLessOrEqual 5
     }
 }
 

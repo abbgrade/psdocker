@@ -95,6 +95,7 @@ function Search-Image {
 
     $arguments.Add( 'search' ) | Out-Null
     $arguments.Add( '--no-trunc' ) | Out-Null
+    $arguments.Add( '--format="{{json .}}"' ) | Out-Null
 
     if ( $Limit ) {
         $arguments.Add( "--limit $Limit" ) | Out-Null
@@ -114,24 +115,17 @@ function Search-Image {
 
     $arguments.Add( $Term ) | Out-Null
 
-    [Image[]] $resultTable = Invoke-ClientCommand `
+    Invoke-ClientCommand `
         -ArgumentList $arguments `
         -Timeout $Timeout `
-        -TableOutput @{
-        'NAME' = 'Name'
-        'DESCRIPTION' = 'Description'
-        'STARS' = 'Stars'
-        'OFFICIAL' = 'IsOfficial'
-        'AUTOMATED' = 'IsAutomated'
-    } | Foreach-Object {
+        -JsonOutput |
+    Foreach-Object {
         New-Object -Type Image -Property @{
             Name = $_.Name
             Description = $_.Description
             Stars = [int] $_.Stars
-            IsOfficial = switch($_.IsOfficial) { '[OK]' { $true } default { $false }}
-            IsAutomated = switch($_.IsAutomated) { '[OK]' { $true } default { $false }}
+            IsOfficial = $_.IsOfficial
+            IsAutomated = $_.IsAutomated
         }
-    }
-
-    Write-Output $resultTable
+    } | Write-Output
 }
