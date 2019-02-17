@@ -69,5 +69,5 @@ function Get-Image {
         'IMAGE ID' = 'ImageId'
         'CREATED' = 'Created'
         'SIZE' = 'Size'
-    }
+    } | Write-Output
 }

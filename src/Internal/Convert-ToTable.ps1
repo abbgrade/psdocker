@@ -74,6 +74,6 @@ function Convert-ToTable {
             }
             $row[$column.Name] = $value.Trim()
         }
-        New-Object PSObject -Property $row
+        New-Object PSObject -Property $row | Write-Output
     }
 }

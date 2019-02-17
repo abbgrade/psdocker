@@ -92,5 +92,5 @@ function Get-Container {
             'STATUS' = 'Status'
             'PORTS' = 'Ports'
             'NAMES' = 'Name'
-    }
+    } | Write-Output
 }

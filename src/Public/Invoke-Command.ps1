@@ -69,7 +69,8 @@ function Invoke-Command {
     Invoke-ClientCommand `
         -ArgumentList $arguments `
         -StringOutput:$StringOutput `
-        -Timeout $Timeout
+        -Timeout $Timeout |
+    Write-Output
 
     Write-Verbose "Command on Docker container executed."
 }
