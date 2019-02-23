@@ -3,38 +3,33 @@ function Stop-Container {
     <#
 
     .SYNOPSIS
-
     Stop container
 
     .DESCRIPTION
+    Wraps the command `docker stop`.
 
-    Wraps the command [docker stop](https://docs.docker.com/engine/reference/commandline/stop/).
+    .LINK https://docs.docker.com/engine/reference/commandline/stop/
 
     .PARAMETER Name
-
     Specifies the name of the container to stop.
 
     .PARAMETER Timeout
-
     Specifies the number of seconds to wait for the command to finish.
 
     .EXAMPLE
-
-    PS C:\> New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer' | Out-Null
-    PS C:\> Stop-DockerContainer -Name 'mycontainer'
+    PS C:\> $container = New-DockerContainer -Image 'microsoft/nanoserver'
+    PS C:\> $container | Stop-DockerContainer
 
     #>
 
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true)]
+        [Parameter( Mandatory = $true, ValueFromPipelineByPropertyName = $true )]
         [ValidateNotNullOrEmpty()]
-        [string]
-        $Name,
+        [string] $Name,
 
-        [Parameter(Mandatory=$false)]
-        [int]
-        $Timeout = 10
+        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
+        [int] $Timeout = 10
     )
 
     Invoke-ClientCommand 'stop', $Name -Timeout $Timeout
