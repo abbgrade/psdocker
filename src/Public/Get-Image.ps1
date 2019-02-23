@@ -3,27 +3,27 @@ function Get-Image {
     <#
 
     .SYNOPSIS
-
     Get docker image
 
     .DESCRIPTION
+    Wraps the command `docker image ls`.
 
-    Wraps the command [docker image ls](https://docs.docker.com/engine/reference/commandline/image_ls/).
+    .LINK
+    https://docs.docker.com/engine/reference/commandline/image_ls/
 
     .PARAMETER Repository
-
     Specifies the repository to filter the images on.
 
     .PARAMETER Tag
-
     Specifies the tag to filter the images on.
 
     .PARAMETER Timeout
-
     Specifies the number of seconds to wait for the command to finish.
 
-    .EXAMPLE
+    .OUTPUTS
+    Image: Returns a Image object for each object matching the parameters.
 
+    .EXAMPLE
     PS C:\> Get-DockerImage -Repository 'microsoft/powershell'
     Created    : 2 weeks ago
     ImageId    : sha256:4ebab174c7292440d4d7d5e5e61d3cd4487441d3f49df0b656ccc81d2a0e4489
