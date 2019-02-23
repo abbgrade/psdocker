@@ -92,11 +92,11 @@ function Get-Container {
             CreatedAt = $_.CreatedAt
             Id = $_.ID
             Image = $_.Image
-            Labels = $_.Labels
-            LocalVolumes = $_.LocalVolumes
-            Mounts = $_.Mounts
+            Labels = $_.Labels -split ','
+            LocalVolumes = $_.LocalVolumes -split ','
+            Mounts = $_.Mounts -split ','
             Names = $_.Names -split ','
-            Networks = $_.Networks
+            Networks = $_.Networks -split ','
             Ports = $_.Ports
             RunningFor = $_.RunningFor
             Size = $_.Size
