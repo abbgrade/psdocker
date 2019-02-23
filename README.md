@@ -11,3 +11,12 @@ Install PSDocker from [PowerShell Gallery](https://www.powershellgallery.com/pac
 ## Usage
 
 See the folder [docs](./docs) for examples.
+
+## Changelog
+
+### Version 1.2.0
+
+- Pipeline support for the cmdlets.
+- New cmdlet Uninstall-Image
+- Types for Image, Repository and Container used as output.
+- Refactoring
