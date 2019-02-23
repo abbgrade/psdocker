@@ -3,33 +3,32 @@ function Get-Container {
     <#
 
     .SYNOPSIS
-
     Get docker container
 
     .DESCRIPTION
-
     Returns references to docker containers of a docker service.
     It can be filtered by name and status.
-    Wraps the command [docker ps](https://docs.docker.com/engine/reference/commandline/ps/).
+    Wraps the command `docker ps`.
+
+    .LINK
+    https://docs.docker.com/engine/reference/commandline/ps/
 
     .PARAMETER Running
-
     Specifies if only running containers should be returned.
 
     .PARAMETER Latest
-
     Specifies if only the latest created container should be returned.
 
     .PARAMETER Name
-
     Specifies if only the container with the given name should be returned.
 
     .PARAMETER Timeout
-
     Specifies the number of seconds to wait for the command to finish.
 
-    .EXAMPLE
+    .OUTPUTS
+    Container:  It returns a `Container` object for each container matching the parameters.
 
+    .EXAMPLE
     PS C:\> New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer' | Out-Null
     PS C:\> Get-DockerContainer -Name 'mycontainer'
     Image       : microsoft/nanoserver
@@ -45,27 +44,21 @@ function Get-Container {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory=$false)]
-        [switch]
-        $Running,
+        [switch] $Running,
 
         [Parameter(Mandatory=$false)]
-        [switch]
-        $Latest,
-
-        [Parameter(Mandatory=$false)]
-        [ValidateNotNullOrEmpty()]
-        [string]
-        $Name,
+        [switch] $Latest,
 
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-        [int]
-        $Timeout = 1
+        [string] $Name,
+
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [int] $Timeout = 1
     )
 
     $arguments = New-Object System.Collections.ArrayList
-
-    $arguments.Add( 'ps' ) | Out-Null
 
     if ( $Running -eq $false ) {
         $arguments.Add( '--all' ) | Out-Null
@@ -80,17 +73,26 @@ function Get-Container {
     }
 
     $arguments.Add( '--no-trunc' ) | Out-Null
+    $arguments.Add( '--format="{{json .}}"' ) | Out-Null
 
-    Invoke-ClientCommand `
-        -ArgumentList $arguments `
+    Invoke-ClientCommand 'ps', $arguments `
         -Timeout $Timeout `
-        -TableOutput @{
-            'CONTAINER ID' = 'ContainerID'
-            'IMAGE' = 'Image'
-            'COMMAND' = 'Command'
-            'CREATED' = 'Created'
-            'STATUS' = 'Status'
-            'PORTS' = 'Ports'
-            'NAMES' = 'Name'
-    }
+        -JsonOutput |
+    ForEach-Object {
+        New-Object -TypeName Container -Property @{
+            Command = $_.Command
+            CreatedAt = $_.CreatedAt
+            Id = $_.ID
+            Image = $_.Image
+            Labels = $_.Labels -split ','
+            LocalVolumes = $_.LocalVolumes -split ','
+            Mounts = $_.Mounts -split ','
+            Names = $_.Names -split ','
+            Networks = $_.Networks -split ','
+            Ports = $_.Ports
+            RunningFor = $_.RunningFor
+            Size = $_.Size
+            Status = $_.Status
+        } | Write-Output
+    } | Write-Output
 }

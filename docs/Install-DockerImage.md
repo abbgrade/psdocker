@@ -1,7 +1,7 @@
 ---
 external help file: PSDocker-help.xml
 Module Name: PSDocker
-online version:
+online version: https://docs.docker.com/engine/reference/commandline/pull/
 schema: 2.0.0
 ---
 
@@ -13,12 +13,13 @@ Install image
 ## SYNTAX
 
 ```
-Install-DockerImage [-Name] <String> [[-Timeout] <Int32>] [<CommonParameters>]
+Install-DockerImage [[-Registry] <String>] [-Repository] <String> [[-Tag] <String>] [-AllTags]
+ [[-Digest] <String>] [[-Timeout] <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 Installs a docker image in the service from a repository.
-Wraps the command \[docker pull\](https://docs.docker.com/engine/reference/commandline/pull/).
+Wraps the command \`docker pull\`.
 
 ## EXAMPLES
 
@@ -29,18 +30,78 @@ Install-DockerImage -Name 'microsoft/nanoserver'
 
 ## PARAMETERS
 
-### -Name
-Specifies the name of the repository of the image to install.
+### -Registry
+Specifies the registry that contains the repository or image.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 1
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Repository
+Specifies the name of the repository of the image to install.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: Name
+
+Required: True
+Position: 2
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Tag
+Specifies the tag of the image to install.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 3
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -AllTags
+Specifies if the images for all tags should be installed.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Digest
+Specifies the digest of the specific image that should be installed.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 4
+Default value: None
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -53,9 +114,9 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
+Position: 5
 Default value: 300
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -67,6 +128,12 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 
 ## OUTPUTS
 
+### Image: Returns `Image` objects for the images that are installed and match the parameter.
 ## NOTES
 
 ## RELATED LINKS
+
+[https://docs.docker.com/engine/reference/commandline/pull/](https://docs.docker.com/engine/reference/commandline/pull/)
+
+[Uninstall-Image]()
+

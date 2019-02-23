@@ -38,12 +38,16 @@ function Invoke-ClientCommand {
 
         [Parameter(Mandatory=$false)]
         [hashtable]
-        $TableOutput
+        $TableOutput,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $JsonOutput
     )
 
     # Configure process
     $process = New-Object System.Diagnostics.Process
-    $process.StartInfo.Filename = "docker"
+    $process.StartInfo.Filename = 'docker'
     $process.StartInfo.Arguments = $ArgumentList
     $process.StartInfo.RedirectStandardOutput = $true
     $process.StartInfo.RedirectStandardError = $true
@@ -94,12 +98,14 @@ function Invoke-ClientCommand {
         if ( $StringOutput ) {
             $standardOutput = $standardOutputBuffer.Values -join "`r`n"
             Write-Verbose "Process output: $standardOutput"
-            $standardOutput
+            Write-Output $standardOutput
+        } elseif ( $JsonOutput ) {
+            $standardOutputBuffer.Values | ConvertFrom-Json | Write-Output
         } elseif ( $TableOutput ) {
-            Convert-ToTable -Content $standardOutputBuffer.Values -Columns $TableOutput
+            Convert-ToTable -Content $standardOutputBuffer.Values -Columns $TableOutput | Write-Output
         }
     } else {
-        Write-Verbose "No process output"
+        Write-Verbose 'No process output'
     }
 
     # process error
@@ -111,7 +117,7 @@ function Invoke-ClientCommand {
         }
         throw "Proccess failed ($processCall) after $( $process.TotalProcessorTime )."
     } else {
-        Write-Verbose "No process error output"
+        Write-Verbose 'No process error output'
     }
     if ( $process.TotalProcessorTime.TotalSeconds -ge $Timeout ) {
         throw "Process timed out ($processCall) after $( $process.TotalProcessorTime )."

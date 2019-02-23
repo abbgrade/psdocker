@@ -1,7 +1,7 @@
 ---
 external help file: PSDocker-help.xml
 Module Name: PSDocker
-online version:
+online version: https://docs.docker.com/engine/reference/commandline/version/
 schema: 2.0.0
 ---
 
@@ -18,7 +18,7 @@ Get-DockerVersion [[-Timeout] <Int32>] [<CommonParameters>]
 
 ## DESCRIPTION
 Returns version information of the docker client and service.
-Wraps the command \[docker version\](https://docs.docker.com/engine/reference/commandline/version/).
+Wraps the command \`docker version\`.
 
 ## EXAMPLES
 
@@ -74,3 +74,6 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 ## NOTES
 
 ## RELATED LINKS
+
+[https://docs.docker.com/engine/reference/commandline/version/](https://docs.docker.com/engine/reference/commandline/version/)
+

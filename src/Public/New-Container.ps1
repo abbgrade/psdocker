@@ -3,49 +3,46 @@ function New-Container {
     <#
 
     .SYNOPSIS
-
     New container
 
     .DESCRIPTION
-
     Creates a new container in the docker service.
-    Wraps the command [docker run](https://docs.docker.com/engine/reference/commandline/run/).
+    Wraps the command `docker run`.
+
+    .LINK
+    https://docs.docker.com/engine/reference/commandline/run/
 
     .PARAMETER Name
-
     Specifies the name of the new container.
     If not specified, a name will be generated.
 
     .PARAMETER Image
-
     Specifies the name if the image to create the container based on.
 
     .PARAMETER Environment
-
     Specifies the environment variables that are used during the container creation.
 
     .PARAMETER Ports
-
     Specifies the portmapping of the created container.
 
     .PARAMETER Timeout
-
     Specifies the number of seconds to wait for the command to finish.
 
     .PARAMETER StatusTimeout
-
     Specifies the timeout of the docker client for the container lookup after creation.
 
     .PARAMETER Detach
-
     Specifies if the container should be detached.
+    That means to run the container without connection to the client shell.
 
     .PARAMETER Interactive
-
     Specifies if the container should be interactive.
+    That means to connect the standard-in stream of container and client.
+
+    .OUTPUTS
+    Container: Returns a Container object for the created container.
 
     .EXAMPLE
-
     PS C:\> New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer'
     Image       : microsoft/nanoserver
     Ports       :
@@ -59,47 +56,37 @@ function New-Container {
 
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$false)]
+        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
         [ValidateNotNullOrEmpty()]
-        [string]
-        $Name,
+        [string] $Name,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter( Mandatory = $true, ValueFromPipelineByPropertyName = $true )]
         [ValidateNotNullOrEmpty()]
-        [string]
-        $Image,
+        [string] $Image,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
         [ValidateNotNullOrEmpty()]
-        [hashtable]
-        $Environment,
+        [hashtable] $Environment,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
         [ValidateNotNullOrEmpty()]
-        [hashtable]
-        $Ports,
+        [hashtable] $Ports,
 
-        [Parameter(Mandatory=$false)]
-        [int]
-        $Timeout = 30,
+        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
+        [int] $Timeout = 30,
 
-        [Parameter(Mandatory=$false)]
-        [int]
-        $StatusTimeout = 1,
+        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
+        [int] $StatusTimeout = 1,
 
-        [Parameter(Mandatory=$false)]
-        [switch]
-        $Detach,
+        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
+        [switch] $Detach,
 
-        [Parameter(Mandatory=$false)]
-        [switch]
-        $Interactive
+        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
+        [switch] $Interactive
     )
 
     # prepare arugments
     $arguments = New-Object System.Collections.ArrayList
-
-    $arguments.Add( 'run' ) | Out-Null
 
     if ( $Name ) {
         $arguments.Add( "--name $Name" ) | Out-Null
@@ -128,7 +115,7 @@ function New-Container {
     $arguments.Add( $Image ) | Out-Null
 
     # create container
-    Invoke-ClientCommand -ArgumentList $arguments -Timeout $Timeout
+    Invoke-ClientCommand 'run', $arguments -Timeout $Timeout
 
     # check container
     $container = Get-Container -Latest -Timeout $StatusTimeout
@@ -138,5 +125,5 @@ function New-Container {
     Write-Verbose "Docker container '$( $container.Name )' created."
 
     # return result
-    $container
+    Write-Output $container
 }

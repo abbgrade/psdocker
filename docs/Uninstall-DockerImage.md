@@ -1,53 +1,42 @@
 ---
 external help file: PSDocker-help.xml
 Module Name: PSDocker
-online version: https://docs.docker.com/engine/reference/commandline/rm/
+online version: https://docs.docker.com/engine/reference/commandline/image_rm/
 schema: 2.0.0
 ---
 
-# Remove-DockerContainer
+# Uninstall-DockerImage
 
 ## SYNOPSIS
-Remove container
+Remove docker image
 
 ## SYNTAX
 
 ```
-Remove-DockerContainer [-Name] <String> [-Force] [[-Timeout] <Int32>] [[-StopTimeout] <Int32>]
- [<CommonParameters>]
+Uninstall-DockerImage [[-Name] <String>] [-Force] [-NoPrune] [[-Timeout] <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Removes a docker container from the service.
-Wraps the command \`docker rm\`.
+Wraps the docker command \`docker image rm\`.
 
 ## EXAMPLES
 
 ### BEISPIEL 1
 ```
-New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer' | Out-Null
+Get-DockerImage -Repository 'microsoft/powershell' | Uninstall-DockerImage
 ```
-
-PS C:\\\> Remove-DockerContainer -Name 'mycontainer'
-
-### BEISPIEL 2
-```
-$container = New-DockerContainer -Image 'microsoft/nanoserver'
-```
-
-PS C:\\\> $container | Remove-DockerContainer
 
 ## PARAMETERS
 
 ### -Name
-Specifies the name of the container, that should be removed.
+Specifies the name of the image to be removed.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases:
+Aliases: Image
 
-Required: True
+Required: False
 Position: 1
 Default value: None
 Accept pipeline input: True (ByPropertyName)
@@ -55,7 +44,22 @@ Accept wildcard characters: False
 ```
 
 ### -Force
-Specifies if the container should be stopped before removal.
+Specifies if the image should be removed, even if a container is using this image.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -NoPrune
+Specifies if untagged parents should not be removed.
 
 ```yaml
 Type: SwitchParameter
@@ -70,7 +74,7 @@ Accept wildcard characters: False
 ```
 
 ### -Timeout
-Specifies the number of seconds to wait for the command to finish.
+Specifies how long to wait for the command to finish.
 
 ```yaml
 Type: Int32
@@ -79,21 +83,6 @@ Aliases:
 
 Required: False
 Position: 2
-Default value: 10
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -StopTimeout
-Specifies the timeout of the docker client command for the stop operation.
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 3
 Default value: 10
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
@@ -111,5 +100,7 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 
 ## RELATED LINKS
 
-[https://docs.docker.com/engine/reference/commandline/rm/](https://docs.docker.com/engine/reference/commandline/rm/)
+[https://docs.docker.com/engine/reference/commandline/image_rm/](https://docs.docker.com/engine/reference/commandline/image_rm/)
+
+[Install-Image]()
 

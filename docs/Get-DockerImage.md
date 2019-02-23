@@ -1,7 +1,7 @@
 ---
 external help file: PSDocker-help.xml
 Module Name: PSDocker
-online version:
+online version: https://docs.docker.com/engine/reference/commandline/image_ls/
 schema: 2.0.0
 ---
 
@@ -17,7 +17,7 @@ Get-DockerImage [[-Repository] <String>] [[-Tag] <String>] [[-Timeout] <Int32>] 
 ```
 
 ## DESCRIPTION
-Wraps the command \[docker image ls\](https://docs.docker.com/engine/reference/commandline/image_ls/).
+Wraps the command \`docker image ls\`.
 
 ## EXAMPLES
 
@@ -40,12 +40,12 @@ Specifies the repository to filter the images on.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases:
+Aliases: Name
 
 Required: False
 Position: 1
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -60,7 +60,7 @@ Aliases:
 Required: False
 Position: 2
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -75,7 +75,7 @@ Aliases:
 Required: False
 Position: 3
 Default value: 10
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -87,6 +87,10 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 
 ## OUTPUTS
 
+### Image: Returns a `Image` object for each object matching the parameters.
 ## NOTES
 
 ## RELATED LINKS
+
+[https://docs.docker.com/engine/reference/commandline/image_ls/](https://docs.docker.com/engine/reference/commandline/image_ls/)
+
