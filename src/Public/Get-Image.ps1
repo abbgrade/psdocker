@@ -35,19 +35,17 @@ function Get-Image {
 
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$false)]
+        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
+        [Alias( 'Name' )]
         [ValidateNotNullOrEmpty()]
-        [string]
-        $Repository,
+        [string] $Repository,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
         [ValidateNotNullOrEmpty()]
-        [string]
-        $Tag,
+        [string] $Tag,
 
-        [Parameter(Mandatory=$false)]
-        [int]
-        $Timeout = 10
+        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
+        [int] $Timeout = 10
     )
 
     $arguments = New-Object System.Collections.ArrayList
