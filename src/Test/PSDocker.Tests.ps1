@@ -91,6 +91,7 @@ Describe 'Install-DockerImage' {
 Describe 'Get-DockerImage' {
 
     BeforeAll {
+        Uninstall-DockerImage -Name $testConfig.Image
         Install-DockerImage -Name $testConfig.Image
     }
 
@@ -124,7 +125,7 @@ Describe 'Uninstall-DockerImage' {
         Uninstall-DockerImage
 
         Get-DockerImage -Repository $testConfig.Image -Tag $testConfig.Tag |
-        Should -Not -Be
+        Should -BeNullOrEmpty
     }
 }
 
