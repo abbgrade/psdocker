@@ -3,41 +3,35 @@ function Search-Repository {
     <#
 
     .SYNOPSIS
-
     Search the Docker Hub for repositories
 
     .DESCRIPTION
+    Wraps the command `docker search`.
 
-    Wraps the command [docker search](https://docs.docker.com/engine/reference/commandline/search/).
+    .LINK
+    https://docs.docker.com/engine/reference/commandline/search/
 
     .PARAMETER Term
-
     Specifies the search term.
 
     .PARAMETER Limit
-
     Specifies the maximum number of results.
     If the limit is $null or 0 the docker default (25) is used instead.
 
     .PARAMETER Timeout
-
     Specifies the number of seconds to wait for the command to finish.
 
     .PARAMETER IsAutomated
-
     Returns only repositories with automated build.
 
     .PARAMETER IsOfficial
-
     Returns only official repositories.
 
     .PARAMETER MininumStars
-
     Returns only repositories with at least specified stars.
 
     .OUTPUTS
-
-    Returns objects of type `Repository` that has the following properties:
+    Repository: Returns objects of type `Repository` that has the following properties:
     - Name
     - Description
     - Stars
@@ -45,7 +39,6 @@ function Search-Repository {
     - IsOfficial
 
     .EXAMPLE
-
     PS C:\> Search-DockerRepository 'nanoserver' -Limit 2
 
     Name        : microsoft/nanoserver
@@ -64,30 +57,24 @@ function Search-Repository {
 
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter( Mandatory = $true, ValueFromPipelineByPropertyName = $true )]
         [ValidateNotNullOrEmpty()]
-        [string]
-        $Term,
+        [string] $Term,
 
-        [Parameter(Mandatory=$true)]
-        [int]
-        $Limit,
+        [Parameter( Mandatory = $true, ValueFromPipelineByPropertyName = $true )]
+        [int] $Limit,
 
-        [Parameter(Mandatory=$false)]
-        [int]
-        $Timeout = 30,
+        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
+        [int] $Timeout = 30,
 
-        [Parameter(Mandatory=$false)]
-        [switch]
-        $IsAutomated,
+        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
+        [switch] $IsAutomated,
 
-        [Parameter(Mandatory=$false)]
-        [switch]
-        $IsOfficial,
+        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
+        [switch] $IsOfficial,
 
-        [Parameter(Mandatory=$false)]
-        [int]
-        $MinimumStars
+        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
+        [int] $MinimumStars
     )
 
     # prepare arugments
