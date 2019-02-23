@@ -33,9 +33,11 @@ function New-Container {
 
     .PARAMETER Detach
     Specifies if the container should be detached.
+    That means to run the container without connection to the client shell.
 
     .PARAMETER Interactive
     Specifies if the container should be interactive.
+    That means to connect the standard-in stream of container and client.
 
     .OUTPUTS
     Container: Returns a Container object for the created container.
