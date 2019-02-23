@@ -3,20 +3,19 @@ function Get-Version {
     <#
 
     .SYNOPSIS
-
     Get version information
 
     .DESCRIPTION
-
     Returns version information of the docker client and service.
-    Wraps the command [docker version](https://docs.docker.com/engine/reference/commandline/version/).
+    Wraps the command `docker version`.
+
+    .LINK
+    https://docs.docker.com/engine/reference/commandline/version/
 
     .PARAMETER Timeout
-
     Specifies the number of seconds to wait for the command to finish.
 
     .EXAMPLE
-
     PS C:\> $version = Get-DockerVersion
     PS C:\> $version.Client
     Version      : 18.06.1-ce
@@ -43,8 +42,7 @@ function Get-Version {
     param (
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-        [int]
-        $Timeout = 1
+        [int] $Timeout = 1
     )
 
     $output = (
