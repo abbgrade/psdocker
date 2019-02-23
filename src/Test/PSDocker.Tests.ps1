@@ -35,7 +35,6 @@ Describe 'Get-DockerVersion' {
 
 #endregion
 
-
 $testConfig = New-Object -Type PsObject -Property $(
     switch ( ( Get-DockerVersion ).Server.OSArch ) {
         'windows/amd64' {
@@ -114,10 +113,29 @@ Describe 'Get-DockerImage' {
     }
 }
 
+Describe 'Uninstall-DockerImage' {
+
+    BeforeAll {
+        Install-DockerImage -Name $testConfig.Image
+    }
+
+    It 'works with pipeline parameters' {
+        Get-DockerImage -Repository $testConfig.Image -Tag $testConfig.Tag |
+        Uninstall-DockerImage
+
+        Get-DockerImage -Repository $testConfig.Image -Tag $testConfig.Tag |
+        Should -Not -Be
+    }
+}
+
 #endregion
 #region Container
 
 Describe 'New-DockerContainer' {
+
+    BeforeAll {
+        Install-DockerImage -Name $testConfig.Image
+    }
 
     It 'does not throw' {
         $container = New-DockerContainer -Image $testConfig.Image -Environment @{"A" = 1; "B" = "C"}

@@ -12,6 +12,9 @@ function Install-Image {
     .LINK
     https://docs.docker.com/engine/reference/commandline/pull/
 
+    .LINK
+    Uninstall-Image
+
     .PARAMETER Registry
     Specifies the registry that contains the repository or image.
 
@@ -81,13 +84,14 @@ function Install-Image {
         $query += "@$Digest"
     }
 
-    $arguments = @( $query )
+    $arguments = New-Object System.Collections.ArrayList
+    $arguments.Add( $query ) | Out-Null
 
     if ( $AllTags ) {
-        $arguments = @( '--all-tags' ) + $arguments
+        $arguments.Insert( '--all-tags', 0 ) | Out-Null
     }
 
-    Invoke-ClientCommand "pull", $arguments -Timeout $Timeout
+    Invoke-ClientCommand 'pull', $arguments -Timeout $Timeout
     Write-Verbose "Docker image '$query' pulled."
 
     Get-Image -Name $query | Write-Output

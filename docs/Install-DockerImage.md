@@ -135,3 +135,5 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 
 [https://docs.docker.com/engine/reference/commandline/pull/](https://docs.docker.com/engine/reference/commandline/pull/)
 
+[Uninstall-Image]()
+
