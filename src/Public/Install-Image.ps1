@@ -71,7 +71,7 @@ function Install-Image {
         $query = "$Registry/"
     }
 
-    $query += $Name
+    $query += $Repository
 
     if ( $Tag ) {
         $query += ":$Tag"
