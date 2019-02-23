@@ -27,16 +27,52 @@ function Install-Image {
 
     [CmdletBinding()]
     param (
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string] $Registry,
+
         [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]
-        $Name,
+        [string] $Name,
+
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string] $Tag,
+
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
+        [ValidateNotNullOrEmpty()]
+        [switch] $AllTags,
+
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string] $Digest,
 
         [Parameter(ValueFromPipelineByPropertyName = $true)]
-        [int]
-        $Timeout = 5 * 60
+        [int] $Timeout = 5 * 60
     )
 
-    Invoke-ClientCommand "pull", $Name -Timeout $Timeout
-    Write-Verbose "Docker image '$Name' pulled."
+    [string] $query = ''
+
+    if ( $Registry ) {
+        $query = "$Registry/"
+    }
+
+    $query += $Name
+
+    if ( $Tag ) {
+        $query += ":$Tag"
+    }
+
+    if ( $Digest ) {
+        $query += "@$Digest"
+    }
+
+    $arguments = @( $query )
+
+    if ( $AllTags ) {
+        $arguments = @( '--all-tags' ) + $arguments
+    }
+
+    Invoke-ClientCommand "pull", $arguments -Timeout $Timeout
+    Write-Verbose "Docker image '$query' pulled."
 }
