@@ -7,7 +7,11 @@ class Image {
 
     Image() {
         $this | Add-Member -Name Image -MemberType ScriptProperty -Value {
-            return "$( $this.Repository ):$( $this.Tag )"
+            if ( $this.Tag ) {
+                return "$( $this.Repository ):$( $this.Tag )"
+            } else {
+                return "$( $this.Repository )"
+            }
         }
     }
 }
