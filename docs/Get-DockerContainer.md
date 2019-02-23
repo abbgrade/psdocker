@@ -1,7 +1,7 @@
 ---
 external help file: PSDocker-help.xml
 Module Name: PSDocker
-online version:
+online version: https://docs.docker.com/engine/reference/commandline/ps/
 schema: 2.0.0
 ---
 
@@ -19,7 +19,7 @@ Get-DockerContainer [-Running] [-Latest] [[-Name] <String>] [[-Timeout] <Int32>]
 ## DESCRIPTION
 Returns references to docker containers of a docker service.
 It can be filtered by name and status.
-Wraps the command \[docker ps\](https://docs.docker.com/engine/reference/commandline/ps/).
+Wraps the command \`docker ps\`.
 
 ## EXAMPLES
 
@@ -107,6 +107,10 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 
 ## OUTPUTS
 
+### Container:  It returns a Container object for each container matching the parameters.
 ## NOTES
 
 ## RELATED LINKS
+
+[https://docs.docker.com/engine/reference/commandline/ps/](https://docs.docker.com/engine/reference/commandline/ps/)
+
