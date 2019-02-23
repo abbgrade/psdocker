@@ -109,8 +109,10 @@ Describe 'Get-DockerImage' {
     It 'returns the installed images from a search' {
         (
             Search-DockerRepository -Term $testConfig.Image -Limit 1 |
-            Get-DockerImage
-        ).Count | Should -Be 1
+            Get-DockerImage |
+            Select-Object 'Repository' |
+            Select-Object -Unique
+        ).Repository | Should -Be $testConfig.Image
     }
 }
 
