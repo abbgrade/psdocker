@@ -87,7 +87,7 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 
 ## OUTPUTS
 
-### Image: Returns a Image object for each object matching the parameters.
+### Image: Returns a `Image` object for each object matching the parameters.
 ## NOTES
 
 ## RELATED LINKS

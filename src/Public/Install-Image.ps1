@@ -31,7 +31,7 @@ function Install-Image {
     Specifies the number of seconds to wait for the command to finish.
 
     .OUTPUTS
-    Image: Returns the images that are installed and match the parameter.
+    Image: Returns `Image` objects for the images that are installed and match the parameter.
 
     .EXAMPLE
     PS C:\> Install-DockerImage -Name 'microsoft/nanoserver'

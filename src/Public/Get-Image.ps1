@@ -21,7 +21,7 @@ function Get-Image {
     Specifies the number of seconds to wait for the command to finish.
 
     .OUTPUTS
-    Image: Returns a Image object for each object matching the parameters.
+    Image: Returns a `Image` object for each object matching the parameters.
 
     .EXAMPLE
     PS C:\> Get-DockerImage -Repository 'microsoft/powershell'

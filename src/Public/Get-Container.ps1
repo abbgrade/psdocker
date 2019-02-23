@@ -26,7 +26,7 @@ function Get-Container {
     Specifies the number of seconds to wait for the command to finish.
 
     .OUTPUTS
-    Container:  It returns a Container object for each container matching the parameters.
+    Container:  It returns a `Container` object for each container matching the parameters.
 
     .EXAMPLE
     PS C:\> New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer' | Out-Null

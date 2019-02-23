@@ -107,7 +107,7 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 
 ## OUTPUTS
 
-### Container:  It returns a Container object for each container matching the parameters.
+### Container:  It returns a `Container` object for each container matching the parameters.
 ## NOTES
 
 ## RELATED LINKS

@@ -128,7 +128,7 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 
 ## OUTPUTS
 
-### Image: Returns the images that are installed and match the parameter.
+### Image: Returns `Image` objects for the images that are installed and match the parameter.
 ## NOTES
 
 ## RELATED LINKS
