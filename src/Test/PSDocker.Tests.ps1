@@ -105,25 +105,47 @@ Describe 'Get-DockerImage' {
             Get-DockerImage -Repository $testConfig.Image
         ).Repository | Should -Be $testConfig.Image
     }
+
+    It 'returns the installed images from a search' {
+        (
+            Search-DockerRepository -Term $testConfig.Image -Limit 1 |
+            Get-DockerImage
+        ).Count | Should -Be 1
+    }
 }
 
 #endregion
 #region Container
 
 Describe 'New-DockerContainer' {
+
     It 'does not throw' {
         $container = New-DockerContainer -Image $testConfig.Image -Environment @{"A" = 1; "B" = "C"}
         $container.Image | Should -Be $testConfig.Image
 
-        Remove-DockerContainer -Name $container.Name
+        $container | Remove-DockerContainer
+    }
+
+    It 'accepts Get-Image as parameter' {
+        $container = Get-DockerImage -Repository $testConfig.Image |
+        New-DockerContainer
+
+        $container | Remove-DockerContainer
     }
 }
 
 Describe 'Remove-DockerContainer' {
-    It 'does not throw' {
-        $container = New-DockerContainer -Image $testConfig.Image
 
+    BeforeEach {
+        $container = New-DockerContainer -Image $testConfig.Image
+    }
+
+    It 'does not throw' {
         Remove-DockerContainer -Name $container.Name
+    }
+
+    It 'works with pipeline parameters' {
+        $container | Remove-DockerContainer
     }
 }
 
@@ -179,13 +201,8 @@ Describe 'Invoke-DockerCommand' {
             -ArgumentList 'foobar' -StringOutput | Should -Be 'foobar'
     }
     AfterAll {
-        try {
-            if ( $container ) {
-                Remove-DockerContainer -Name $container.Name -Force
-            }
-        } catch {
-            Write-Error $_.Exception -ErrorAction 'Continue'
-            throw
+        if ( $container ) {
+            Remove-DockerContainer -Name $container.Name -Force
         }
     }
 }
