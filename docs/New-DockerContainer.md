@@ -1,7 +1,7 @@
 ---
 external help file: PSDocker-help.xml
 Module Name: PSDocker
-online version:
+online version: https://docs.docker.com/engine/reference/commandline/run/
 schema: 2.0.0
 ---
 
@@ -19,7 +19,7 @@ New-DockerContainer [[-Name] <String>] [-Image] <String> [[-Environment] <Hashta
 
 ## DESCRIPTION
 Creates a new container in the docker service.
-Wraps the command \[docker run\](https://docs.docker.com/engine/reference/commandline/run/).
+Wraps the command \`docker run\`.
 
 ## EXAMPLES
 
@@ -50,7 +50,7 @@ Aliases:
 Required: False
 Position: 1
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -65,7 +65,7 @@ Aliases:
 Required: True
 Position: 2
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -80,7 +80,7 @@ Aliases:
 Required: False
 Position: 3
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -95,7 +95,7 @@ Aliases:
 Required: False
 Position: 4
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -110,7 +110,7 @@ Aliases:
 Required: False
 Position: 5
 Default value: 30
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -125,12 +125,13 @@ Aliases:
 Required: False
 Position: 6
 Default value: 1
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
 ### -Detach
 Specifies if the container should be detached.
+That means to run the container without connection to the client shell.
 
 ```yaml
 Type: SwitchParameter
@@ -140,12 +141,13 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
 ### -Interactive
 Specifies if the container should be interactive.
+That means to connect the standard-in stream of container and client.
 
 ```yaml
 Type: SwitchParameter
@@ -155,7 +157,7 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -167,6 +169,10 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 
 ## OUTPUTS
 
+### Container: Returns a Container object for the created container.
 ## NOTES
 
 ## RELATED LINKS
+
+[https://docs.docker.com/engine/reference/commandline/run/](https://docs.docker.com/engine/reference/commandline/run/)
+

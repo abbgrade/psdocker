@@ -1,18 +1,18 @@
-$functionFolders = @('Public', 'Internal')
-ForEach ($folder in $functionFolders)
-{
+foreach ( $folder in @('Public', 'Internal') ) {
     $folderPath = Join-Path -Path $PSScriptRoot -ChildPath $folder
-    If (Test-Path -Path $folderPath)
-    {
-        Write-Verbose -Message "Importing from $folder"
-        $functions = Get-ChildItem -Path $folderPath -Filter '*.ps1'
-        ForEach ($function in $functions)
-        {
-            Write-Verbose -Message "  Importing $($function.BaseName)"
-            . $($function.FullName)
+    if (Test-Path -Path $folderPath) {
+        Write-Verbose "Importing from $folder"
+        foreach ( $function in Get-ChildItem -Path $folderPath -Filter '*.ps1' ) {
+            Write-Verbose "  Importing $( $function.BaseName )"
+            . $function.FullName
+
+            switch ( $folder ) {
+                Public {
+                    if ( ( Get-Command -Module $null | Where-Object { $_.Name -eq $function.BaseName } ) ) {
+                        Export-ModuleMember -Function $function.BaseName
+                    }
+                }
+            }
         }
     }
 }
-
-$publicFunctions = (Get-ChildItem -Path "$PSScriptRoot\Public" -Filter '*.ps1').BaseName
-Export-ModuleMember -Function $publicFunctions

@@ -1,7 +1,7 @@
 ---
 external help file: PSDocker-help.xml
 Module Name: PSDocker
-online version:
+online version: https://docs.docker.com/engine/reference/commandline/exec/
 schema: 2.0.0
 ---
 
@@ -19,7 +19,7 @@ Invoke-DockerCommand [-Name] <String> [-Command] <String> [[-ArgumentList] <Stri
 
 ## DESCRIPTION
 Invokes a command on a docker container.
-Wraps the docker \[command exec\](https://docs.docker.com/engine/reference/commandline/exec/).
+Wraps the docker \`command exec\`.
 
 ## EXAMPLES
 
@@ -28,7 +28,7 @@ Wraps the docker \[command exec\](https://docs.docker.com/engine/reference/comma
 $container = New-DockerContainer -Image 'microsoft/iis' -Detach
 ```
 
-PS C:\\\> Invoke-DockerCommand -Name $container.Name -Command "hostname" -StringOutput
+PS C:\\\> Invoke-DockerCommand -Name $container.Name -Command 'hostname' -StringOutput
 88eb8fa9c07f
 
 ## PARAMETERS
@@ -116,6 +116,10 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 
 ## OUTPUTS
 
+### System.string: Returns a string if the parameter StringOutput is set.
 ## NOTES
 
 ## RELATED LINKS
+
+[https://docs.docker.com/engine/reference/commandline/exec/](https://docs.docker.com/engine/reference/commandline/exec/)
+

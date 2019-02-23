@@ -1,14 +1,14 @@
 ---
 external help file: PSDocker-help.xml
 Module Name: PSDocker
-online version:
+online version: https://docs.docker.com/engine/reference/commandline/search/
 schema: 2.0.0
 ---
 
 # Stop-DockerContainer
 
 ## SYNOPSIS
-Stop container
+{{Fill in the Synopsis}}
 
 ## SYNTAX
 
@@ -17,21 +17,21 @@ Stop-DockerContainer [-Name] <String> [[-Timeout] <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Wraps the command \[docker stop\](https://docs.docker.com/engine/reference/commandline/stop/).
+{{Fill in the Description}}
 
 ## EXAMPLES
 
-### BEISPIEL 1
-```
-New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer' | Out-Null
+### Example 1
+```powershell
+PS C:\> {{ Add example code here }}
 ```
 
-PS C:\\\> Stop-DockerContainer -Name 'mycontainer'
+{{ Add example description here }}
 
 ## PARAMETERS
 
 ### -Name
-Specifies the name of the container to stop.
+{{Fill Name Description}}
 
 ```yaml
 Type: String
@@ -39,14 +39,14 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 1
+Position: 0
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
 ### -Timeout
-Specifies the number of seconds to wait for the command to finish.
+{{Fill Timeout Description}}
 
 ```yaml
 Type: Int32
@@ -54,9 +54,9 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
-Default value: 10
-Accept pipeline input: False
+Position: 1
+Default value: None
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -66,8 +66,13 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 
 ## INPUTS
 
+### System.String
+
+### System.Int32
+
 ## OUTPUTS
 
+### System.Object
 ## NOTES
 
 ## RELATED LINKS

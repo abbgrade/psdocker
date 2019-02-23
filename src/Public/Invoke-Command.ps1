@@ -3,71 +3,69 @@ function Invoke-Command {
     <#
 
     .SYNOPSIS
-
     Invoke command
 
     .DESCRIPTION
-
     Invokes a command on a docker container.
-    Wraps the docker [command exec](https://docs.docker.com/engine/reference/commandline/exec/).
+    Wraps the docker `command exec`.
+
+    .LINK
+    https://docs.docker.com/engine/reference/commandline/exec/
 
     .PARAMETER Name
-
     Specifies the name of the docker container to run the command on.
 
     .PARAMETER Command
-
     Specifies the command to run on the docker container.
 
     .PARAMETER ArgumentList
-
     Specifies the list of arguments of the command.
 
     .PARAMETER Timeout
-
     Specifies the number of seconds to wait for the command to finish.
 
     .PARAMETER StringOutput
-
     Specifies if the output of the container command should be returned as string.
 
-    .EXAMPLE
+    .OUTPUTS
+    System.string: Returns a string if the parameter StringOutput is set.
 
+    .EXAMPLE
     PS C:\> $container = New-DockerContainer -Image 'microsoft/iis' -Detach
-    PS C:\> Invoke-DockerCommand -Name $container.Name -Command "hostname" -StringOutput
+    PS C:\> Invoke-DockerCommand -Name $container.Name -Command 'hostname' -StringOutput
     88eb8fa9c07f
 
     #>
 
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true)]
+        [Parameter( Mandatory = $true )]
         [ValidateNotNullOrEmpty()]
-        [string]
-        $Name,
+        [string] $Name,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter( Mandatory = $true )]
         [ValidateNotNullOrEmpty()]
-        [string]
-        $Command,
+        [string] $Command,
 
-        [Parameter(Mandatory=$false)]
-        [string[]]
-        $ArgumentList,
+        [Parameter( Mandatory = $false )]
+        [string[]] $ArgumentList,
 
-        [Parameter(Mandatory=$false)]
-        [int]
-        $Timeout = 30,
+        [Parameter( Mandatory = $false )]
+        [int] $Timeout = 30,
 
-        [Parameter(Mandatory=$false)]
-        [switch]
-        $StringOutput
+        [Parameter( Mandatory = $false )]
+        [switch] $StringOutput
     )
 
-    [string[]] $arguments = @( 'exec', $Name, $Command ) + $( if ( $ArgumentList ) { $ArgumentList } )
+    $arguments = New-Object System.Collections.ArrayList
+    $arguments.Add( $Name ) | Out-Null
+    $arguments.Add( $Command ) | Out-Null
 
-    Invoke-ClientCommand `
-        -ArgumentList $arguments `
+    if ( $ArgumentList ) {
+        $arguments.AddRange( $ArgumentList )
+    }
+
+    Invoke-ClientCommand 'exec', $arguments `
         -StringOutput:$StringOutput `
         -Timeout $Timeout |
     Write-Output
