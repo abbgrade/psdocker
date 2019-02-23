@@ -66,7 +66,7 @@ function Get-Image {
     ForEach-Object {
         New-Object -TypeName Image -Property @{
             Repository = $_.Repository
-            Tag = $_.Tag
+            Tag = switch ( $_.Tag ) { '<none>' { $null } default { $_ } }
             Id = $_.ID
             CreatedAt = $_.CreatedAt
             Size = $_.Size

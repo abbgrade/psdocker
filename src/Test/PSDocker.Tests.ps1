@@ -102,7 +102,7 @@ Describe 'Get-DockerImage' {
 
     It 'returns a specific image' {
         (
-            Get-DockerImage -Repository $testConfig.Image
+            Get-DockerImage -Repository $testConfig.Image -Tag $testConfig.Tag
         ).Repository | Should -Be $testConfig.Image
     }
 
