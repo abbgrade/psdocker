@@ -131,6 +131,7 @@ Accept wildcard characters: False
 
 ### -Detach
 Specifies if the container should be detached.
+That means to run the container without connection to the client shell.
 
 ```yaml
 Type: SwitchParameter
@@ -146,6 +147,7 @@ Accept wildcard characters: False
 
 ### -Interactive
 Specifies if the container should be interactive.
+That means to connect the standard-in stream of container and client.
 
 ```yaml
 Type: SwitchParameter

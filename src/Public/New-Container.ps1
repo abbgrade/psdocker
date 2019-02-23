@@ -88,8 +88,6 @@ function New-Container {
     # prepare arugments
     $arguments = New-Object System.Collections.ArrayList
 
-    $arguments.Add( 'run' ) | Out-Null
-
     if ( $Name ) {
         $arguments.Add( "--name $Name" ) | Out-Null
     }
@@ -117,7 +115,7 @@ function New-Container {
     $arguments.Add( $Image ) | Out-Null
 
     # create container
-    Invoke-ClientCommand -ArgumentList $arguments -Timeout $Timeout
+    Invoke-ClientCommand 'run', $arguments -Timeout $Timeout
 
     # check container
     $container = Get-Container -Latest -Timeout $StatusTimeout

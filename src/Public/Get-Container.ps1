@@ -60,8 +60,6 @@ function Get-Container {
 
     $arguments = New-Object System.Collections.ArrayList
 
-    $arguments.Add( 'ps' ) | Out-Null
-
     if ( $Running -eq $false ) {
         $arguments.Add( '--all' ) | Out-Null
     }
@@ -75,10 +73,9 @@ function Get-Container {
     }
 
     $arguments.Add( '--no-trunc' ) | Out-Null
-    $arguments.Add('--format="{{json .}}"') | Out-Null
+    $arguments.Add( '--format="{{json .}}"' ) | Out-Null
 
-    Invoke-ClientCommand `
-        -ArgumentList $arguments `
+    Invoke-ClientCommand 'ps', $arguments `
         -Timeout $Timeout `
         -JsonOutput |
     ForEach-Object {

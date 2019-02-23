@@ -57,10 +57,15 @@ function Invoke-Command {
         [switch] $StringOutput
     )
 
-    [string[]] $arguments = @( 'exec', $Name, $Command ) + $( if ( $ArgumentList ) { $ArgumentList } )
+    $arguments = New-Object System.Collections.ArrayList
+    $arguments.Add( $Name ) | Out-Null
+    $arguments.Add( $Command ) | Out-Null
 
-    Invoke-ClientCommand `
-        -ArgumentList $arguments `
+    if ( $ArgumentList ) {
+        $arguments.AddRange( $ArgumentList )
+    }
+
+    Invoke-ClientCommand 'exec', $arguments `
         -StringOutput:$StringOutput `
         -Timeout $Timeout |
     Write-Output

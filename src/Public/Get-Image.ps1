@@ -49,10 +49,8 @@ function Get-Image {
     )
 
     $arguments = New-Object System.Collections.ArrayList
-    $arguments.Add('image') | Out-Null
-    $arguments.Add('ls') | Out-Null
-    $arguments.Add('--no-trunc') | Out-Null
-    $arguments.Add('--format="{{json .}}"') | Out-Null
+    $arguments.Add( '--no-trunc' ) | Out-Null
+    $arguments.Add( '--format="{{json .}}" ') | Out-Null
 
     if ( $Repository ) {
         if ( $Tag ) {
@@ -62,7 +60,7 @@ function Get-Image {
         }
     }
 
-    Invoke-ClientCommand $arguments -Timeout $Timeout -JsonOutput |
+    Invoke-ClientCommand 'image ls', $arguments -Timeout $Timeout -JsonOutput |
     ForEach-Object {
         New-Object -TypeName Image -Property @{
             Repository = $_.Repository

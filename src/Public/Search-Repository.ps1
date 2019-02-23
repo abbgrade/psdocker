@@ -79,8 +79,6 @@ function Search-Repository {
 
     # prepare arugments
     $arguments = New-Object System.Collections.ArrayList
-
-    $arguments.Add( 'search' ) | Out-Null
     $arguments.Add( '--no-trunc' ) | Out-Null
     $arguments.Add( '--format="{{json .}}"' ) | Out-Null
 
@@ -102,8 +100,7 @@ function Search-Repository {
 
     $arguments.Add( $Term ) | Out-Null
 
-    Invoke-ClientCommand `
-        -ArgumentList $arguments `
+    Invoke-ClientCommand 'search', $arguments `
         -Timeout $Timeout `
         -JsonOutput |
     Foreach-Object {

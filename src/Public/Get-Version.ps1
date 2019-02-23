@@ -46,7 +46,7 @@ function Get-Version {
     )
 
     $output = (
-        Invoke-ClientCommand "version" -Timeout $Timeout -StringOutput
+        Invoke-ClientCommand 'version' -Timeout $Timeout -StringOutput
     ).Split( [Environment]::NewLine )
 
     $dockerVersionTable = @{
