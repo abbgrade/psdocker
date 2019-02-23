@@ -44,22 +44,18 @@ function Get-Container {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory=$false)]
-        [switch]
-        $Running,
+        [switch] $Running,
 
         [Parameter(Mandatory=$false)]
-        [switch]
-        $Latest,
-
-        [Parameter(Mandatory=$false)]
-        [ValidateNotNullOrEmpty()]
-        [string]
-        $Name,
+        [switch] $Latest,
 
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-        [int]
-        $Timeout = 1
+        [string] $Name,
+
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [int] $Timeout = 1
     )
 
     $arguments = New-Object System.Collections.ArrayList
