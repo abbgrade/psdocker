@@ -1,7 +1,7 @@
 ---
 external help file: PSDocker-help.xml
 Module Name: PSDocker
-online version:
+online version: https://docs.docker.com/engine/reference/commandline/rm/
 schema: 2.0.0
 ---
 
@@ -19,7 +19,7 @@ Remove-DockerContainer [-Name] <String> [-Force] [[-Timeout] <Int32>] [[-StopTim
 
 ## DESCRIPTION
 Removes a docker container from the service.
-Wraps the command \[docker rm\](https://docs.docker.com/engine/reference/commandline/rm/).
+Wraps the command \`docker rm\`.
 
 ## EXAMPLES
 
@@ -29,6 +29,13 @@ New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer' | Out-Null
 ```
 
 PS C:\\\> Remove-DockerContainer -Name 'mycontainer'
+
+### BEISPIEL 2
+```
+$container = New-DockerContainer -Image 'microsoft/nanoserver'
+```
+
+PS C:\\\> $container | Remove-DockerContainer
 
 ## PARAMETERS
 
@@ -43,7 +50,7 @@ Aliases:
 Required: True
 Position: 1
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -58,7 +65,7 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -73,7 +80,7 @@ Aliases:
 Required: False
 Position: 2
 Default value: 10
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -88,7 +95,7 @@ Aliases:
 Required: False
 Position: 3
 Default value: 10
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -103,3 +110,6 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 ## NOTES
 
 ## RELATED LINKS
+
+[https://docs.docker.com/engine/reference/commandline/rm/](https://docs.docker.com/engine/reference/commandline/rm/)
+
