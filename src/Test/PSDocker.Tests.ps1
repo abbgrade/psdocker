@@ -35,7 +35,28 @@ Describe 'Get-DockerVersion' {
 
 #endregion
 
-$imageName = 'hello-world'
+
+$testConfig = New-Object -Type PsObject -Property $(
+    switch ( ( Get-DockerVersion ).Server.OSArch ) {
+        'windows/amd64' {
+            @{
+                Image = 'microsoft/nanoserver'
+                Tag = 'latest'
+                PrintCommand = 'powershell -c Write-Host'
+            } | Write-Output
+        }
+        'linux/amd64' {
+            @{
+                Image = 'microsoft/powershell'
+                Tag = 'latest'
+                PrintCommand = 'echo'
+            } | Write-Output
+        }
+        default {
+            Write-Error "Missing test for $_"
+        }
+    }
+)
 
 #region Image
 
@@ -53,10 +74,13 @@ Describe 'Search-DockerRepository' {
 Describe 'Install-DockerImage' {
 
     It 'works with named parameters' {
-        Install-DockerImage -Name $imageName
+        Install-DockerImage -Name $testConfig.Image
     }
     It 'works with pipeline parameters' {
-        Search-DockerRepository -Term $imageName -Limit 1 -IsOfficial | Install-DockerImage
+        Search-DockerRepository -Term $testConfig.Image -Limit 1 | Install-DockerImage
+    }
+    It 'works with name and tag' {
+        Install-DockerImage -Name $testConfig.Image -Tag $testConfig.Tag
     }
     It 'throws on invalid image' {
         {
@@ -68,18 +92,18 @@ Describe 'Install-DockerImage' {
 Describe 'Get-DockerImage' {
 
     BeforeAll {
-        Install-DockerImage -Name $imageName
+        Install-DockerImage -Name $testConfig.Image
     }
 
     It 'returns a list of images' {
         Get-DockerImage |
-        Where-Object Name -eq $imageName | Should -Be
+        Where-Object Name -eq $testConfig.Image | Should -Be
     }
 
     It 'returns a specific image' {
         (
-            Get-DockerImage -Repository $imageName
-        ).Repository | Should -Be $imageName
+            Get-DockerImage -Repository $testConfig.Image
+        ).Repository | Should -Be $testConfig.Image
     }
 }
 
@@ -88,8 +112,8 @@ Describe 'Get-DockerImage' {
 
 Describe 'New-DockerContainer' {
     It 'does not throw' {
-        $container = New-DockerContainer -Image $imageName -Environment @{"A" = 1; "B" = "C"}
-        $container.Image | Should -Be $imageName
+        $container = New-DockerContainer -Image $testConfig.Image -Environment @{"A" = 1; "B" = "C"}
+        $container.Image | Should -Be $testConfig.Image
 
         Remove-DockerContainer -Name $container.Name
     }
@@ -97,7 +121,7 @@ Describe 'New-DockerContainer' {
 
 Describe 'Remove-DockerContainer' {
     It 'does not throw' {
-        $container = New-DockerContainer -Image $imageName
+        $container = New-DockerContainer -Image $testConfig.Image
 
         Remove-DockerContainer -Name $container.Name
     }
@@ -106,17 +130,17 @@ Describe 'Remove-DockerContainer' {
 Describe 'Get-DockerContainer' {
     It 'returns the correct number of containers' {
         $baseLineContainer = @(
-            ( New-DockerContainer -Image $imageName ),
-            ( New-DockerContainer -Image $imageName )
+            ( New-DockerContainer -Image $testConfig.Image ),
+            ( New-DockerContainer -Image $testConfig.Image )
         )
 
         $previousCount = ( Get-DockerContainer ).Count
 
         $container = @(
-            ( New-DockerContainer -Image $imageName ),
-            ( New-DockerContainer -Image $imageName ),
-            ( New-DockerContainer -Image $imageName ),
-            ( New-DockerContainer -Image $imageName )
+            ( New-DockerContainer -Image $testConfig.Image ),
+            ( New-DockerContainer -Image $testConfig.Image ),
+            ( New-DockerContainer -Image $testConfig.Image ),
+            ( New-DockerContainer -Image $testConfig.Image )
         )
 
         $afterCount = ( Get-DockerContainer ).Count
@@ -134,26 +158,6 @@ Describe 'Get-DockerContainer' {
 Describe 'Invoke-DockerCommand' {
     BeforeAll {
         try {
-            $testConfig = New-Object -Type PsObject -Property $(
-                switch ( ( Get-DockerVersion ).Server.OSArch ) {
-                    'windows/amd64' {
-                        @{
-                            Image = 'microsoft/nanoserver'
-                            PrintCommand = 'powershell -c Write-Host'
-                        } | Write-Output
-                    }
-                    'linux/amd64' {
-                        @{
-                            Image = 'microsoft/powershell'
-                            PrintCommand = 'echo'
-                        } | Write-Output
-                    }
-                    default {
-                        Write-Error "Missing test for $_"
-                    }
-                }
-            )
-
             if ( -not ( Get-DockerImage -Repository $testConfig.Image )) {
                 Install-DockerImage -Name $testConfig.Image -Timeout ( 10 * 60)
             }
