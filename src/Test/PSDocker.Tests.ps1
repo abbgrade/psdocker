@@ -42,6 +42,7 @@ $testConfig = New-Object -Type PsObject -Property $(
                 Image = 'microsoft/nanoserver'
                 Tag = 'latest'
                 PrintCommand = 'powershell -c Write-Host'
+                MountPoint = 'C:\volume'
             } | Write-Output
         }
         'linux/amd64' {
@@ -49,6 +50,7 @@ $testConfig = New-Object -Type PsObject -Property $(
                 Image = 'microsoft/powershell'
                 Tag = 'latest'
                 PrintCommand = 'echo'
+                MountPoint = '/tmp/volume'
             } | Write-Output
         }
         default {
@@ -148,10 +150,23 @@ Describe 'New-DockerContainer' {
     }
 
     It 'accepts Get-Image as parameter' {
-        $container = Get-DockerImage -Repository $testConfig.Image |
+        $container = Get-DockerImage -Repository $testConfig.Image -Tag $testConfig.Tag |
         New-DockerContainer
 
         $container | Remove-DockerContainer
+    }
+
+    It 'mounts a volume' {
+
+        $testSharePath = ( Get-Item 'TestDrive:\' ).FullName
+        $testText = 'lorem ipsum'
+        Set-Content "$testSharePath\test.txt" -Value $testText
+
+        $container = Get-DockerImage -Repository $testConfig.Image -Tag $testConfig.Tag |
+        New-DockerContainer -Volumes @{ $testSharePath = $testConfig.MountPoint } -Detach -Interactive
+
+        Invoke-DockerCommand -Name $container.Name -Command "pwsh -c `"Get-Content -Path '$( $testConfig.MountPoint )/test.txt' | Write-Output`"" -StringOutput |
+        Should -Be $testText
     }
 }
 
