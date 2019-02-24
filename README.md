@@ -14,6 +14,13 @@ See the folder [docs](./docs) for examples.
 
 ## Changelog
 
+### Version 1.3.0
+
+- Support for Linux clients
+- Support for Linux containers
+- Support von container volumes
+- Refactoring
+
 ### Version 1.2.0
 
 - Pipeline support for the cmdlets.
