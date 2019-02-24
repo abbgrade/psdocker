@@ -9,9 +9,9 @@ image:
  - Ubuntu
 
 install:
-  - ps: Install-Module InvokeBuild -Force
-  - ps: Install-Module Pester -Force -SkipPublisherCheck
-  - ps: Install-Module PlatyPS -Force
+  - ps: Install-Module InvokeBuild -Scope CurrentUser -Force
+  - ps: Install-Module Pester -Scope CurrentUser -Force -SkipPublisherCheck
+  - ps: Install-Module PlatyPS -Scope CurrentUser -Force
   - docker version
 
 platform:
