@@ -34,7 +34,7 @@ function Uninstall-Image {
     [CmdletBinding()]
     param (
         [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
-        [Alias( 'Image' )]
+        [Alias( 'Image', 'ImageName' )]
         [ValidateNotNullOrEmpty()]
         [string] $Name,
 

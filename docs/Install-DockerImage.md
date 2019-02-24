@@ -51,7 +51,7 @@ Specifies the name of the repository of the image to install.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: Name
+Aliases: Name, ImageName
 
 Required: True
 Position: 2
