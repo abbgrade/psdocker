@@ -56,7 +56,7 @@ function Install-Image {
         [ValidateNotNullOrEmpty()]
         [string] $Tag,
 
-        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
+        [Parameter( Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [switch] $AllTags,
 

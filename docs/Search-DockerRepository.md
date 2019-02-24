@@ -69,7 +69,7 @@ Aliases:
 Required: True
 Position: 2
 Default value: 0
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -84,7 +84,7 @@ Aliases:
 Required: False
 Position: 3
 Default value: 30
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -99,7 +99,7 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -114,7 +114,7 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -129,7 +129,7 @@ Aliases:
 Required: False
 Position: 4
 Default value: 0
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

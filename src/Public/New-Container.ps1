@@ -25,6 +25,10 @@ function New-Container {
     .PARAMETER Ports
     Specifies the portmapping of the created container.
 
+    .PARAMETER Volumes
+    Specifies the volumes to mount as a hashmap,
+    where the key is the path on the host and the value the path in the container.
+
     .PARAMETER Timeout
     Specifies the number of seconds to wait for the command to finish.
 
@@ -73,9 +77,13 @@ function New-Container {
         [hashtable] $Ports,
 
         [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
+        [ValidateNotNullOrEmpty()]
+        [hashtable] $Volumes,
+
+        [Parameter( Mandatory = $false )]
         [int] $Timeout = 30,
 
-        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
+        [Parameter( Mandatory = $false )]
         [int] $StatusTimeout = 1,
 
         [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
@@ -101,6 +109,12 @@ function New-Container {
     if ( $Ports ) {
         foreach ( $item in $Ports.GetEnumerator() ) {
             $arguments.Add( "--publish $( $item.Name):$( $item.Value )") | Out-Null
+        }
+    }
+
+    if ( $Volumes ) {
+        foreach ( $volume in $Volumes.GetEnumerator() ) {
+            $arguments.Add( "--volume $( $volume.Name ):$( $volume.Value )" )
         }
     }
 

@@ -40,13 +40,13 @@ function Remove-Container {
         [ValidateNotNullOrEmpty()]
         [string] $Name,
 
-        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
+        [Parameter( Mandatory = $false )]
         [switch] $Force,
 
-        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
+        [Parameter( Mandatory = $false )]
         [int] $Timeout = 10,
 
-        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
+        [Parameter( Mandatory = $false )]
         [int] $StopTimeout = 10
     )
 

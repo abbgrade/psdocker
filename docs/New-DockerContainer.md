@@ -14,7 +14,8 @@ New container
 
 ```
 New-DockerContainer [[-Name] <String>] [-Image] <String> [[-Environment] <Hashtable>] [[-Ports] <Hashtable>]
- [[-Timeout] <Int32>] [[-StatusTimeout] <Int32>] [-Detach] [-Interactive] [<CommonParameters>]
+ [[-Volumes] <Hashtable>] [[-Timeout] <Int32>] [[-StatusTimeout] <Int32>] [-Detach] [-Interactive]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -99,6 +100,22 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
+### -Volumes
+Specifies the volumes to mount as a hashmap,
+where the key is the path on the host and the value the path in the container.
+
+```yaml
+Type: Hashtable
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 5
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
 ### -Timeout
 Specifies the number of seconds to wait for the command to finish.
 
@@ -108,9 +125,9 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 5
+Position: 6
 Default value: 30
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -123,9 +140,9 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 6
+Position: 7
 Default value: 1
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

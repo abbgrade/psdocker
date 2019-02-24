@@ -61,19 +61,19 @@ function Search-Repository {
         [ValidateNotNullOrEmpty()]
         [string] $Term,
 
-        [Parameter( Mandatory = $true, ValueFromPipelineByPropertyName = $true )]
+        [Parameter( Mandatory = $true )]
         [int] $Limit,
 
-        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
+        [Parameter( Mandatory = $false )]
         [int] $Timeout = 30,
 
-        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
+        [Parameter( Mandatory = $false )]
         [switch] $IsAutomated,
 
-        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
+        [Parameter( Mandatory = $false )]
         [switch] $IsOfficial,
 
-        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
+        [Parameter( Mandatory = $false )]
         [int] $MinimumStars
     )
 

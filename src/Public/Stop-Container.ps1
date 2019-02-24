@@ -8,7 +8,8 @@ function Stop-Container {
     .DESCRIPTION
     Wraps the command `docker stop`.
 
-    .LINK https://docs.docker.com/engine/reference/commandline/stop/
+    .LINK
+    https://docs.docker.com/engine/reference/commandline/stop/
 
     .PARAMETER Name
     Specifies the name of the container to stop.
@@ -28,7 +29,7 @@ function Stop-Container {
         [ValidateNotNullOrEmpty()]
         [string] $Name,
 
-        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
+        [Parameter( Mandatory = $false )]
         [int] $Timeout = 10
     )
 
