@@ -19,9 +19,11 @@ Import-Module "$PSScriptRoot\..\PSDocker.psd1" -Force
 
 Describe 'Docker Service' {
     It 'is running' {
-        Get-Process |
-        Where-Object Name -eq 'Docker for Windows' |
-        Should -Not -BeNullOrEmpty
+        if ( -not $ENV:APPVEYOR ) {
+            $socket = New-Object Net.Sockets.TcpClient
+            $socket.Connect( '127.0.0.1', 2375 )
+            $socket.Connected | Should -Be $true
+        }
     }
 }
 
