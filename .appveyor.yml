@@ -1,15 +1,17 @@
-version: '1.2.0.{build}'
+version: '1.3.0.{build}'
 
 environment:
   nuget_apikey:
     secure: AWSfDUQgVaMF1fhfsaVx5Hy/qIa9lwyPwXQ9kYTYUJV4qdEeFHMIggk2COOD6DH2
 
-image: Visual Studio 2017
+image:
+ - Visual Studio 2017
+ - Ubuntu
 
 install:
-  - ps: Install-Module InvokeBuild -Force
-  - ps: Install-Module Pester -Force -SkipPublisherCheck
-  - ps: Install-Module PlatyPS -Force
+  - ps: Install-Module InvokeBuild -Scope CurrentUser -Force
+  - ps: Install-Module Pester -Scope CurrentUser -Force -SkipPublisherCheck
+  - ps: Install-Module PlatyPS -Scope CurrentUser -Force
   - docker version
 
 platform:

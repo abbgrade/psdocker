@@ -44,7 +44,7 @@ function Get-Image {
         [ValidateNotNullOrEmpty()]
         [string] $Tag,
 
-        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
+        [Parameter( Mandatory = $false )]
         [int] $Timeout = 10
     )
 

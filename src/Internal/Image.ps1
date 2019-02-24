@@ -6,7 +6,7 @@ class Image {
     [string] $Size
 
     Image() {
-        $this | Add-Member -Name Image -MemberType ScriptProperty -Value {
+        $this | Add-Member -Name ImageName -MemberType ScriptProperty -Value {
             if ( $this.Tag ) {
                 return "$( $this.Repository ):$( $this.Tag )"
             } else {

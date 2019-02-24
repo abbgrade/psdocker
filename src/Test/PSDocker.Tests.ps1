@@ -19,9 +19,11 @@ Import-Module "$PSScriptRoot\..\PSDocker.psd1" -Force
 
 Describe 'Docker Service' {
     It 'is running' {
-        Get-Process |
-        Where-Object Name -eq 'Docker for Windows' |
-        Should -Not -BeNullOrEmpty
+        if ( -not $ENV:APPVEYOR ) {
+            $socket = New-Object Net.Sockets.TcpClient
+            $socket.Connect( '127.0.0.1', 2375 )
+            $socket.Connected | Should -Be $true
+        }
     }
 }
 
@@ -39,16 +41,26 @@ $testConfig = New-Object -Type PsObject -Property $(
     switch ( ( Get-DockerVersion ).Server.OSArch ) {
         'windows/amd64' {
             @{
-                Image = 'microsoft/nanoserver'
-                Tag = 'latest'
+                Image = New-Object PsObject -Property @{
+                    Repository = 'microsoft/nanoserver'
+                    Tag = 'latest'
+                    Name = 'microsoft/nanoserver:latest'
+                }
                 PrintCommand = 'powershell -c Write-Host'
+                PowershellCommand = 'powershell -c '
+                MountPoint = 'C:\volume'
             } | Write-Output
         }
         'linux/amd64' {
             @{
-                Image = 'microsoft/powershell'
-                Tag = 'latest'
+                Image = New-Object PsObject -Property @{
+                    Repository = 'microsoft/powershell'
+                    Tag = 'latest'
+                    Name = 'microsoft/powershell:latest'
+                }
                 PrintCommand = 'echo'
+                PowershellCommand = 'pwsh -c '
+                MountPoint = '/tmp/volume'
             } | Write-Output
         }
         default {
@@ -73,17 +85,17 @@ Describe 'Search-DockerRepository' {
 Describe 'Install-DockerImage' {
 
     It 'works with named parameters' {
-        Install-DockerImage -Name $testConfig.Image
+        Install-DockerImage -Repository $testConfig.Image.Repository
     }
     It 'works with pipeline parameters' {
-        Search-DockerRepository -Term $testConfig.Image -Limit 1 | Install-DockerImage
+        Search-DockerRepository -Term $testConfig.Image.Repository -Limit 1 | Install-DockerImage
     }
     It 'works with name and tag' {
-        Install-DockerImage -Name $testConfig.Image -Tag $testConfig.Tag
+        Install-DockerImage -Repository $testConfig.Image.Repository -Tag $testConfig.Image.Tag
     }
     It 'throws on invalid image' {
         {
-            Install-DockerImage -Name 'foobar' -WarningAction 'SilentlyContinue'
+            Install-DockerImage -Repository 'foobar' -WarningAction 'SilentlyContinue'
         } | Should Throw
     }
 }
@@ -91,42 +103,42 @@ Describe 'Install-DockerImage' {
 Describe 'Get-DockerImage' {
 
     BeforeAll {
-        Uninstall-DockerImage -Name $testConfig.Image
-        Install-DockerImage -Name $testConfig.Image
+        Uninstall-DockerImage -Name $testConfig.Image.Repository
+        Install-DockerImage -Repository $testConfig.Image.Repository
     }
 
     It 'returns a list of images' {
         Get-DockerImage |
-        Where-Object Name -eq $testConfig.Image | Should -Be
+        Where-Object Name -eq $testConfig.Image.Repository | Should -Be
     }
 
     It 'returns a specific image' {
         (
-            Get-DockerImage -Repository $testConfig.Image -Tag $testConfig.Tag
-        ).Repository | Should -Be $testConfig.Image
+            Get-DockerImage -Repository $testConfig.Image.Repository -Tag $testConfig.Image.Tag
+        ).Repository | Should -Be $testConfig.Image.Repository
     }
 
     It 'returns the installed images from a search' {
         (
-            Search-DockerRepository -Term $testConfig.Image -Limit 1 |
+            Search-DockerRepository -Term $testConfig.Image.Repository -Limit 1 |
             Get-DockerImage |
             Select-Object 'Repository' |
             Select-Object -Unique
-        ).Repository | Should -Be $testConfig.Image
+        ).Repository | Should -Be $testConfig.Image.Repository
     }
 }
 
 Describe 'Uninstall-DockerImage' {
 
     BeforeAll {
-        Install-DockerImage -Name $testConfig.Image
+        $testConfig.Image | Install-DockerImage
     }
 
     It 'works with pipeline parameters' {
-        Get-DockerImage -Repository $testConfig.Image -Tag $testConfig.Tag |
+        Get-DockerImage -Repository $testConfig.Image.Repository -Tag $testConfig.Image.Tag |
         Uninstall-DockerImage
 
-        Get-DockerImage -Repository $testConfig.Image -Tag $testConfig.Tag |
+        Get-DockerImage -Repository $testConfig.Image.Repository -Tag $testConfig.Image.Tag |
         Should -BeNullOrEmpty
     }
 }
@@ -137,31 +149,46 @@ Describe 'Uninstall-DockerImage' {
 Describe 'New-DockerContainer' {
 
     BeforeAll {
-        Install-DockerImage -Name $testConfig.Image
+        $testConfig.Image | Install-DockerImage
     }
 
     It 'does not throw' {
-        $container = New-DockerContainer -Image $testConfig.Image -Environment @{"A" = 1; "B" = "C"}
-        $container.Image | Should -Be $testConfig.Image
+        $container = New-DockerContainer -Image $testConfig.Image.Name -Environment @{"A" = 1; "B" = "C"}
+        $container.Image | Should -Be $testConfig.Image.Name
 
         $container | Remove-DockerContainer
     }
 
     It 'accepts Get-Image as parameter' {
-        $container = Get-DockerImage -Repository $testConfig.Image |
-        New-DockerContainer
+        $container = Get-DockerImage -Repository $testConfig.Image.Repository -Tag $testConfig.Image.Tag | New-DockerContainer
+        $container.Image | Should -Be $testConfig.Image.Name
 
         $container | Remove-DockerContainer
+    }
+
+    It 'mounts a volume' {
+
+        $testSharePath = ( Get-Item 'TestDrive:\' ).FullName
+        $testText = 'lorem ipsum'
+        Set-Content "$testSharePath\test.txt" -Value $testText
+
+        $container = Get-DockerImage -Repository $testConfig.Image.Repository -Tag $testConfig.Image.Tag |
+        New-DockerContainer -Volumes @{ $testSharePath = $testConfig.MountPoint } -Detach -Interactive
+
+        Invoke-DockerCommand -Name $container.Name -Command "$( $testConfig.PowershellCommand ) `"Get-Content -Path '$( $testConfig.MountPoint )/test.txt'`"" -StringOutput |
+        Should -Be $testText
+
+        Remove-DockerContainer -Name $container.Name -Force
     }
 }
 
 Describe 'Remove-DockerContainer' {
 
     BeforeEach {
-        $container = New-DockerContainer -Image $testConfig.Image
+        $container = New-DockerContainer -Image $testConfig.Image.Name
     }
 
-    It 'does not throw' {
+    It 'works with named parameters' {
         Remove-DockerContainer -Name $container.Name
     }
 
@@ -173,17 +200,17 @@ Describe 'Remove-DockerContainer' {
 Describe 'Get-DockerContainer' {
     It 'returns the correct number of containers' {
         $baseLineContainer = @(
-            ( New-DockerContainer -Image $testConfig.Image ),
-            ( New-DockerContainer -Image $testConfig.Image )
+            ( New-DockerContainer -Image $testConfig.Image.Name ),
+            ( New-DockerContainer -Image $testConfig.Image.Name )
         )
 
         $previousCount = ( Get-DockerContainer ).Count
 
         $container = @(
-            ( New-DockerContainer -Image $testConfig.Image ),
-            ( New-DockerContainer -Image $testConfig.Image ),
-            ( New-DockerContainer -Image $testConfig.Image ),
-            ( New-DockerContainer -Image $testConfig.Image )
+            ( New-DockerContainer -Image $testConfig.Image.Name ),
+            ( New-DockerContainer -Image $testConfig.Image.Name ),
+            ( New-DockerContainer -Image $testConfig.Image.Name ),
+            ( New-DockerContainer -Image $testConfig.Image.Name )
         )
 
         $afterCount = ( Get-DockerContainer ).Count
@@ -191,7 +218,7 @@ Describe 'Get-DockerContainer' {
         $afterCount | Should -Be $( $previousCount + 4 )
 
         ( $baseLineContainer + $container ) | ForEach-Object {
-            Remove-DockerContainer -Name $_.Name
+            $_ | Remove-DockerContainer
         }
     }
 }
@@ -201,11 +228,7 @@ Describe 'Get-DockerContainer' {
 Describe 'Invoke-DockerCommand' {
     BeforeAll {
         try {
-            if ( -not ( Get-DockerImage -Repository $testConfig.Image )) {
-                Install-DockerImage -Name $testConfig.Image -Timeout ( 10 * 60)
-            }
-
-            $container = New-DockerContainer -Image $testConfig.Image -Interactive -Detach
+            $container = New-DockerContainer -Image $testConfig.Image.Name -Interactive -Detach
         } catch {
             Write-Error $_.Exception -ErrorAction 'Continue'
             throw
