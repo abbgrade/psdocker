@@ -4,7 +4,9 @@ environment:
   nuget_apikey:
     secure: AWSfDUQgVaMF1fhfsaVx5Hy/qIa9lwyPwXQ9kYTYUJV4qdEeFHMIggk2COOD6DH2
 
-image: Visual Studio 2017
+image:
+ - Visual Studio 2017
+ - Ubuntu
 
 install:
   - ps: Install-Module InvokeBuild -Force
