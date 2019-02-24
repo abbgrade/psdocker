@@ -66,7 +66,8 @@ function New-Container {
 
         [Parameter( Mandatory = $true, ValueFromPipelineByPropertyName = $true )]
         [ValidateNotNullOrEmpty()]
-        [string] $Image,
+        [Alias( 'Image' )]
+        [string] $ImageName,
 
         [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
         [ValidateNotNullOrEmpty()]
@@ -126,7 +127,7 @@ function New-Container {
         $arguments.Add( '--interactive' ) | Out-Null
     }
 
-    $arguments.Add( $Image ) | Out-Null
+    $arguments.Add( $ImageName ) | Out-Null
 
     # create container
     Invoke-ClientCommand 'run', $arguments -Timeout $Timeout

@@ -13,9 +13,9 @@ New container
 ## SYNTAX
 
 ```
-New-DockerContainer [[-Name] <String>] [-Image] <String> [[-Environment] <Hashtable>] [[-Ports] <Hashtable>]
- [[-Volumes] <Hashtable>] [[-Timeout] <Int32>] [[-StatusTimeout] <Int32>] [-Detach] [-Interactive]
- [<CommonParameters>]
+New-DockerContainer [[-Name] <String>] [-ImageName] <String> [[-Environment] <Hashtable>]
+ [[-Ports] <Hashtable>] [[-Volumes] <Hashtable>] [[-Timeout] <Int32>] [[-StatusTimeout] <Int32>] [-Detach]
+ [-Interactive] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -55,13 +55,13 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -Image
-Specifies the name if the image to create the container based on.
+### -ImageName
+{{Fill ImageName Description}}
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases:
+Aliases: Image
 
 Required: True
 Position: 2

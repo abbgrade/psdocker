@@ -34,7 +34,7 @@ Specifies the name of the image to be removed.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: Image
+Aliases: Image, ImageName
 
 Required: False
 Position: 1

@@ -49,7 +49,7 @@ function Install-Image {
 
         [Parameter( Mandatory = $true, ValueFromPipelineByPropertyName = $true )]
         [ValidateNotNullOrEmpty()]
-        [Alias( 'Name' )]
+        [Alias( 'Name', 'ImageName' )]
         [string] $Repository,
 
         [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
