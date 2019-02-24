@@ -38,13 +38,13 @@ function Uninstall-Image {
         [ValidateNotNullOrEmpty()]
         [string] $Name,
 
-        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
+        [Parameter( Mandatory = $false )]
         [switch] $Force = $false,
 
-        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
+        [Parameter( Mandatory = $false )]
         [switch] $NoPrune = $false,
 
-        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
+        [Parameter( Mandatory = $false )]
         [int] $Timeout = 10
     )
 

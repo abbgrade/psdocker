@@ -80,10 +80,10 @@ function New-Container {
         [ValidateNotNullOrEmpty()]
         [hashtable] $Volumes,
 
-        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
+        [Parameter( Mandatory = $false )]
         [int] $Timeout = 30,
 
-        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
+        [Parameter( Mandatory = $false )]
         [int] $StatusTimeout = 1,
 
         [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]

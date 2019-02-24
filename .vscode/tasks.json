@@ -31,7 +31,8 @@
             "label": "Build",
             "type": "shell",
             "group": "build",
-            "command": "$DebugPreference = 'Continue'; Invoke-Build Clean,Build"
+            "command": "$DebugPreference = 'Continue'; Invoke-Build Clean,Build",
+            "problemMatcher": []
         },
         {
             "label": "Clean",
