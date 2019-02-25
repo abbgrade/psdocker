@@ -54,9 +54,14 @@ test_script:
           throw "$($res.FailedCount) tests failed."
       }
 
-# deploy on tag
-deploy_script:
-  - ps: |
-      if ( $env:APPVEYOR_REPO_TAG_NAME ) {
-        Invoke-Build Publish
-      }
+# deploy on tag and windows image
+for:
+  -
+    matrix:
+      only:
+        - image: Visual Studio 2017
+    deploy_script:
+      - ps: |
+          if ( $env:APPVEYOR_REPO_TAG_NAME ) {
+            Invoke-Build Publish
+          }
