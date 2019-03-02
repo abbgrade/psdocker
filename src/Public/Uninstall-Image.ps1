@@ -48,20 +48,22 @@ function Uninstall-Image {
         [int] $Timeout = 10
     )
 
+    process {
 
-    $arguments = New-Object System.Collections.ArrayList
+        $arguments = New-Object System.Collections.ArrayList
 
-    if ( $Force ) {
-        $arguments.Add( '--force' ) | Out-Null
+        if ( $Force ) {
+            $arguments.Add( '--force' ) | Out-Null
+        }
+
+        if ( $NoPrune ) {
+            $arguments.Add( '--no-prune' ) | Out-Null
+        }
+
+        $arguments.Add( $Name ) | Out-Null
+
+        Invoke-ClientCommand 'image rm', $arguments -Timeout $Timeout
+        Write-Verbose "Docker image '$Name' removed."
+
     }
-
-    if ( $NoPrune ) {
-        $arguments.Add( '--no-prune' ) | Out-Null
-    }
-
-    $arguments.Add( $Name ) | Out-Null
-
-    Invoke-ClientCommand 'image rm', $arguments -Timeout $Timeout
-    Write-Verbose "Docker image '$Name' removed."
-
 }
