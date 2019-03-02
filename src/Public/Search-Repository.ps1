@@ -77,39 +77,43 @@ function Search-Repository {
         [int] $MinimumStars
     )
 
-    # prepare arugments
-    $arguments = New-Object System.Collections.ArrayList
-    $arguments.Add( '--no-trunc' ) | Out-Null
-    $arguments.Add( '--format="{{json .}}"' ) | Out-Null
+    process {
 
-    if ( $Limit ) {
-        $arguments.Add( "--limit $Limit" ) | Out-Null
-    }
+        # prepare arugments
+        $arguments = New-Object System.Collections.ArrayList
+        $arguments.Add( '--no-trunc' ) | Out-Null
+        $arguments.Add( '--format="{{json .}}"' ) | Out-Null
 
-    if ( $IsOfficial ) {
-        $arguments.Add( "--filter `"is-official=true`"" ) | Out-Null
-    }
-
-    if ( $IsAutomated ) {
-        $arguments.Add( "--filter `"is-automated=true`"" ) | Out-Null
-    }
-
-    if ( $MinimumStars ) {
-        $arguments.Add( "--filter `"stars=$MinimumStars`"" ) | Out-Null
-    }
-
-    $arguments.Add( $Term ) | Out-Null
-
-    Invoke-ClientCommand 'search', $arguments `
-        -Timeout $Timeout `
-        -JsonOutput |
-    Foreach-Object {
-        New-Object -Type Repository -Property @{
-            Name = $_.Name
-            Description = $_.Description
-            Stars = [int] $_.Stars
-            IsOfficial = $_.IsOfficial
-            IsAutomated = $_.IsAutomated
+        if ( $Limit ) {
+            $arguments.Add( "--limit $Limit" ) | Out-Null
         }
-    } | Write-Output
+
+        if ( $IsOfficial ) {
+            $arguments.Add( "--filter `"is-official=true`"" ) | Out-Null
+        }
+
+        if ( $IsAutomated ) {
+            $arguments.Add( "--filter `"is-automated=true`"" ) | Out-Null
+        }
+
+        if ( $MinimumStars ) {
+            $arguments.Add( "--filter `"stars=$MinimumStars`"" ) | Out-Null
+        }
+
+        $arguments.Add( $Term ) | Out-Null
+
+        Invoke-ClientCommand 'search', $arguments `
+            -Timeout $Timeout `
+            -JsonOutput |
+        Foreach-Object {
+            New-Object -Type Repository -Property @{
+                Name = $_.Name
+                Description = $_.Description
+                Stars = [int] $_.Stars
+                IsOfficial = $_.IsOfficial
+                IsAutomated = $_.IsAutomated
+            }
+        } | Write-Output
+
+    }
 }
