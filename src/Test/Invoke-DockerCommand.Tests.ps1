@@ -8,12 +8,9 @@ param (
 Describe 'Invoke-DockerCommand' {
     Context 'running container' {
         BeforeAll {
-            try {
-                $container = New-DockerContainer -Image $testConfig.Image.Name -Interactive -Detach
-            } catch {
-                Write-Error $_.Exception -ErrorAction 'Continue'
-                throw
-            }
+            $testConfig.Image | Install-DockerImage
+
+            $container = New-DockerContainer -Image $testConfig.Image.Name -Interactive -Detach
         }
 
         AfterAll {

@@ -49,7 +49,7 @@ function Convert-ToTable {
 
         if ( $Columns ) {
             if ( -not $Columns.ContainsKey( $columnName ) ) {
-                throw "Unexpected column '$columnName'"
+                Write-Error "Unexpected column '$columnName'"
             }
             $columnName = $Columns[ $columnName ]
         }

@@ -8,6 +8,8 @@ param (
 Describe 'Get-DockerContainer' {
     Context 'there are some containers' {
         BeforeAll {
+            $testConfig.Image | Install-DockerImage
+
             $container = New-Object System.Collections.ArrayList
             $container.Add(( New-DockerContainer -Image $testConfig.Image.Name )) | Out-Null
             $container.Add(( New-DockerContainer -Image $testConfig.Image.Name )) | Out-Null
