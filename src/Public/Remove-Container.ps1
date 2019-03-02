@@ -50,10 +50,14 @@ function Remove-Container {
         [int] $StopTimeout = 10
     )
 
-    if ( $Force ) {
-        Stop-Container -Name $Name -Timeout $StopTimeout
-    }
+    process {
 
-    Invoke-ClientCommand 'rm', $Name -Timeout $Timeout
-    Write-Verbose "Docker container removed."
+        if ( $Force ) {
+            Stop-Container -Name $Name -Timeout $StopTimeout
+        }
+
+        Invoke-ClientCommand 'rm', $Name -Timeout $Timeout
+        Write-Verbose "Docker container removed."
+
+    }
 }

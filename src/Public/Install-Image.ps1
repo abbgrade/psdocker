@@ -68,31 +68,35 @@ function Install-Image {
         [int] $Timeout = 5 * 60
     )
 
-    [string] $query = ''
+    process {
 
-    if ( $Registry ) {
-        $query = "$Registry/"
+        [string] $query = ''
+
+        if ( $Registry ) {
+            $query = "$Registry/"
+        }
+
+        $query += $Repository
+
+        if ( $Tag ) {
+            $query += ":$Tag"
+        }
+
+        if ( $Digest ) {
+            $query += "@$Digest"
+        }
+
+        $arguments = New-Object System.Collections.ArrayList
+        $arguments.Add( $query ) | Out-Null
+
+        if ( $AllTags ) {
+            $arguments.Insert( '--all-tags', 0 ) | Out-Null
+        }
+
+        Invoke-ClientCommand 'pull', $arguments -Timeout $Timeout
+        Write-Verbose "Docker image '$query' pulled."
+
+        Get-Image -Name $query | Write-Output
+
     }
-
-    $query += $Repository
-
-    if ( $Tag ) {
-        $query += ":$Tag"
-    }
-
-    if ( $Digest ) {
-        $query += "@$Digest"
-    }
-
-    $arguments = New-Object System.Collections.ArrayList
-    $arguments.Add( $query ) | Out-Null
-
-    if ( $AllTags ) {
-        $arguments.Insert( '--all-tags', 0 ) | Out-Null
-    }
-
-    Invoke-ClientCommand 'pull', $arguments -Timeout $Timeout
-    Write-Verbose "Docker image '$query' pulled."
-
-    Get-Image -Name $query | Write-Output
 }

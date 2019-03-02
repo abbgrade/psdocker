@@ -48,26 +48,30 @@ function Get-Image {
         [int] $Timeout = 10
     )
 
-    $arguments = New-Object System.Collections.ArrayList
-    $arguments.Add( '--no-trunc' ) | Out-Null
-    $arguments.Add( '--format="{{json .}}" ') | Out-Null
+    process {
 
-    if ( $Repository ) {
-        if ( $Tag ) {
-            $arguments.Add( $Repository + ':' + $Tag ) | Out-Null
-        } else {
-            $arguments.Add( $Repository ) | Out-Null
+        $arguments = New-Object System.Collections.ArrayList
+        $arguments.Add( '--no-trunc' ) | Out-Null
+        $arguments.Add( '--format="{{json .}}" ') | Out-Null
+
+        if ( $Repository ) {
+            if ( $Tag ) {
+                $arguments.Add( $Repository + ':' + $Tag ) | Out-Null
+            } else {
+                $arguments.Add( $Repository ) | Out-Null
+            }
         }
-    }
 
-    Invoke-ClientCommand 'image ls', $arguments -Timeout $Timeout -JsonOutput |
-    ForEach-Object {
-        New-Object -TypeName Image -Property @{
-            Repository = $_.Repository
-            Tag = switch ( $_.Tag ) { '<none>' { $null } default { $_ } }
-            Id = $_.ID
-            CreatedAt = $_.CreatedAt
-            Size = $_.Size
+        Invoke-ClientCommand 'image ls', $arguments -Timeout $Timeout -JsonOutput |
+        ForEach-Object {
+            New-Object -TypeName Image -Property @{
+                Repository = $_.Repository
+                Tag = switch ( $_.Tag ) { '<none>' { $null } default { $_ } }
+                Id = $_.ID
+                CreatedAt = $_.CreatedAt
+                Size = $_.Size
+            } | Write-Output
         } | Write-Output
-    } | Write-Output
+
+    }
 }

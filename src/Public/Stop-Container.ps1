@@ -33,6 +33,10 @@ function Stop-Container {
         [int] $Timeout = 10
     )
 
-    Invoke-ClientCommand 'stop', $Name -Timeout $Timeout
-    Write-Verbose "Docker container removed."
+    process {
+
+        Invoke-ClientCommand 'stop', $Name -Timeout $Timeout
+        Write-Verbose "Docker container removed."
+
+    }
 }

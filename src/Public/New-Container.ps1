@@ -94,51 +94,55 @@ function New-Container {
         [switch] $Interactive
     )
 
-    # prepare arugments
-    $arguments = New-Object System.Collections.ArrayList
+    process {
 
-    if ( $Name ) {
-        $arguments.Add( "--name $Name" ) | Out-Null
-    }
+        # prepare arugments
+        $arguments = New-Object System.Collections.ArrayList
 
-    if ( $Environment ) {
-        foreach ( $item in $Environment.GetEnumerator() ) {
-            $arguments.Add( "--env `"$( $item.Name)=$( $item.Value )`"") | Out-Null
+        if ( $Name ) {
+            $arguments.Add( "--name $Name" ) | Out-Null
         }
-    }
 
-    if ( $Ports ) {
-        foreach ( $item in $Ports.GetEnumerator() ) {
-            $arguments.Add( "--publish $( $item.Name):$( $item.Value )") | Out-Null
+        if ( $Environment ) {
+            foreach ( $item in $Environment.GetEnumerator() ) {
+                $arguments.Add( "--env `"$( $item.Name)=$( $item.Value )`"") | Out-Null
+            }
         }
-    }
 
-    if ( $Volumes ) {
-        foreach ( $volume in $Volumes.GetEnumerator() ) {
-            $arguments.Add( "--volume $( $volume.Name ):$( $volume.Value )" )
+        if ( $Ports ) {
+            foreach ( $item in $Ports.GetEnumerator() ) {
+                $arguments.Add( "--publish $( $item.Name):$( $item.Value )") | Out-Null
+            }
         }
+
+        if ( $Volumes ) {
+            foreach ( $volume in $Volumes.GetEnumerator() ) {
+                $arguments.Add( "--volume $( $volume.Name ):$( $volume.Value )" ) | Out-Null
+            }
+        }
+
+        if ( $Detach ) {
+            $arguments.Add( '--detach' ) | Out-Null
+        }
+
+        if ( $Interactive ) {
+            $arguments.Add( '--interactive' ) | Out-Null
+        }
+
+        $arguments.Add( $ImageName ) | Out-Null
+
+        # create container
+        Invoke-ClientCommand 'run', $arguments -Timeout $Timeout
+
+        # check container
+        $container = Get-Container -Latest -Timeout $StatusTimeout
+        if ( -not $container.Name ) {
+            Write-Error "Failed to create container"
+        }
+        Write-Verbose "Docker container '$( $container.Name )' created."
+
+        # return result
+        Write-Output $container
+
     }
-
-    if ( $Detach ) {
-        $arguments.Add( '--detach' ) | Out-Null
-    }
-
-    if ( $Interactive ) {
-        $arguments.Add( '--interactive' ) | Out-Null
-    }
-
-    $arguments.Add( $ImageName ) | Out-Null
-
-    # create container
-    Invoke-ClientCommand 'run', $arguments -Timeout $Timeout
-
-    # check container
-    $container = Get-Container -Latest -Timeout $StatusTimeout
-    if ( -not $container.Name ) {
-        throw "Failed to create container"
-    }
-    Write-Verbose "Docker container '$( $container.Name )' created."
-
-    # return result
-    Write-Output $container
 }

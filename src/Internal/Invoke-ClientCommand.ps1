@@ -86,8 +86,6 @@ function Invoke-ClientCommand {
         $process.WaitForExit() | Out-Null # Ensure streams are flushed
 
         Write-Verbose "Process exited (code $( $process.ExitCode )) after $( $process.TotalProcessorTime )."
-    } catch {
-        throw
     } finally {
         Unregister-Event -SourceIdentifier $outputEvent.Name
         Unregister-Event -SourceIdentifier $errorEvent.Name
@@ -115,11 +113,11 @@ function Invoke-ClientCommand {
                 Write-Warning "Process error: $line" -ErrorAction 'Continue'
             }
         }
-        throw "Proccess failed ($processCall) after $( $process.TotalProcessorTime )."
+        Write-Error "Proccess failed ($processCall) after $( $process.TotalProcessorTime )."
     } else {
         Write-Verbose 'No process error output'
     }
     if ( $process.TotalProcessorTime.TotalSeconds -ge $Timeout ) {
-        throw "Process timed out ($processCall) after $( $process.TotalProcessorTime )."
+        Write-Error "Process timed out ($processCall) after $( $process.TotalProcessorTime )."
     }
 }
