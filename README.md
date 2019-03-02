@@ -14,6 +14,13 @@ See the folder [docs](./docs) for examples.
 
 ## Changelog
 
+### Version 1.4.0
+
+- Fixed output issue with volumes
+- Fixed pipeline processing with multiple items
+- Fixed ErrorAction parameter
+- Unit test refactoring
+
 ### Version 1.3.0
 
 - Support for Linux clients
