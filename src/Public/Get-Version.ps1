@@ -62,7 +62,7 @@ function Get-Version {
             "Server:*" { $component = 'Server' }
             Default {
                 if ( -not $component ) {
-                    throw "unexpected response from 'docker version'"
+                    Write-Error "unexpected response from 'docker version'"
                 } else {
                     $key, $value = $line -Split ':  ' | ForEach-Object { $_.Trim() }
                     $componentVersionTable = $dockerVersionTable[$component]
