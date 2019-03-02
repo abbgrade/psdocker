@@ -175,6 +175,9 @@ Describe 'New-DockerContainer' {
         $container = Get-DockerImage -Repository $testConfig.Image.Repository -Tag $testConfig.Image.Tag |
         New-DockerContainer -Volumes @{ $testSharePath = $testConfig.MountPoint } -Detach -Interactive
 
+        # test if new container returns one element
+        ( @() + $container ).Count | Should -Be 1
+
         Invoke-DockerCommand -Name $container.Name -Command "$( $testConfig.PowershellCommand ) `"Get-Content -Path '$( $testConfig.MountPoint )/test.txt'`"" -StringOutput |
         Should -Be $testText
 

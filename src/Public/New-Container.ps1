@@ -115,7 +115,7 @@ function New-Container {
 
     if ( $Volumes ) {
         foreach ( $volume in $Volumes.GetEnumerator() ) {
-            $arguments.Add( "--volume $( $volume.Name ):$( $volume.Value )" )
+            $arguments.Add( "--volume $( $volume.Name ):$( $volume.Value )" ) | Out-Null
         }
     }
 
