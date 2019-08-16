@@ -1,4 +1,4 @@
-foreach ( $folder in @('Public', 'Internal') ) {
+foreach ( $folder in @('Internal', 'Public') ) {
     $folderPath = Join-Path -Path $PSScriptRoot -ChildPath $folder
     if (Test-Path -Path $folderPath) {
         Write-Verbose "Importing from $folder"
