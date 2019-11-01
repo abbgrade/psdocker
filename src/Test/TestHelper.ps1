@@ -7,8 +7,9 @@ param (
 
 Import-Module "$PSScriptRoot\..\PSDocker.psd1" -Force
 
+$version = Get-DockerVersion
 $testConfig = New-Object -Type PsObject -Property $(
-    switch ( ( Get-DockerVersion ).Server.OSArch ) {
+    switch ( $version.Server.Engine.OSArch ) {
         'windows/amd64' {
             @{
                 Image = New-Object PsObject -Property @{
