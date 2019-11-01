@@ -28,6 +28,8 @@ You can run the tests by:
 - __PowerShell__: execute `Invoke-Build Test` in a PowerShell in the directory of this project
 - __VSCode__: run the integrated test task feature (F1 + "Tasks: Run Test Task")
 
+For debugging tests change the working directory to ./src/test create the breakpoint in VSCode and start debugging by F1 + "Debug: Start Debugging".
+
 ## Usage
 
 See the folder [docs](./docs) for examples.
