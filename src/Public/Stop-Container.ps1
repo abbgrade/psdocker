@@ -1,3 +1,5 @@
+Register-ArgumentCompleter -CommandName Stop-DockerContainer -ParameterName Name -ScriptBlock $ContainerNameCompleter
+
 function Stop-Container {
 
     <#

@@ -24,14 +24,5 @@ Describe 'Get-DockerImage' {
                 Get-DockerImage -Repository $testConfig.Image.Repository -Tag $testConfig.Image.Tag
             ).Repository | Should -Be $testConfig.Image.Repository
         }
-
-        It 'returns the installed images from a search' {
-            (
-                Search-DockerRepository -Term $testConfig.Image.Repository -Limit 1 |
-                Get-DockerImage |
-                Select-Object 'Repository' |
-                Select-Object -Unique
-            ).Repository | Should -Be $testConfig.Image.Repository
-        }
     }
 }

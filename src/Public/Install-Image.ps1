@@ -1,3 +1,6 @@
+Register-ArgumentCompleter -CommandName Install-DockerImage -ParameterName Repository -ScriptBlock $RepositoryCompleter
+Register-ArgumentCompleter -CommandName Install-DockerImage -ParameterName Tag -ScriptBlock $TagCompleter
+
 function Install-Image {
 
     <#

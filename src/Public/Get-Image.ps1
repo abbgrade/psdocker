@@ -1,3 +1,6 @@
+Register-ArgumentCompleter -CommandName Get-DockerImage -ParameterName Repository -ScriptBlock $RepositoryCompleter
+Register-ArgumentCompleter -CommandName Get-DockerImage -ParameterName Tag -ScriptBlock $TagCompleter
+
 function Get-Image {
 
     <#
@@ -57,21 +60,22 @@ function Get-Image {
         if ( $Repository ) {
             if ( $Tag ) {
                 $arguments.Add( $Repository + ':' + $Tag ) | Out-Null
-            } else {
+            }
+            else {
                 $arguments.Add( $Repository ) | Out-Null
             }
         }
 
         Invoke-ClientCommand 'image ls', $arguments -Timeout $Timeout -JsonOutput |
-        ForEach-Object {
-            New-Object -TypeName Image -Property @{
-                Repository = $_.Repository
-                Tag = switch ( $_.Tag ) { '<none>' { $null } default { $_ } }
-                Id = $_.ID
-                CreatedAt = $_.CreatedAt
-                Size = $_.Size
+            ForEach-Object {
+                New-Object -TypeName Image -Property @{
+                    Repository = $_.Repository
+                    Tag        = switch ( $_.Tag ) { '<none>' { $null } default { $_ } }
+                    Id         = $_.ID
+                    CreatedAt  = $_.CreatedAt
+                    Size       = $_.Size
+                } | Write-Output
             } | Write-Output
-        } | Write-Output
 
     }
 }

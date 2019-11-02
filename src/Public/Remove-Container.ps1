@@ -1,3 +1,5 @@
+Register-ArgumentCompleter -CommandName Remove-DockerContainer -ParameterName Name -ScriptBlock $ContainerNameCompleter
+
 function Remove-Container {
 
     <#
