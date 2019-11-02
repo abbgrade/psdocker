@@ -1,3 +1,6 @@
+Register-ArgumentCompleter -CommandName New-DockerContainer -ParameterName Image -ScriptBlock $ImageNameCompleter
+
+
 function New-Container {
 
     <#
