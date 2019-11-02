@@ -1,17 +1,3 @@
-$RepositoryCompleter = {
-    param (
-        $commandName,
-        $parameterName,
-        $wordToComplete,
-        $commandAst,
-        $fakeBoundParameters
-    )
-
-    return Get-DockerImage | Select-Object -ExpandProperty Repository -Unique
-}
-
-Set-Variable -Name RepositoryCompleter -Value $RepositoryCompleter -Visibility Public -Scope Script
-
 $TagCompleter = {
     param (
         $commandName,
@@ -38,17 +24,3 @@ $TagCompleter = {
 }
 
 Set-Variable -Name TagCompleter -Value $TagCompleter -Visibility Public -Scope Script
-
-$NameCompleter = {
-    param (
-        $commandName,
-        $parameterName,
-        $wordToComplete,
-        $commandAst,
-        $fakeBoundParameters
-    )
-
-    return Get-DockerImage | Select-Object -ExpandProperty ImageName -Unique
-}
-
-Set-Variable -Name NameCompleter -Value $NameCompleter -Visibility Public -Scope Script

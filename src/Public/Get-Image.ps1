@@ -67,15 +67,15 @@ function Get-Image {
         }
 
         Invoke-ClientCommand 'image ls', $arguments -Timeout $Timeout -JsonOutput |
-        ForEach-Object {
-            New-Object -TypeName Image -Property @{
-                Repository = $_.Repository
-                Tag        = switch ( $_.Tag ) { '<none>' { $null } default { $_ } }
-                Id         = $_.ID
-                CreatedAt  = $_.CreatedAt
-                Size       = $_.Size
+            ForEach-Object {
+                New-Object -TypeName Image -Property @{
+                    Repository = $_.Repository
+                    Tag        = switch ( $_.Tag ) { '<none>' { $null } default { $_ } }
+                    Id         = $_.ID
+                    CreatedAt  = $_.CreatedAt
+                    Size       = $_.Size
+                } | Write-Output
             } | Write-Output
-        } | Write-Output
 
     }
 }

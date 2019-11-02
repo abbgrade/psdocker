@@ -1,4 +1,4 @@
-Register-ArgumentCompleter -CommandName Uninstall-DockerImage -ParameterName Name -ScriptBlock $NameCompleter
+Register-ArgumentCompleter -CommandName Uninstall-DockerImage -ParameterName Name -ScriptBlock $ImageNameCompleter
 
 function Uninstall-Image {
 
