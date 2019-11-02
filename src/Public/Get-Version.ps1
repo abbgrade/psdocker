@@ -49,32 +49,66 @@ function Get-Version {
         Invoke-ClientCommand 'version' -Timeout $Timeout -StringOutput
     ).Split( [Environment]::NewLine )
 
-    $dockerVersionTable = @{
-        'Client' = @{}
-        'Server' = @{}
-    }
+    $dockerVersionTable = @{}
+    $stack = New-Object System.Collections.Stack
+    $stack.Push( $dockerVersionTable )
 
-    $component = $null
+    $previousDepth = 0
+    $previousKey = $null
     foreach ( $line in $output ) {
         switch -Wildcard ( $line ) {
             "" {}
-            "Client:*" { $component = 'Client' }
-            "Server:*" { $component = 'Server' }
             Default {
-                if ( -not $component ) {
-                    Write-Error "unexpected response from 'docker version'"
-                } else {
-                    $key, $value = $line -Split ':  ' | ForEach-Object { $_.Trim() }
-                    $componentVersionTable = $dockerVersionTable[$component]
-                    $componentVersionTable.Add($key.Replace('/', '').Replace(' ', ''), $value)
+                $key, $value = $line -split ':', 2
+                $depth = 0
+                foreach ( $item in $key.ToCharArray() ) {
+                    if ( $item -eq ' ' ) {
+                        $depth = $depth + 1
+                    } else {
+                        break
+                    }
                 }
+
+                $key = $key.Trim()
+                $value = $value.Trim()
+
+                if ( $previousDepth -gt $depth ) {
+                    $stack.Pop() | Out-Null
+                }
+                if ( $previousDepth -lt $depth ) {
+                    $node = @{
+                        $key = $value
+                    }
+                    $stack.Peek()[$previousKey] = $node
+                    $stack.Push( $node )
+                } else {
+                    $stack.Peek()[$key] = $value
+                }
+
+                $previousKey = $key
+                $previousDepth = $depth
             }
         }
     }
 
-    New-Object PSObject -Property @{
-        Client = ( New-Object PSObject -Property $dockerVersionTable['Client'] )
-        Server = ( New-Object PSObject -Property $dockerVersionTable['Server'] )
-    } | Write-Output
+    function ConvertTo-PsObject {
+        param (
+            [hashtable] $Value
+        )
 
+        foreach ( $key in @( $Value.Keys ) ) {
+            $plainKey = $key.Replace('/', '').Replace(' ', '')
+            $temp = $Value[$key]
+            $Value.Remove($key)
+            $Value[$plainKey] = $temp
+        }
+
+        foreach ( $key in $Value.Keys | Where-Object { $Value[$_].GetType() -eq @{}.GetType() } ) {
+            $Value[$key] = ConvertTo-PsObject $Value[$key]
+        }
+
+        New-Object PSObject -Property $Value | Write-Output
+    }
+
+    ConvertTo-PsObject $dockerVersionTable | Write-Output
 }
