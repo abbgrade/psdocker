@@ -117,7 +117,7 @@ function Invoke-ClientCommand {
     } else {
         Write-Verbose 'No process error output'
     }
-    if ( $process.TotalProcessorTime.TotalSeconds -ge $Timeout ) {
+    if ( $Timeout -gt 0 -and $process.TotalProcessorTime.TotalSeconds -ge $Timeout ) {
         Write-Error "Process timed out ($processCall) after $( $process.TotalProcessorTime )."
     }
 }

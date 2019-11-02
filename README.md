@@ -36,6 +36,10 @@ See the folder [docs](./docs) for examples.
 
 ## Changelog
 
+### Work in progress
+
+- Fixed timeout issue
+
 ### Version 1.5.0
 
 - Adopted changes from the Docker CLI
