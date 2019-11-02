@@ -1,3 +1,5 @@
+Register-ArgumentCompleter -CommandName Get-DockerContainer -ParameterName Name -ScriptBlock $ContainerNameCompleter
+
 function Get-Container {
 
     <#
