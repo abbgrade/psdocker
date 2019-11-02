@@ -36,6 +36,11 @@ See the folder [docs](./docs) for examples.
 
 ## Changelog
 
+### Version 1.5.0
+
+- Adopted changes from the Docker CLI
+- Added argument completions for image name, tag, repository, container name
+
 ### Version 1.4.0
 
 - Fixed output issue with volumes
@@ -56,3 +61,8 @@ See the folder [docs](./docs) for examples.
 - New cmdlet Uninstall-Image
 - Types for Image, Repository and Container used as output.
 - Refactoring
+
+## Contributors
+
+- Steffen Kampmann
+- Marc Kassay
