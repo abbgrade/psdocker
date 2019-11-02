@@ -8,7 +8,7 @@ param (
 Describe 'Get-DockerVersion' {
     It 'is Linux or Windows mode' {
         $dockerVersion = Get-DockerVersion
-        $dockerVersion.Server.OSArch |
+        $dockerVersion.Server.Engine.OSArch |
         Should -BeIn @( 'windows/amd64', 'linux/amd64' )
     }
 }
