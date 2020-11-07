@@ -1,4 +1,3 @@
-#Requires -Modules Pester
 
 param (
     [string] $PSScriptRoot = $( if ( $PSScriptRoot ) { $PSScriptRoot } else { Get-Location } ),
