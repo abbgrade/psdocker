@@ -1,9 +1,12 @@
+#Requires -Modules @{ ModuleName='Pester'; ModuleVersion='5.0.0' }
 
 param (
     [string] $PSScriptRoot = $( if ( $PSScriptRoot ) { $PSScriptRoot } else { Get-Location } )
 )
 
-. $PSScriptRoot\TestHelper.ps1
+BeforeAll {
+    . $PSScriptRoot\TestHelper.ps1
+}
 
 Describe 'New-DockerContainer' {
     Context 'installed Image' {

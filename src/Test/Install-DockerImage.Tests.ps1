@@ -1,9 +1,12 @@
+#Requires -Modules @{ ModuleName='Pester'; ModuleVersion='5.0.0' }
 
 param (
     [string] $PSScriptRoot = $( if ( $PSScriptRoot ) { $PSScriptRoot } else { Get-Location } )
 )
 
-. $PSScriptRoot\TestHelper.ps1
+BeforeAll {
+    . $PSScriptRoot\TestHelper.ps1
+}
 
 Describe 'Install-DockerImage' {
 
@@ -23,6 +26,6 @@ Describe 'Install-DockerImage' {
     It 'throws on invalid image' {
         {
             Install-DockerImage -Repository 'foobar' -WarningAction SilentlyContinue -ErrorAction Stop
-        } | Should Throw
+        } | Should -Throw
     }
 }
