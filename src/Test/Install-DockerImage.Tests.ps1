@@ -26,6 +26,6 @@ Describe 'Install-DockerImage' {
     It 'throws on invalid image' {
         {
             Install-DockerImage -Repository 'foobar' -WarningAction SilentlyContinue -ErrorAction Stop
-        } | Should Throw
+        } | Should -Throw
     }
 }
