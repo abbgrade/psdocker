@@ -13,7 +13,7 @@ $testConfig = New-Object -Type PsObject -Property $(
 
             $local:image = [ordered] @{
                 Repository = 'mcr.microsoft.com/windows/nanoserver'
-                Tag = [string] ( Get-ComputerInfo -Property 'WindowsVersion' ).WindowsVersion
+                Tag = [string] (Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion").ReleaseId
             }
             $local:image.Name = $local:image.Repository + ':' + $local:image.Tag
             @{
