@@ -5,15 +5,15 @@ param (
 )
 
 BeforeAll {
-    . $PSScriptRoot\TestHelper.ps1
+    . $PSScriptRoot\Helper\TestHelper.ps1
 }
 
 Describe 'Invoke-DockerCommand' {
     Context 'running container' {
         BeforeAll {
-            $testConfig.Image | Install-DockerImage
+            $global:TestConfig.Image | Install-DockerImage
 
-            $container = New-DockerContainer -Image $testConfig.Image.Name -Interactive -Detach
+            $container = New-DockerContainer -Image $global:TestConfig.Image.Name -Interactive -Detach
         }
 
         AfterAll {
@@ -28,7 +28,7 @@ Describe 'Invoke-DockerCommand' {
 
         It 'returns string output' {
             Invoke-DockerCommand -Name $container.Name `
-                -Command $testConfig.PrintCommand `
+                -Command $global:TestConfig.PrintCommand `
                 -ArgumentList 'foobar' -StringOutput | Should -Be 'foobar'
         }
     }

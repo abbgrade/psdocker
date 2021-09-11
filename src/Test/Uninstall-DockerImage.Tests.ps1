@@ -5,20 +5,20 @@ param (
 )
 
 BeforeAll {
-    . $PSScriptRoot\TestHelper.ps1
+    . $PSScriptRoot\Helper\TestHelper.ps1
 }
 
 Describe 'Uninstall-DockerImage' {
     Context 'installed image' {
         BeforeAll {
-            $testConfig.Image | Install-DockerImage
+            $global:TestConfig.Image | Install-DockerImage
         }
 
         It 'removes the image from pipeline' {
-            Get-DockerImage -Repository $testConfig.Image.Repository -Tag $testConfig.Image.Tag |
+            Get-DockerImage -Repository $global:TestConfig.Image.Repository -Tag $global:TestConfig.Image.Tag |
             Uninstall-DockerImage
 
-            Get-DockerImage -Repository $testConfig.Image.Repository -Tag $testConfig.Image.Tag |
+            Get-DockerImage -Repository $global:TestConfig.Image.Repository -Tag $global:TestConfig.Image.Tag |
             Should -BeNullOrEmpty
         }
     }

@@ -5,7 +5,7 @@ param (
 )
 
 BeforeAll {
-    . $PSScriptRoot\TestHelper.ps1
+    . $PSScriptRoot\Helper\TestHelper.ps1
 }
 
 Describe 'Docker Service' {
