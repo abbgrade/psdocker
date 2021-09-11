@@ -5,13 +5,13 @@ param (
 )
 
 BeforeAll {
-    . $PSScriptRoot\TestHelper.ps1
+    . $PSScriptRoot\Helper\TestHelper.ps1
 }
 
 Describe 'Remove-DockerContainer' {
     Context 'running container' {
         BeforeEach {
-            $container = New-DockerContainer -Image $testConfig.Image.Name
+            $container = New-DockerContainer -Image $global:TestConfig.Image.Name
         }
 
         It 'works with named parameters' {
@@ -21,7 +21,7 @@ Describe 'Remove-DockerContainer' {
     Context 'two running containers' {
         BeforeEach {
             $container = @( 1, 2 ) | Foreach-Object {
-                New-DockerContainer -Image $testConfig.Image.Name
+                New-DockerContainer -Image $global:TestConfig.Image.Name
             }
         }
 

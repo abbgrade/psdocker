@@ -1,13 +1,13 @@
 
 param (
     [string] $PSScriptRoot = $( if ( $PSScriptRoot ) { $PSScriptRoot } else { Get-Location } ),
-    [string] $ModuleManifestPath = "$PSScriptRoot\..\PSDocker.psd1"
+    [string] $ModuleManifestPath = "$PSScriptRoot\..\..\PSDocker.psd1"
 )
 
-Import-Module "$PSScriptRoot\..\PSDocker.psd1" -Force
+Import-Module $ModuleManifestPath -Force
 
 $version = Get-DockerVersion
-$testConfig = New-Object -Type PsObject -Property $(
+$global:TestConfig = New-Object -Type PsObject -Property $(
     switch ( $version.Server.Engine.OSArch ) {
         'windows/amd64' {
 
@@ -25,9 +25,8 @@ $testConfig = New-Object -Type PsObject -Property $(
         }
         'linux/amd64' {
             $local:image = [ordered] @{
-                Repository = 'microsoft/powershell'
+                Repository = 'mcr.microsoft.com/powershell'
                 Tag = 'latest'
-                Name = 'microsoft/powershell:latest'
             }
             $local:image.Name = $local:image.Repository + ':' + $local:image.Tag
             @{
