@@ -4,6 +4,8 @@
 
 ## Installation
 
+Make sure that the docker cli is installed. e.g. from [Chocolatey](https://chocolatey.org/packages/docker-cli) or with [Docker Desktop](https://hub.docker.com/editions/community/docker-ce-desktop-windows/).
+
 Install PSDocker from [PowerShell Gallery](https://www.powershellgallery.com/packages/psdocker) using a PowerShell command line:
 
     Install-Module -Name PSDocker -Scope CurrentUser
