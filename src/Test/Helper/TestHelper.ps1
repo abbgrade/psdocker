@@ -25,9 +25,8 @@ $global:TestConfig = New-Object -Type PsObject -Property $(
         }
         'linux/amd64' {
             $local:image = [ordered] @{
-                Repository = 'microsoft/powershell'
+                Repository = 'mcr.microsoft.com/powershell'
                 Tag = 'latest'
-                Name = 'microsoft/powershell:latest'
             }
             $local:image.Name = $local:image.Repository + ':' + $local:image.Tag
             @{

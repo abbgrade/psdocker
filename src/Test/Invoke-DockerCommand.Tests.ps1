@@ -13,21 +13,21 @@ Describe 'Invoke-DockerCommand' {
         BeforeAll {
             $global:TestConfig.Image | Install-DockerImage
 
-            $container = New-DockerContainer -Image $global:TestConfig.Image.Name -Interactive -Detach
+            $script:Container = New-DockerContainer -Image $global:TestConfig.Image.Name -Interactive -Detach
         }
 
         AfterAll {
-            Remove-DockerContainer -Name $container.Name -Force
+            Remove-DockerContainer -Name $script:Container.Name -Force
         }
 
         It 'does not throw' {
             {
-                Invoke-DockerCommand -Name $container.Name -Command 'hostname'
+                Invoke-DockerCommand -Name $script:Container.Name -Command 'hostname'
             } | Should -Not -Throw
         }
 
         It 'returns string output' {
-            Invoke-DockerCommand -Name $container.Name `
+            Invoke-DockerCommand -Name $script:Container.Name `
                 -Command $global:TestConfig.PrintCommand `
                 -ArgumentList 'foobar' -StringOutput | Should -Be 'foobar'
         }

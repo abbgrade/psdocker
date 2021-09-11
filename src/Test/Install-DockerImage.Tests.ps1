@@ -11,11 +11,11 @@ BeforeAll {
 Describe 'Install-DockerImage' {
 
     It 'works with named parameters' {
-        Install-DockerImage -Repository $global:TestConfig.Image.Repository -ErrorAction Stop
+        Install-DockerImage -Repository $global:TestConfig.Image.Repository -Tag $global:TestConfig.Image.Tag -ErrorAction Stop
     }
 
     It 'works with pipeline parameters' {
-        Search-DockerRepository -Term $global:TestConfig.Image.Repository -Limit 1 |
+        Search-DockerRepository -Term ( $global:TestConfig.Image.Repository -split '/', 2)[1] -Limit 1 -ErrorAction Stop |
         Install-DockerImage -ErrorAction Stop
     }
 

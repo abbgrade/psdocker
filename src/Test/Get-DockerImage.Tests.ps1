@@ -14,17 +14,17 @@ Describe 'Get-DockerImage' {
             if ( Get-DockerImage | Where-Object Name -eq $global:TestConfig.Image.Repository ) {
                 Uninstall-DockerImage -Name $global:TestConfig.Image.Repository
             }
-            Install-DockerImage -Repository $global:TestConfig.Image.Repository
+            Install-DockerImage -Repository $global:TestConfig.Image.Repository -Tag $global:TestConfig.Image.Tag -ErrorAction Stop
         }
 
         It 'returns a list of images' {
-            Get-DockerImage |
+            Get-DockerImage -ErrorAction Stop |
             Where-Object Name -eq $global:TestConfig.Image.Repository | Should -Be
         }
 
         It 'returns a specific image' {
             (
-                Get-DockerImage -Repository $global:TestConfig.Image.Repository -Tag $global:TestConfig.Image.Tag
+                Get-DockerImage -Repository $global:TestConfig.Image.Repository -Tag $global:TestConfig.Image.Tag -ErrorAction Stop
             ).Repository | Should -Be $global:TestConfig.Image.Repository
         }
     }

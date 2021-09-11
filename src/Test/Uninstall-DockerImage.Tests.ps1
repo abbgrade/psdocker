@@ -11,12 +11,12 @@ BeforeAll {
 Describe 'Uninstall-DockerImage' {
     Context 'installed image' {
         BeforeAll {
-            $global:TestConfig.Image | Install-DockerImage
+            $global:TestConfig.Image | Install-DockerImage -ErrorAction Continue
         }
 
         It 'removes the image from pipeline' {
             Get-DockerImage -Repository $global:TestConfig.Image.Repository -Tag $global:TestConfig.Image.Tag |
-            Uninstall-DockerImage
+            Uninstall-DockerImage -Force
 
             Get-DockerImage -Repository $global:TestConfig.Image.Repository -Tag $global:TestConfig.Image.Tag |
             Should -BeNullOrEmpty
