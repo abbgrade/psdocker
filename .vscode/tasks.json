@@ -63,7 +63,7 @@
             "type": "shell",
             "command": "Invoke-Pester",
             "options": {
-                "cwd": "src/test"
+                "cwd": "test"
             },
             "problemMatcher": "$msCompile",
             "presentation": {
