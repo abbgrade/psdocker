@@ -1,34 +1,22 @@
-function Get-BuildRoot {
-	if ( $env:APPVEYOR ) {
-		Write-Output $env:APPVEYOR_BUILD_FOLDER
-	} else {
-		Write-Output '.'
-	}
-}
 
-[string] $root = Get-BuildRoot
-[string] $sourcePath = "$root\src"
-[string] $buildPath = "$root\build"
-[string] $docPath = "$root\docs"
+[string] $sourcePath = "$PsScriptRoot\src"
+[string] $buildPath = "$PsScriptRoot\build"
+[string] $docPath = "$PsScriptRoot\docs"
 [string] $manifestFilePath = "$sourcePath\PSDocker.psd1"
 [string] $moduleBuildPath = "$buildPath\PSDocker"
 
-task Build PrepareBuildPath, CopyArtefacts
-
-task PrepareBuildPath {
-	New-Item -Path $buildPath -ItemType Directory | Out-Null
-}
+task Build -Jobs CopyArtefacts
 
 task CleanBuildPath {
 	Remove-Item $buildPath -Recurse -ErrorAction 'Continue'
 }
 
-task CopyArtefacts {
-	Copy-Item -Path $sourcePath -Destination $moduleBuildPath -Recurse
+task PrepareBuildPath -Jobs CleanBuildPath, {
+	New-Item -Path $buildPath -ItemType Directory | Out-Null
 }
 
-task Test {
-    Invoke-Pester $sourcePath
+task CopyArtefacts -Jobs PrepareBuildPath, {
+	Copy-Item -Path $sourcePath -Destination $moduleBuildPath -Recurse
 }
 
 task Publish {

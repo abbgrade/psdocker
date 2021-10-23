@@ -1,12 +1,11 @@
 
 param (
-    [string] $PSScriptRoot = $( if ( $PSScriptRoot ) { $PSScriptRoot } else { Get-Location } ),
     [string] $ModuleManifestPath = "$PSScriptRoot\..\..\PSDocker.psd1"
 )
 
 Import-Module $ModuleManifestPath -Force
 
-$version = Get-DockerVersion
+$version = Get-DockerVersion -ErrorAction Stop
 $global:TestConfig = New-Object -Type PsObject -Property $(
     switch ( $version.Server.Engine.OSArch ) {
         'windows/amd64' {
