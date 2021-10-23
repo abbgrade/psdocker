@@ -52,6 +52,12 @@
             "command": "Invoke-Build Clean"
         },
         {
+            "label": "Install",
+            "type": "shell",
+            "command": "Invoke-Build Install",
+            "problemMatcher": "none"
+        },
+        {
             "label": "Update docs",
             "type": "shell",
             "command": "Invoke-Build UpdateDocs",
