@@ -1,0 +1,64 @@
+on:
+  push:
+    branches: [ develop, bugfix/*, feature/* ]
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+      - uses: actions/checkout@v2
+
+      - name: Install InvokeBuild
+        shell: pwsh
+        run: Install-Module InvokeBuild -Scope CurrentUser -Force
+
+      - name: Install PlatyPS
+        shell: pwsh
+        run: Install-Module PlatyPS -Scope CurrentUser -Force
+
+      - name: Update Docs
+        shell: pwsh
+        run: Invoke-Build UpdateDocs
+
+      - name: Upload build
+        uses: actions/upload-artifact@v2
+        with:
+          path: build/PSDocker
+          name: build
+
+  test:
+    needs: build
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+
+      - name: Run tests
+        shell: pwsh
+        run: |
+          $config = New-PesterConfiguration @{
+            'Run.Path' = 'src/Test'
+            'Run.Exit' = $true
+            'TestResult.Enabled' = $true
+            'CodeCoverage.Enabled' = $true
+          }
+          Invoke-Pester -Configuration $config
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.os }}-test-results
+          path: testResults.xml
+
+      - name: Upload test coverage
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.os }}-test-coverage
+          path: coverage.xml

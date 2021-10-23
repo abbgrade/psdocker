@@ -5,8 +5,13 @@
     "windows": {
         "options": {
             "shell": {
-                "executable": "powershell.exe",
-                "args": [ "-NoProfile", "-ExecutionPolicy Bypass", "-NonInteractive", "-Command" ]
+                "executable": "pwsh.exe",
+                "args": [
+                    "-NoProfile",
+                    "-ExecutionPolicy Bypass",
+                    "-NonInteractive",
+                    "-Command"
+                ]
             }
         }
     },
@@ -31,18 +36,25 @@
             "label": "Build",
             "type": "shell",
             "group": "build",
-            "command": "$DebugPreference = 'Continue'; Invoke-Build Clean,Build",
+            "command": "Invoke-Build Build",
+            "problemMatcher": []
+        },
+        {
+            "label": "Rebuild",
+            "type": "shell",
+            "group": "build",
+            "command": "Invoke-Build Clean,Build",
             "problemMatcher": []
         },
         {
             "label": "Clean",
             "type": "shell",
-            "command": "$DebugPreference = 'Continue'; Invoke-Build Clean"
+            "command": "Invoke-Build Clean"
         },
         {
             "label": "Update docs",
             "type": "shell",
-            "command": "$DebugPreference = 'Continue'; Invoke-Build UpdateDocs",
+            "command": "Invoke-Build UpdateDocs",
             "problemMatcher": []
         },
         {
