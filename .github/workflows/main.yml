@@ -11,17 +11,19 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v2
 
-      - name: Install InvokeBuild
+      - name: Install build dependencies
         shell: pwsh
-        run: Install-Module InvokeBuild -Scope CurrentUser -Force
+        run: |
+            Install-Module InvokeBuild -ErrorAction Stop
+            Install-Module PlatyPS -ErrorAction Stop
 
-      - name: Install PlatyPS
-        shell: pwsh
-        run: Install-Module PlatyPS -Scope CurrentUser -Force
-
-      - name: Update Docs
+      - name: Update docs
         shell: pwsh
         run: Invoke-Build UpdateDocs
+
+      - name: Create build
+        shell: pwsh
+        run: Invoke-Build Build
 
       - name: Upload build
         uses: actions/upload-artifact@v2
