@@ -59,12 +59,18 @@
         },
         {
             "label": "Test",
-            "type": "shell",
             "group": "test",
-            "command": "Invoke-Build Test",
-            "problemMatcher": [
-                "$pester"
-            ]
-        }
+            "type": "shell",
+            "command": "Invoke-Pester",
+            "options": {
+                "cwd": "src/test"
+            },
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "echo": false,
+                "showReuseMessage": false
+            },
+            "dependsOn": "Build"
+        },
     ]
 }
