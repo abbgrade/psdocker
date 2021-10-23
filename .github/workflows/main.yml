@@ -14,8 +14,9 @@ jobs:
       - name: Install build dependencies
         shell: pwsh
         run: |
-            Install-Module InvokeBuild -ErrorAction Stop
-            Install-Module PlatyPS -ErrorAction Stop
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          Install-Module InvokeBuild -ErrorAction Stop
+          Install-Module PlatyPS -ErrorAction Stop
 
       - name: Update docs
         shell: pwsh
