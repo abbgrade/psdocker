@@ -49,13 +49,14 @@
         {
             "label": "Clean",
             "type": "shell",
-            "command": "Invoke-Build Clean"
+            "command": "Invoke-Build Clean",
+            "problemMatcher": []
         },
         {
             "label": "Install",
             "type": "shell",
-            "command": "Invoke-Build Install",
-            "problemMatcher": "none"
+            "command": "Invoke-Build Clean, Install",
+            "problemMatcher": []
         },
         {
             "label": "Update docs",

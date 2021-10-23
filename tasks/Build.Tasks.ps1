@@ -6,11 +6,11 @@
 
 task Build -Jobs CopyArtefacts
 
-task CleanBuildPath {
+task Clean {
 	Remove-Item $buildPath -Recurse -ErrorAction 'Continue'
 }
 
-task PrepareBuildPath -Jobs CleanBuildPath, {
+task PrepareBuildPath -If ( -Not ( Test-Path $buildPath )) -Jobs {
 	New-Item -Path $buildPath -ItemType Directory | Out-Null
 }
 
@@ -21,8 +21,6 @@ task CopyArtefacts -Jobs PrepareBuildPath, {
 task Publish {
 	Publish-Module -Path $moduleBuildPath -NuGetApiKey $env:nuget_apikey
 }
-
-task Clean CleanBuildPath
 
 task UpdateDocs {
 	Import-Module $global:Manifest.FullName -Force
