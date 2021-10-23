@@ -33,7 +33,6 @@ jobs:
           name: build
 
   test:
-    needs: build
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest]
@@ -47,7 +46,7 @@ jobs:
         shell: pwsh
         run: |
           $config = New-PesterConfiguration @{
-            'Run.Path' = 'src/Test'
+            'Run.Path' = 'test'
             'Run.Exit' = $true
             'TestResult.Enabled' = $true
             'CodeCoverage.Enabled' = $true
