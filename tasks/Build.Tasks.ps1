@@ -1,0 +1,49 @@
+[System.IO.DirectoryInfo] $sourcePath = "$PsScriptRoot\..\src"
+[System.IO.DirectoryInfo] $buildPath = "$PsScriptRoot\..\build"
+[System.IO.DirectoryInfo] $docPath = "$PsScriptRoot\..\docs"
+[System.IO.FileInfo] $global:Manifest = "$sourcePath\PSDocker.psd1"
+[System.IO.DirectoryInfo] $moduleBuildPath = "$buildPath\PSDocker"
+
+task Build -Jobs CopyArtefacts
+
+task CleanBuildPath {
+	Remove-Item $buildPath -Recurse -ErrorAction 'Continue'
+}
+
+task PrepareBuildPath -Jobs CleanBuildPath, {
+	New-Item -Path $buildPath -ItemType Directory | Out-Null
+}
+
+task CopyArtefacts -Jobs PrepareBuildPath, {
+	Copy-Item -Path $sourcePath -Destination $moduleBuildPath -Recurse
+}
+
+task Publish {
+	Publish-Module -Path $moduleBuildPath -NuGetApiKey $env:nuget_apikey
+}
+
+task Clean CleanBuildPath
+
+task UpdateDocs {
+	Import-Module $global:Manifest.FullName -Force
+	Remove-Item -Path $docPath/*
+	New-MarkdownHelp -Module PSDocker -OutputFolder $docPath
+	# Update-MarkdownHelp -Path $docPath -AlphabeticParamsOrder -Force
+}
+
+# Synopsis: Install the module.
+task Install -Jobs Build, {
+    $info = Import-PowerShellDataFile $global:Manifest.FullName
+    $version = ([System.Version] $info.ModuleVersion)
+    $name = $global:Manifest.BaseName
+    $defaultModulePath = $env:PsModulePath -split ';' | Select-Object -First 1
+	Write-Verbose "install $name $version to $defaultModulePath"
+    $installPath = Join-Path $defaultModulePath $name $version.ToString()
+    New-Item -Type Directory $installPath -Force | Out-Null
+    Get-ChildItem $global:Manifest.Directory | Copy-Item -Destination $installPath -Recurse -Force
+}
+
+# Synopsis: Publish the module to PSGallery.
+task Publish -Jobs Install, {
+	Publish-Module -Name PsSmo -NuGetApiKey $NuGetApiKey
+}
