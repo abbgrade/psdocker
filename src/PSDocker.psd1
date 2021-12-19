@@ -11,7 +11,6 @@
     AliasesToExport = '*'
     PrivateData = @{
         PSData = @{
-            Prerelease = 'beta'
             Tags = @('Docker')
             LicenseUri = 'https://github.com/abbgrade/PSDocker/blob/master/LICENSE'
             ProjectUri = 'https://github.com/abbgrade/PSDocker'
