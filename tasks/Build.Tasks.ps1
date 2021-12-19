@@ -18,10 +18,6 @@ task CopyArtefacts -Jobs PrepareBuildPath, {
 	Copy-Item -Path $sourcePath -Destination $moduleBuildPath -Recurse
 }
 
-task Publish {
-	Publish-Module -Path $moduleBuildPath -NuGetApiKey $env:nuget_apikey
-}
-
 task UpdateDocs {
 	Import-Module $global:Manifest.FullName -Force
 	Remove-Item -Path $docPath/*
@@ -43,5 +39,5 @@ task Install -Jobs Build, {
 
 # Synopsis: Publish the module to PSGallery.
 task Publish -Jobs Install, {
-	Publish-Module -Name PsSmo -NuGetApiKey $NuGetApiKey
+	Publish-Module -Name PSDocker -NuGetApiKey $NuGetApiKey
 }
