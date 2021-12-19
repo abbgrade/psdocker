@@ -1,14 +1,17 @@
+#Requires -Modules @{ ModuleName='Pester'; ModuleVersion='5.0.0' }
 
 param (
     [string] $PSScriptRoot = $( if ( $PSScriptRoot ) { $PSScriptRoot } else { Get-Location } )
 )
 
-. $PSScriptRoot\TestHelper.ps1
+BeforeAll {
+    . $PSScriptRoot\Helper\TestHelper.ps1
+}
 
 Describe 'Remove-DockerContainer' {
     Context 'running container' {
         BeforeEach {
-            $container = New-DockerContainer -Image $testConfig.Image.Name
+            $container = New-DockerContainer -Image $global:TestConfig.Image.Name
         }
 
         It 'works with named parameters' {
@@ -18,7 +21,7 @@ Describe 'Remove-DockerContainer' {
     Context 'two running containers' {
         BeforeEach {
             $container = @( 1, 2 ) | Foreach-Object {
-                New-DockerContainer -Image $testConfig.Image.Name
+                New-DockerContainer -Image $global:TestConfig.Image.Name
             }
         }
 
