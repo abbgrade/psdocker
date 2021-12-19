@@ -43,7 +43,7 @@
             "label": "Rebuild",
             "type": "shell",
             "group": "build",
-            "command": "Invoke-Build Clean,Build",
+            "command": "Invoke-Build Clean, Build",
             "problemMatcher": []
         },
         {
@@ -69,6 +69,9 @@
             "group": "test",
             "type": "shell",
             "command": "Invoke-Pester",
+            "args": [
+                "-Output", "Detailed"
+            ],
             "options": {
                 "cwd": "test"
             },
@@ -77,7 +80,7 @@
                 "echo": false,
                 "showReuseMessage": false
             },
-            "dependsOn": "Build"
+            "dependsOn": "Rebuild"
         },
     ]
 }
