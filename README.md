@@ -39,9 +39,10 @@ See the folder [docs](./docs) for examples.
 
 ## Changelog
 
-### Work in progress
+### Version 1.6.0
 
 - Fixed timeout issue
+- Added `-Remove` parameter to New-Container.
 
 ### Version 1.5.0
 
