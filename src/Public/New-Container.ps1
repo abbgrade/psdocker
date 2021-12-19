@@ -112,6 +112,9 @@ function New-Container {
         [switch] $Remove,
 
         [Parameter( Mandatory = $false )]
+        [switch] $StringOutput,
+
+        [Parameter( Mandatory = $false )]
         [string[]] $ArgumentList
     )
 
