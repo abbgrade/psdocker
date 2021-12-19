@@ -38,6 +38,7 @@ task Install -Jobs Build, {
 }
 
 # Synopsis: Publish the module to PSGallery.
-task Publish -Jobs Install, {
-	Publish-Module -Name PSDocker -NuGetApiKey $NuGetApiKey
+task Publish -Jobs Clean, Install, {
+	# Publish-Module -Name PSDocker -NuGetApiKey $NuGetApiKey
+    Publish-PSResource -Path $buildPath\PSDocker -APIKey $NuGetApiKey
 }
