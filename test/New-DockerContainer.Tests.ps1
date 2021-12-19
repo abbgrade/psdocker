@@ -45,5 +45,12 @@ Describe 'New-DockerContainer' {
 
             Remove-DockerContainer -Name $container.Name -Force
         }
+
+        It 'Removes with -Remove' {
+            $previousCount = ( Get-DockerContainer ).Count
+            New-DockerContainer -Image $global:TestConfig.Image.Name -Remove
+
+            ( Get-DockerContainer ).Count | Should -Be $previousCount
+        }
     }
 }
