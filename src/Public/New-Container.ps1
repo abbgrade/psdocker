@@ -46,6 +46,15 @@ function New-Container {
     Specifies if the container should be interactive.
     That means to connect the standard-in stream of container and client.
 
+    .PARAMETER Terminal
+    Allocate a pseudo-TTY.
+
+    .PARAMETER Remove
+    Automatically remove the container when it exits.
+
+    .PARAMETER ArgumentList
+    Specifies a command or arguments to run on the container.
+
     .OUTPUTS
     Container: Returns a Container object for the created container.
 
@@ -94,7 +103,16 @@ function New-Container {
         [switch] $Detach,
 
         [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
-        [switch] $Interactive
+        [switch] $Interactive,
+
+        [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
+        [switch] $Terminal,
+
+        [Parameter( Mandatory = $false )]
+        [switch] $Remove,
+
+        [Parameter( Mandatory = $false )]
+        [string[]] $ArgumentList
     )
 
     process {
@@ -132,20 +150,33 @@ function New-Container {
             $arguments.Add( '--interactive' ) | Out-Null
         }
 
+        if ( $Terminal ) {
+            $arguments.Add( '--tty' ) | Out-Null
+        }
+
+        if ( $Remove ) {
+            $arguments.Add( '--rm' ) | Out-Null
+        }
+
         $arguments.Add( $ImageName ) | Out-Null
 
-        # create container
-        Invoke-ClientCommand 'run', $arguments -Timeout $Timeout
-
-        # check container
-        $container = Get-Container -Latest -Timeout $StatusTimeout
-        if ( -not $container.Name ) {
-            Write-Error "Failed to create container"
+        if ( $ArgumentList ) {
+            $arguments.AddRange( $ArgumentList )
         }
-        Write-Verbose "Docker container '$( $container.Name )' created."
 
-        # return result
-        Write-Output $container
+        # create container
+        Invoke-ClientCommand 'run', $arguments -StringOutput:$StringOutput -Timeout $Timeout
 
+        if ( -Not $Remove ) {
+            # check container
+            $container = Get-Container -Latest -Timeout $StatusTimeout
+            if ( -not $container.Name ) {
+                Write-Error "Failed to create container"
+            }
+            Write-Verbose "Docker container '$( $container.Name )' created."
+
+            # return result
+            Write-Output $container
+        }
     }
 }
