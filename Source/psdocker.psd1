@@ -1,6 +1,6 @@
 @{
     RootModule = 'psdocker.psm1'
-    ModuleVersion = '1.6.0'
+    ModuleVersion = '1.7.0'
     GUID = '22cb8e1e-1c64-446b-960c-7c5e8529eb31'
     Author = 'Steffen Kampmann'
     Copyright = '(c) 2018 s.kampmann. Alle Rechte vorbehalten.'

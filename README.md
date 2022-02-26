@@ -39,36 +39,40 @@ See the folder [docs](./docs) for examples.
 
 ## Changelog
 
+### Version 1.7.0
+
+- Added Linux support.
+
 ### Version 1.6.0
 
-- Fixed timeout issue
+- Fixed timeout issue.
 - Added `-Remove` parameter to New-Container.
 
 ### Version 1.5.0
 
-- Adopted changes from the Docker CLI
-- Added argument completions for image name, tag, repository, container name
+- Adopted changes from the Docker CLI.
+- Added argument completions for image name, tag, repository, container name.
 
 ### Version 1.4.0
 
-- Fixed output issue with volumes
-- Fixed pipeline processing with multiple items
-- Fixed ErrorAction parameter
-- Unit test refactoring
+- Fixed output issue with volumes.
+- Fixed pipeline processing with multiple items.
+- Fixed ErrorAction parameter.
+- Unit test refactoring.
 
 ### Version 1.3.0
 
-- Support for Linux clients
-- Support for Linux containers
-- Support von container volumes
-- Refactoring
+- Support for Linux clients.
+- Support for Linux containers.
+- Support von container volumes.
+- Refactoring.
 
 ### Version 1.2.0
 
 - Pipeline support for the cmdlets.
-- New cmdlet Uninstall-Image
+- New cmdlet Uninstall-Image.
 - Types for Image, Repository and Container used as output.
-- Refactoring
+- Refactoring.
 
 ## Contributors
 
