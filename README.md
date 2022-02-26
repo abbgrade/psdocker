@@ -1,4 +1,4 @@
-# PSDocker
+# psdocker
 
 [![Build status](https://ci.appveyor.com/api/projects/status/fck33uiofugnmgva?svg=true)](https://ci.appveyor.com/project/abbgrade/psdocker)
 
@@ -6,13 +6,13 @@
 
 Make sure that the docker cli is installed. e.g. from [Chocolatey](https://chocolatey.org/packages/docker-cli) or with [Docker Desktop](https://hub.docker.com/editions/community/docker-ce-desktop-windows/).
 
-Install PSDocker from [PowerShell Gallery](https://www.powershellgallery.com/packages/psdocker) using a PowerShell command line:
+Install psdocker from [PowerShell Gallery](https://www.powershellgallery.com/packages/psdocker) using a PowerShell command line:
 
-    Install-Module -Name PSDocker -Scope CurrentUser
+    Install-Module -Name psdocker -Scope CurrentUser
 
 ## Build
 
-This project uses a [build script](./PsDocker.build.ps1) that is based on [Invoke-Build](https://github.com/nightroman/Invoke-Build).
+This project uses a [build script](./psdocker.build.ps1) that is based on [Invoke-Build](https://github.com/nightroman/Invoke-Build).
 For installation details see the instructions from the Invoke-Build project, but we recommend `Install-Module InvokeBuild -Scope CurrentUser`.
 The documentation is based on [platyPS](https://github.com/PowerShell/platyPS), so you may want to execute `Install-Module PlatyPs -Scope CurrentUser`.
 
