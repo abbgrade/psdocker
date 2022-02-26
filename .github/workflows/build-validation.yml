@@ -6,33 +6,6 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout source
-        uses: actions/checkout@v2
-
-      - name: Install build dependencies
-        shell: pwsh
-        run: |
-          Set-PSRepository PSGallery -InstallationPolicy Trusted
-          Install-Module InvokeBuild -ErrorAction Stop
-          Install-Module PlatyPS -ErrorAction Stop
-
-      - name: Update docs
-        shell: pwsh
-        run: Invoke-Build UpdateDocs
-
-      - name: Create build
-        shell: pwsh
-        run: Invoke-Build Build
-
-      - name: Upload build
-        uses: actions/upload-artifact@v2
-        with:
-          path: build/PSDocker
-          name: build
-
-  test:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest]
@@ -41,6 +14,38 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
+
+      - name: Install build dependencies
+        shell: pwsh
+        run: |
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          Install-Module InvokeBuild, platyPs -ErrorAction Stop
+
+      - name: Create build
+        shell: pwsh
+        run: Invoke-Build Build
+
+      - name: Upload build
+        uses: actions/upload-artifact@v2
+        with:
+          path: publish
+          name: ${{ matrix.os }}-build
+  test:
+    needs: build
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+
+      - name: Download build
+        uses: actions/download-artifact@v2
+        with:
+          path: publish
+          name: ${{ matrix.os }}-build
 
       - name: Run tests
         shell: pwsh
