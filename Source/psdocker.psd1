@@ -1,5 +1,5 @@
 @{
-    RootModule = 'PSDocker.psm1'
+    RootModule = 'psdocker.psm1'
     ModuleVersion = '1.6.0'
     GUID = '22cb8e1e-1c64-446b-960c-7c5e8529eb31'
     Author = 'Steffen Kampmann'
@@ -12,8 +12,8 @@
     PrivateData = @{
         PSData = @{
             Tags = @('Docker')
-            LicenseUri = 'https://github.com/abbgrade/PSDocker/blob/master/LICENSE'
-            ProjectUri = 'https://github.com/abbgrade/PSDocker'
+            LicenseUri = 'https://github.com/abbgrade/psdocker/blob/master/LICENSE'
+            ProjectUri = 'https://github.com/abbgrade/psdocker'
         }
     }
     DefaultCommandPrefix = 'Docker'
