@@ -28,7 +28,7 @@ jobs:
       - name: Upload build
         uses: actions/upload-artifact@v2
         with:
-          path: publish
+          path: Publish
           name: ${{ matrix.os }}-build
   test:
     needs: build
