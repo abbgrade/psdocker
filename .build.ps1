@@ -27,6 +27,7 @@ param(
 
 $ModuleName = 'psdocker'
 
+. $PSScriptRoot\Tasks\Dependencies.Tasks.ps1
 . $PSScriptRoot\Tasks\Build.Tasks.ps1
 
 # Synopsis: Default task.
