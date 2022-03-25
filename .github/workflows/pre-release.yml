@@ -4,38 +4,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: windows-latest
-    steps:
-      - name: Checkout source
-        uses: actions/checkout@v2
-
-      - name: Install build dependencies
-        shell: pwsh
-        run: |
-          Set-PSRepository PSGallery -InstallationPolicy Trusted
-          Install-Module InvokeBuild, platyPS -ErrorAction Stop
-
-      - name: Create build
-        shell: pwsh
-        run: Invoke-Build Build -BuildNumber ${{ github.run_number }}
-
-      - name: Upload build
-        uses: actions/upload-artifact@v2
-        with:
-          name: build
-          path: Publish
-
-  release:
-    needs: build
-    runs-on: windows-latest
-    steps:
-      - name: Download build artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: build
-
-      - name: Publish to PsGallery
-        shell: pwsh
-        run: |
-          Publish-Module -Path ./psdocker -NuGetApiKey ${{ secrets.PS_GALLERY_KEY }}
+  pre-release:
+    uses: abbgrade/PsBuildTasks/.github/workflows/pre-release-windows.yml@v1.1
+    with:
+      module-name: psdocker
+    secrets:
+      ps-gallery-key: ${{ secrets.PS_GALLERY_KEY }}

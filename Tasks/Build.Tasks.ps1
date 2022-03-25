@@ -2,7 +2,7 @@ requires ModuleName
 
 [System.IO.DirectoryInfo] $SourceDirectory = "$PsScriptRoot\..\Source"
 [System.IO.DirectoryInfo] $SourceManifest = "$SourceDirectory\$ModuleName.psd1"
-[System.IO.DirectoryInfo] $PublishDirectory = "$PsScriptRoot\..\Publish"
+[System.IO.DirectoryInfo] $PublishDirectory = "$PsScriptRoot\..\publish"
 [System.IO.DirectoryInfo] $DocumentationDirectory = "$PsScriptRoot\..\Docs"
 [System.IO.DirectoryInfo] $ModulePublishDirectory = "$PublishDirectory\$ModuleName"
 
@@ -16,14 +16,23 @@ task Import -Jobs {
     Import-Module $SourceManifest -Force
 }
 
+# Synopsis: Import platyPs.
+task Import.platyPs -Jobs {
+	Import-Module platyPs
+}
+
+# Synopsis: Initialize the documentation directory.
+task Doc.Init.Directory -If { $DocumentationDirectory.Exists -eq $false} -Jobs {
+	New-Item $DocumentationDirectory -ItemType Directory
+}
+
 # Synopsis: Initialize the documentation.
-task Doc.Init -If { $DocumentationDirectory.Exists -eq $false -Or $ForceDocInit -eq $true } -Jobs Import, {
-	New-Item $DocumentationDirectory -ItemType Directory -ErrorAction SilentlyContinue
-    New-MarkdownHelp -Module $ModuleName -OutputFolder $DocumentationDirectory -Force:$ForceDocInit -ErrorAction Stop
+task Doc.Init -Jobs Import, Import.platyPs, Doc.Init.Directory, {
+    New-MarkdownHelp -Module $ModuleName -OutputFolder $DocumentationDirectory -Force:$ForceDocInit -ErrorAction Continue
 }
 
 # Synopsis: Update the markdown documentation.
-task Doc.Update -Jobs Import, Doc.Init, {
+task Doc.Update -Jobs Import, Import.platyPs, Doc.Init, {
     Update-MarkdownHelp -Path $DocumentationDirectory
 }
 
