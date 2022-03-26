@@ -73,7 +73,7 @@
                 "-Output", "Detailed"
             ],
             "options": {
-                "cwd": "test"
+                "cwd": "${workspaceFolder}/test"
             },
             "problemMatcher": "$msCompile",
             "presentation": {
