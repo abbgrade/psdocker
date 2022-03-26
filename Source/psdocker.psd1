@@ -33,7 +33,7 @@ Copyright = '(c) 2018 Steffen Kampmann. Alle Rechte vorbehalten.'
 Description = 'Cmdlets that wraps the docker client and supports the interaction with containers.'
 
 # Minimum version of the PowerShell engine required by this module
-# PowerShellVersion = ''
+PowerShellVersion = '7.0'
 
 # Name of the PowerShell host required by this module
 # PowerShellHostName = ''
@@ -75,7 +75,7 @@ FunctionsToExport = '*'
 CmdletsToExport = '*'
 
 # Variables to export from this module
-VariablesToExport = '*'
+# VariablesToExport = @()
 
 # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
 AliasesToExport = '*'
@@ -95,7 +95,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'Docker'
+        Tags = 'Docker','Windows','Linux','macOS'
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/abbgrade/psdocker/blob/master/LICENSE'
