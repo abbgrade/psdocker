@@ -58,10 +58,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Pipeline support for the cmdlets.
+- Pipeline support for the commandlet.
 - New cmdlet Uninstall-Image.
 - Types for Image, Repository and Container used as output.
 
 ### Changed
 
 - Refactoring.
+
+<!-- markdownlint-configure-file {"MD024": { "siblings_only": true } } -->
