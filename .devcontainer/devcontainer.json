@@ -26,7 +26,6 @@
 	"remoteUser": "vscode",
 	"features": {
 		"docker-from-docker": "latest",
-		"powershell": "latest",
-		"dotnet": "latest"
+		"powershell": "latest"
 	}
 }
