@@ -1,6 +1,6 @@
 ---
-external help file: PSDocker-help.xml
-Module Name: PSDocker
+external help file: psdocker-help.xml
+Module Name: psdocker
 online version: https://docs.docker.com/engine/reference/commandline/image_rm/
 schema: 2.0.0
 ---
@@ -21,7 +21,7 @@ Wraps the docker command \`docker image rm\`.
 
 ## EXAMPLES
 
-### BEISPIEL 1
+### EXAMPLE 1
 ```
 Get-DockerImage -Repository 'microsoft/powershell' | Uninstall-DockerImage
 ```
@@ -89,8 +89,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

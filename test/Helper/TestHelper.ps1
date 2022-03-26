@@ -1,6 +1,6 @@
 
 param (
-    [string] $ModuleManifestPath = "$PSScriptRoot\..\..\src\PSDocker.psd1"
+    [string] $ModuleManifestPath = "$PSScriptRoot\..\..\Source\psdocker.psd1"
 )
 
 Import-Module $ModuleManifestPath -Force

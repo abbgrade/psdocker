@@ -1,6 +1,6 @@
 ---
-external help file: PSDocker-help.xml
-Module Name: PSDocker
+external help file: psdocker-help.xml
+Module Name: psdocker
 online version: https://docs.docker.com/engine/reference/commandline/search/
 schema: 2.0.0
 ---
@@ -22,7 +22,7 @@ Wraps the command \`docker search\`.
 
 ## EXAMPLES
 
-### BEISPIEL 1
+### EXAMPLE 1
 ```
 Search-DockerRepository 'nanoserver' -Limit 2
 ```
@@ -119,7 +119,7 @@ Accept wildcard characters: False
 ```
 
 ### -MinimumStars
-{{Fill MinimumStars Description}}
+{{ Fill MinimumStars Description }}
 
 ```yaml
 Type: Int32
@@ -134,8 +134,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

@@ -1,6 +1,6 @@
 ---
-external help file: PSDocker-help.xml
-Module Name: PSDocker
+external help file: psdocker-help.xml
+Module Name: psdocker
 online version: https://docs.docker.com/engine/reference/commandline/ps/
 schema: 2.0.0
 ---
@@ -23,19 +23,18 @@ Wraps the command \`docker ps\`.
 
 ## EXAMPLES
 
-### BEISPIEL 1
+### EXAMPLE 1
 ```
 New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer' | Out-Null
-```
-
-PS C:\\\> Get-DockerContainer -Name 'mycontainer'
+PS C:\> Get-DockerContainer -Name 'mycontainer'
 Image       : microsoft/nanoserver
 Ports       :
-Command     : "c:\\\\windows\\\\system32\\\\cmd.exe"
+Command     : "c:\\windows\\system32\\cmd.exe"
 Created     : 13 seconds ago
 Name        : mycontainer
 ContainerID : 1c3bd73d25552b41a677a99a15a9326ba72123096f9e10c3d36f72fb90e57f16
 Status      : Exited (0) 5 seconds ago
+```
 
 ## PARAMETERS
 
@@ -100,8 +99,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

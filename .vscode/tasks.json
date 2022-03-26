@@ -40,13 +40,6 @@
             "problemMatcher": []
         },
         {
-            "label": "Rebuild",
-            "type": "shell",
-            "group": "build",
-            "command": "Invoke-Build Clean, Build",
-            "problemMatcher": []
-        },
-        {
             "label": "Clean",
             "type": "shell",
             "command": "Invoke-Build Clean",
@@ -73,7 +66,7 @@
                 "-Output", "Detailed"
             ],
             "options": {
-                "cwd": "test"
+                "cwd": "${workspaceFolder}/test"
             },
             "problemMatcher": "$msCompile",
             "presentation": {

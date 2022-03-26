@@ -1,6 +1,6 @@
 ---
-external help file: PSDocker-help.xml
-Module Name: PSDocker
+external help file: psdocker-help.xml
+Module Name: psdocker
 online version: https://docs.docker.com/engine/reference/commandline/image_ls/
 schema: 2.0.0
 ---
@@ -21,16 +21,15 @@ Wraps the command \`docker image ls\`.
 
 ## EXAMPLES
 
-### BEISPIEL 1
+### EXAMPLE 1
 ```
 Get-DockerImage -Repository 'microsoft/powershell'
-```
-
 Created    : 2 weeks ago
 ImageId    : sha256:4ebab174c7292440d4d7d5e5e61d3cd4487441d3f49df0b656ccc81d2a0e4489
 Size       : 364MB
 Tag        : latest
 Repository : microsoft/powershell
+```
 
 ## PARAMETERS
 
@@ -80,8 +79,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

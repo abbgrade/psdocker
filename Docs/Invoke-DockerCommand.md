@@ -1,6 +1,6 @@
 ---
-external help file: PSDocker-help.xml
-Module Name: PSDocker
+external help file: psdocker-help.xml
+Module Name: psdocker
 online version: https://docs.docker.com/engine/reference/commandline/exec/
 schema: 2.0.0
 ---
@@ -23,13 +23,12 @@ Wraps the docker \`command exec\`.
 
 ## EXAMPLES
 
-### BEISPIEL 1
+### EXAMPLE 1
 ```
 $container = New-DockerContainer -Image 'microsoft/iis' -Detach
-```
-
-PS C:\\\> Invoke-DockerCommand -Name $container.Name -Command 'hostname' -StringOutput
+PS C:\> Invoke-DockerCommand -Name $container.Name -Command 'hostname' -StringOutput
 88eb8fa9c07f
+```
 
 ## PARAMETERS
 
@@ -109,8 +108,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

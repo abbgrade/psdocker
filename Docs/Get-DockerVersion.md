@@ -1,6 +1,6 @@
 ---
-external help file: PSDocker-help.xml
-Module Name: PSDocker
+external help file: psdocker-help.xml
+Module Name: psdocker
 online version: https://docs.docker.com/engine/reference/commandline/version/
 schema: 2.0.0
 ---
@@ -22,12 +22,10 @@ Wraps the command \`docker version\`.
 
 ## EXAMPLES
 
-### BEISPIEL 1
+### EXAMPLE 1
 ```
 $version = Get-DockerVersion
-```
-
-PS C:\\\> $version.Client
+PS C:\> $version.Client
 Version      : 18.06.1-ce
 Goversion    : go1.10.3
 Experimental : false
@@ -35,6 +33,7 @@ APIversion   : 1.38
 Gitcommit    : e68fc7a
 Built        : Tue Aug 21 17:21:34 2018
 OSArch       : windows/amd64
+```
 
 PS C:\\\> $version.Server
 Version      : 18.06.1-ce
@@ -64,8 +63,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

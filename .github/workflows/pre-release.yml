@@ -1,0 +1,12 @@
+on:
+  push:
+    branches: [ release/* ]
+  workflow_dispatch:
+
+jobs:
+  pre-release:
+    uses: abbgrade/PsBuildTasks/.github/workflows/pre-release-windows.yml@v1.1
+    with:
+      module-name: psdocker
+    secrets:
+      ps-gallery-key: ${{ secrets.PS_GALLERY_KEY }}

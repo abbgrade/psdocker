@@ -1,18 +1,18 @@
-# PSDocker
+# psdocker
 
-[![Build status](https://ci.appveyor.com/api/projects/status/fck33uiofugnmgva?svg=true)](https://ci.appveyor.com/project/abbgrade/psdocker)
+[![.github/workflows/build-validation.yml](https://github.com/abbgrade/psdocker/actions/workflows/build-validation.yml/badge.svg?branch=develop)](https://github.com/abbgrade/psdocker/actions/workflows/build-validation.yml)
 
 ## Installation
 
 Make sure that the docker cli is installed. e.g. from [Chocolatey](https://chocolatey.org/packages/docker-cli) or with [Docker Desktop](https://hub.docker.com/editions/community/docker-ce-desktop-windows/).
 
-Install PSDocker from [PowerShell Gallery](https://www.powershellgallery.com/packages/psdocker) using a PowerShell command line:
+Install psdocker from [PowerShell Gallery](https://www.powershellgallery.com/packages/psdocker) using a PowerShell command line:
 
-    Install-Module -Name PSDocker -Scope CurrentUser
+    Install-Module -Name psdocker -Scope CurrentUser
 
 ## Build
 
-This project uses a [build script](./PsDocker.build.ps1) that is based on [Invoke-Build](https://github.com/nightroman/Invoke-Build).
+This project uses a [build script](./psdocker.build.ps1) that is based on [Invoke-Build](https://github.com/nightroman/Invoke-Build).
 For installation details see the instructions from the Invoke-Build project, but we recommend `Install-Module InvokeBuild -Scope CurrentUser`.
 The documentation is based on [platyPS](https://github.com/PowerShell/platyPS), so you may want to execute `Install-Module PlatyPs -Scope CurrentUser`.
 
@@ -39,36 +39,7 @@ See the folder [docs](./docs) for examples.
 
 ## Changelog
 
-### Version 1.6.0
-
-- Fixed timeout issue
-- Added `-Remove` parameter to New-Container.
-
-### Version 1.5.0
-
-- Adopted changes from the Docker CLI
-- Added argument completions for image name, tag, repository, container name
-
-### Version 1.4.0
-
-- Fixed output issue with volumes
-- Fixed pipeline processing with multiple items
-- Fixed ErrorAction parameter
-- Unit test refactoring
-
-### Version 1.3.0
-
-- Support for Linux clients
-- Support for Linux containers
-- Support von container volumes
-- Refactoring
-
-### Version 1.2.0
-
-- Pipeline support for the cmdlets.
-- New cmdlet Uninstall-Image
-- Types for Image, Repository and Container used as output.
-- Refactoring
+See the [changelog](./CHANGELOG.md) file.
 
 ## Contributors
 

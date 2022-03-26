@@ -1,6 +1,6 @@
 ---
-external help file: PSDocker-help.xml
-Module Name: PSDocker
+external help file: psdocker-help.xml
+Module Name: psdocker
 online version: https://docs.docker.com/engine/reference/commandline/run/
 schema: 2.0.0
 ---
@@ -15,7 +15,7 @@ New container
 ```
 New-DockerContainer [[-Name] <String>] [-ImageName] <String> [[-Environment] <Hashtable>]
  [[-Ports] <Hashtable>] [[-Volumes] <Hashtable>] [[-Timeout] <Int32>] [[-StatusTimeout] <Int32>] [-Detach]
- [-Interactive] [<CommonParameters>]
+ [-Interactive] [-Terminal] [-Remove] [-StringOutput] [[-ArgumentList] <String[]>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -24,18 +24,17 @@ Wraps the command \`docker run\`.
 
 ## EXAMPLES
 
-### BEISPIEL 1
+### EXAMPLE 1
 ```
 New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer'
-```
-
 Image       : microsoft/nanoserver
 Ports       :
-Command     : "c:\\\\windows\\\\system32\\\\cmd.exe"
+Command     : "c:\\windows\\system32\\cmd.exe"
 Created     : 14 seconds ago
 Name        : mycontainer
 ContainerID : 1a0b70cfcfba78e46468dbfa72b0b36fae4c30282367482bc348b5fcee0b85d3
 Status      : Exited (0) 1 second ago
+```
 
 ## PARAMETERS
 
@@ -56,7 +55,7 @@ Accept wildcard characters: False
 ```
 
 ### -ImageName
-{{Fill ImageName Description}}
+{{ Fill ImageName Description }}
 
 ```yaml
 Type: String
@@ -178,9 +177,68 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
+### -Terminal
+Allocate a pseudo-TTY.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Remove
+Automatically remove the container when it exits.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -StringOutput
+{{ Fill StringOutput Description }}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ArgumentList
+Specifies a command or arguments to run on the container.
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 8
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

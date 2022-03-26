@@ -45,9 +45,13 @@ function Get-Version {
         [int] $Timeout = 1
     )
 
-    $output = (
-        Invoke-ClientCommand 'version' -Timeout $Timeout -StringOutput
-    ).Split( [Environment]::NewLine )
+    $versionOutput = Invoke-ClientCommand 'version' -Timeout $Timeout -StringOutput
+    if ( -Not $versionOutput ) {
+        Write-Error 'docker version did not return a output.'
+        return
+    }
+
+    $output = $versionOutput.Split( [Environment]::NewLine )
 
     $dockerVersionTable = @{}
     $stack = New-Object System.Collections.Stack

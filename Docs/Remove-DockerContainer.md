@@ -1,6 +1,6 @@
 ---
-external help file: PSDocker-help.xml
-Module Name: PSDocker
+external help file: psdocker-help.xml
+Module Name: psdocker
 online version: https://docs.docker.com/engine/reference/commandline/rm/
 schema: 2.0.0
 ---
@@ -23,19 +23,17 @@ Wraps the command \`docker rm\`.
 
 ## EXAMPLES
 
-### BEISPIEL 1
+### EXAMPLE 1
 ```
 New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer' | Out-Null
+PS C:\> Remove-DockerContainer -Name 'mycontainer'
 ```
 
-PS C:\\\> Remove-DockerContainer -Name 'mycontainer'
-
-### BEISPIEL 2
+### EXAMPLE 2
 ```
 $container = New-DockerContainer -Image 'microsoft/nanoserver'
+PS C:\> $container | Remove-DockerContainer
 ```
-
-PS C:\\\> $container | Remove-DockerContainer
 
 ## PARAMETERS
 
@@ -100,8 +98,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
