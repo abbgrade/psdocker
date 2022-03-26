@@ -3,6 +3,7 @@ task InstallBuildDependencies -Jobs {
 }
 
 task InstallTestDependencies -Jobs {
+    Install-Module Pester -MinimumVersion '5.0.0'
 }
 
 task InstallReleaseDependencies -Jobs {
