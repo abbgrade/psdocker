@@ -1,6 +1,6 @@
 # psdocker
 
-[![.github/workflows/build-validation.yml](https://github.com/abbgrade/psdocker/actions/workflows/build-validation.yml/badge.svg?branch=develop)](https://github.com/abbgrade/psdocker/actions/workflows/build-validation.yml)
+[![.github/workflows/build-validation.yml](https://github.com/abbgrade/psdocker/actions/workflows/build-validation.yml/badge.svg)](https://github.com/abbgrade/psdocker/actions/workflows/build-validation.yml)
 
 ## Installation
 
