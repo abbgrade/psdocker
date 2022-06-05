@@ -24,6 +24,6 @@ function New-Image {
         $arguments.Add("-t $( $Repository ):$Tag") | Out-Null
         $arguments.Add("$Path") | Out-Null
 
-        Invoke-ClientCommand "build", $arguments -Timeout $Timeout -JsonOutput | Write-Output
+        Invoke-ClientCommand "build", $arguments -Timeout $Timeout | Write-Output
     }
 }
