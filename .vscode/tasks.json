@@ -48,7 +48,7 @@
         {
             "label": "Install",
             "type": "shell",
-            "command": "Invoke-Build Clean, Install",
+            "command": "Invoke-Build Install",
             "problemMatcher": []
         },
         {
@@ -62,18 +62,15 @@
             "group": "test",
             "type": "shell",
             "command": "Invoke-Pester",
-            "args": [
-                "-Output", "Detailed"
-            ],
             "options": {
-                "cwd": "${workspaceFolder}/test"
+                "cwd": "test"
             },
             "problemMatcher": "$msCompile",
             "presentation": {
                 "echo": false,
                 "showReuseMessage": false
             },
-            "dependsOn": "Rebuild"
+            "dependsOn": "Build"
         },
     ]
 }

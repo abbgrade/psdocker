@@ -1,9 +1,9 @@
 requires ModuleName
 
-[System.IO.DirectoryInfo] $SourceDirectory = "$PsScriptRoot\..\Source"
+[System.IO.DirectoryInfo] $SourceDirectory = "$PsScriptRoot\..\src"
 [System.IO.DirectoryInfo] $SourceManifest = "$SourceDirectory\$ModuleName.psd1"
 [System.IO.DirectoryInfo] $PublishDirectory = "$PsScriptRoot\..\publish"
-[System.IO.DirectoryInfo] $DocumentationDirectory = "$PsScriptRoot\..\Docs"
+[System.IO.DirectoryInfo] $DocumentationDirectory = "$PsScriptRoot\..\docs"
 [System.IO.DirectoryInfo] $ModulePublishDirectory = "$PublishDirectory\$ModuleName"
 
 # Synopsis: Remove all temporary files.
