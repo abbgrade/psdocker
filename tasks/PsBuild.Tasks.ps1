@@ -17,14 +17,16 @@ task UpdateValidationWorkflow {
 
 task UpdatePreReleaseWorkflow {
     Invoke-WebRequest `
-        -Uri 'https://raw.githubusercontent.com/abbgrade/PsBuildTasks/main/GitHub/pre-release-windows.yml' `
-        -OutFile "$PSScriptRoot\..\.github\workflows\pre-release.yml"
+        -Uri 'https://raw.githubusercontent.com/abbgrade/PsBuildTasks/main/GitHub/pre-release-windows.yml' |
+    ForEach-Object { $_ -replace 'MyModuleName', $ModuleName } |
+    Out-File "$PSScriptRoot\..\.github\workflows\pre-release.yml"
 }
 
 task UpdateReleaseWorkflow {
     Invoke-WebRequest `
-        -Uri 'https://raw.githubusercontent.com/abbgrade/PsBuildTasks/main/GitHub/release-windows.yml' `
-        -OutFile "$PSScriptRoot\..\.github\workflows\release.yml"
+        -Uri 'https://raw.githubusercontent.com/abbgrade/PsBuildTasks/main/GitHub/release-windows.yml' |
+    ForEach-Object { $_ -replace 'MyModuleName', $ModuleName } |
+    Out-File "$PSScriptRoot\..\.github\workflows\release.yml"
 }
 
 #endregion
