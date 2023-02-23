@@ -1,6 +1,8 @@
-# psdocker
+# Readme
 
 [![.github/workflows/build-validation.yml](https://github.com/abbgrade/psdocker/actions/workflows/build-validation.yml/badge.svg?branch=develop)](https://github.com/abbgrade/psdocker/actions/workflows/build-validation.yml)
+
+For details, visit the [GitHub Pages](https://abbgrade.github.io/psdocker/).
 
 ## Installation
 
@@ -8,7 +10,9 @@ Make sure that the docker cli is installed. e.g. from [Chocolatey](https://choco
 
 Install psdocker from [PowerShell Gallery](https://www.powershellgallery.com/packages/psdocker) using a PowerShell command line:
 
-    Install-Module -Name psdocker -Scope CurrentUser
+```powershell
+Install-Module -Name psdocker -Scope CurrentUser
+```
 
 ## Build
 
@@ -35,7 +39,7 @@ For debugging tests change the working directory to ./src/test create the breakp
 
 ## Usage
 
-See the folder [docs](./docs) for examples.
+See [the command reference](./docs/) for descriptions and examples.
 
 ## Changelog
 

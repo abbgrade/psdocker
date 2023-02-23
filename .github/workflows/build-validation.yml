@@ -6,4 +6,4 @@ on:
 
 jobs:
   build-validation:
-    uses: abbgrade/PsBuildTasks/.github/workflows/build-validation-matrix.yml@v1.1
+    uses: abbgrade/PsBuildTasks/.github/workflows/build-validation-matrix.yml@1.8.2
