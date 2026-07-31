@@ -5,8 +5,9 @@ on:
 
 jobs:
   release:
-    uses: abbgrade/PsBuildTasks/.github/workflows/release-windows.yml@1.8.2
+    uses: abbgrade/PsBuildTasks/.github/workflows/release-windows.yml@1.14.5
     with:
       module-name: psdocker
+      force-publish: false
     secrets:
       ps-gallery-key: ${{ secrets.PS_GALLERY_KEY }}
