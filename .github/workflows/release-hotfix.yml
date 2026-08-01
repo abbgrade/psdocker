@@ -1,0 +1,13 @@
+on:
+  push:
+    branches: [ 'hotfix/*' ]
+  workflow_dispatch:
+
+jobs:
+  release:
+    uses: abbgrade/PsBuildTasks/.github/workflows/release-windows.yml@1.14.5
+    with:
+      module-name: psdocker
+      force-publish: true
+    secrets:
+      ps-gallery-key: ${{ secrets.PS_GALLERY_KEY }}
