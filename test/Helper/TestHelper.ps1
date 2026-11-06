@@ -43,6 +43,8 @@ $global:TestConfig = New-Object -Type PsObject -Property $(
                 Image = [PSCustomObject] $local:image
                 PrintCommand = 'cmd /c echo'
                 ReadFileCommand = 'cmd /c type'
+                ContainerCommand = @('cmd.exe', '/c', 'echo', 'psdocker')
+                PathSeparator = '\'
                 MountPoint = 'C:\volume'
             } | Write-Output
         }
@@ -56,6 +58,8 @@ $global:TestConfig = New-Object -Type PsObject -Property $(
                 Image = [PSCustomObject] $local:image
                 PrintCommand = 'echo'
                 ReadFileCommand = 'cat'
+                ContainerCommand = @('echo', 'psdocker')
+                PathSeparator = '/'
                 MountPoint = '/tmp/volume'
             } | Write-Output
         }

@@ -28,12 +28,26 @@ Describe 'New-DockerContainer' {
             $container | Remove-DockerContainer
         }
 
+        It 'supports a name, terminal, and command arguments' {
+            $name = "psdocker-test-$([guid]::NewGuid().ToString('N'))"
+            $container = New-DockerContainer `
+                -Image $global:TestConfig.Image.Name `
+                -Name $name `
+                -Terminal `
+                -ArgumentList $global:TestConfig.ContainerCommand
+
+            $container.Name | Should -Be $name
+            $container | Remove-DockerContainer
+        }
+
         It 'mounts a volume' {
 
             $testSharePath = ( Get-Item 'TestDrive:\' ).FullName
             $testText = 'lorem ipsum'
             Set-Content "$testSharePath\test.txt" -Value $testText
 
+            $containerFilePath = $global:TestConfig.MountPoint.TrimEnd([char[]]@('\', '/')) +
+                $global:TestConfig.PathSeparator + 'test.txt'
             $container = Get-DockerImage -Repository $global:TestConfig.Image.Repository -Tag $global:TestConfig.Image.Tag |
             New-DockerContainer -Volumes @{ $testSharePath = $global:TestConfig.MountPoint } -Detach -Interactive
 
@@ -42,7 +56,7 @@ Describe 'New-DockerContainer' {
 
             Invoke-DockerCommand -Name $container.Name `
                 -Command $global:TestConfig.ReadFileCommand `
-                -ArgumentList "$( $global:TestConfig.MountPoint )/test.txt" `
+                -ArgumentList $containerFilePath `
                 -StringOutput |
             Should -Be $testText
 
