@@ -43,74 +43,52 @@ function Get-Version {
         [int] $Timeout = 1
     )
 
-    $versionOutput = Invoke-ClientCommand 'version' -Timeout $Timeout -StringOutput
-    if ( -Not $versionOutput ) {
-        Write-Error 'docker version did not return a output.'
+    $versionOutput = & docker version --format "{{json .}}" 2>&1
+    if ( $LASTEXITCODE -ne 0 -or -not $versionOutput ) {
+        Write-Error 'docker version did not return a valid result.'
         return
     }
 
-    $output = $versionOutput.Split( [Environment]::NewLine )
-
-    $dockerVersionTable = @{}
-    $stack = New-Object System.Collections.Stack
-    $stack.Push( $dockerVersionTable )
-
-    $previousDepth = 0
-    $previousKey = $null
-    foreach ( $line in $output ) {
-        switch -Wildcard ( $line ) {
-            "" {}
-            Default {
-                $key, $value = $line -split ':', 2
-                $depth = 0
-                foreach ( $item in $key.ToCharArray() ) {
-                    if ( $item -eq ' ' ) {
-                        $depth = $depth + 1
-                    } else {
-                        break
-                    }
-                }
-
-                $key = $key.Trim()
-                $value = $value.Trim()
-
-                if ( $previousDepth -gt $depth ) {
-                    $stack.Pop() | Out-Null
-                }
-                if ( $previousDepth -lt $depth ) {
-                    $node = @{
-                        $key = $value
-                    }
-                    $stack.Peek()[$previousKey] = $node
-                    $stack.Push( $node )
-                } else {
-                    $stack.Peek()[$key] = $value
-                }
-
-                $previousKey = $key
-                $previousDepth = $depth
-            }
-        }
+    $dockerVersion = ($versionOutput | Out-String) | ConvertFrom-Json
+    if ( -not $dockerVersion ) {
+        Write-Error 'docker version output could not be parsed as JSON.'
+        return
     }
 
-    function ConvertTo-PsObject {
-        param (
-            [hashtable] $Value
-        )
-
-        foreach ( $key in @( $Value.Keys ) ) {
-            $plainKey = $key.Replace('/', '').Replace(' ', '')
-            $temp = $Value[$key]
-            $Value.Remove($key)
-            $Value[$plainKey] = $temp
-        }
-
-        foreach ( $key in $Value.Keys | Where-Object { $Value[$_].GetType() -eq @{}.GetType() } ) {
-            $Value[$key] = ConvertTo-PsObject $Value[$key]
-        }
-
-        New-Object PSObject -Property $Value | Write-Output
+    $client = [pscustomobject]@{
+        Version = $dockerVersion.Client.Version
+        Goversion = $dockerVersion.Client.GoVersion
+        Experimental = $dockerVersion.Client.Experimental
+        APIversion = $dockerVersion.Client.ApiVersion
+        Gitcommit = $dockerVersion.Client.GitCommit
+        Built = $dockerVersion.Client.BuildTime
+        OSArch = "$($dockerVersion.Client.Os)/$($dockerVersion.Client.Arch)"
     }
 
-    ConvertTo-PsObject $dockerVersionTable | Write-Output
+    $engine = $dockerVersion.Server.Components | Where-Object { $_.Name -eq 'Engine' } | Select-Object -First 1
+    $serverEngine = [pscustomobject]@{
+        Version = if ( $engine ) { $engine.Version } else { $dockerVersion.Server.Version }
+        Goversion = if ( $engine ) { $engine.Details.GoVersion } else { $dockerVersion.Server.GoVersion }
+        Experimental = if ( $engine ) { $engine.Details.Experimental } else { $dockerVersion.Server.Experimental }
+        APIversion = if ( $engine ) { $engine.Details.ApiVersion } else { $dockerVersion.Server.ApiVersion }
+        Gitcommit = if ( $engine ) { $engine.Details.GitCommit } else { $dockerVersion.Server.GitCommit }
+        Built = if ( $engine ) { $engine.Details.BuildTime } else { $dockerVersion.Server.BuildTime }
+        OSArch = "$($dockerVersion.Server.Os)/$($dockerVersion.Server.Arch)"
+    }
+
+    $server = [pscustomobject]@{
+        Version = $dockerVersion.Server.Version
+        Goversion = $dockerVersion.Server.GoVersion
+        Experimental = $dockerVersion.Server.Experimental
+        APIversion = $dockerVersion.Server.ApiVersion
+        Gitcommit = $dockerVersion.Server.GitCommit
+        Built = $dockerVersion.Server.BuildTime
+        OSArch = "$($dockerVersion.Server.Os)/$($dockerVersion.Server.Arch)"
+        Engine = $serverEngine
+    }
+
+    [pscustomobject]@{
+        Client = $client
+        Server = $server
+    } | Write-Output
 }
