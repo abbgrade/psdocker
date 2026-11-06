@@ -15,7 +15,8 @@ New container
 ```
 New-DockerContainer [[-Name] <String>] [-ImageName] <String> [[-Environment] <Hashtable>]
  [[-Ports] <Hashtable>] [[-Volumes] <Hashtable>] [[-Timeout] <Int32>] [[-StatusTimeout] <Int32>] [-Detach]
- [-Interactive] [-Terminal] [-Remove] [-StringOutput] [[-ArgumentList] <String[]>] [<CommonParameters>]
+ [-Interactive] [-Terminal] [-Remove] [-StringOutput] [[-ArgumentList] <String[]>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -232,6 +233,21 @@ Aliases:
 
 Required: False
 Position: 8
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
