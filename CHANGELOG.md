@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - New-Image command to build an image.
 
+### Changed
+
+- Updated Get-DockerVersion to parse Docker's JSON output and support current Engine version details.
+
 ## [1.7.0] - 2022-02-26
 
 ### Added
