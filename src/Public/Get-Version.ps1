@@ -12,9 +12,6 @@ function Get-Version {
     .LINK
     https://docs.docker.com/engine/reference/commandline/version/
 
-    .PARAMETER Timeout
-    Specifies the number of seconds to wait for the command to finish.
-
     .EXAMPLE
     PS C:\> $version = Get-DockerVersion
     PS C:\> $version.Client
@@ -40,6 +37,7 @@ function Get-Version {
 
     [CmdletBinding()]
     param (
+        # Specifies the number of seconds to wait for the command to finish.
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [int] $Timeout = 1

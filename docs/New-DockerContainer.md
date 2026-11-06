@@ -56,7 +56,7 @@ Accept wildcard characters: False
 ```
 
 ### -ImageName
-{{ Fill ImageName Description }}
+Specifies the name of the image to create the container from.
 
 ```yaml
 Type: String
@@ -71,7 +71,7 @@ Accept wildcard characters: False
 ```
 
 ### -Environment
-Specifies the environment variables that are used during the container creation.
+Specifies the environment variables to use during container creation.
 
 ```yaml
 Type: Hashtable
@@ -86,7 +86,7 @@ Accept wildcard characters: False
 ```
 
 ### -Ports
-Specifies the portmapping of the created container.
+Specifies the port mappings for the created container.
 
 ```yaml
 Type: Hashtable
@@ -101,8 +101,7 @@ Accept wildcard characters: False
 ```
 
 ### -Volumes
-Specifies the volumes to mount as a hashmap,
-where the key is the path on the host and the value the path in the container.
+Specifies the volumes to mount, mapping host paths to container paths.
 
 ```yaml
 Type: Hashtable
@@ -132,7 +131,7 @@ Accept wildcard characters: False
 ```
 
 ### -StatusTimeout
-Specifies the timeout of the docker client for the container lookup after creation.
+Specifies the timeout of the Docker client for the container lookup after creation.
 
 ```yaml
 Type: Int32
@@ -147,8 +146,7 @@ Accept wildcard characters: False
 ```
 
 ### -Detach
-Specifies if the container should be detached.
-That means to run the container without connection to the client shell.
+Runs the container without a connection to the client shell.
 
 ```yaml
 Type: SwitchParameter
@@ -163,8 +161,7 @@ Accept wildcard characters: False
 ```
 
 ### -Interactive
-Specifies if the container should be interactive.
-That means to connect the standard-in stream of container and client.
+Connects the container's standard input to the client.
 
 ```yaml
 Type: SwitchParameter
@@ -179,7 +176,7 @@ Accept wildcard characters: False
 ```
 
 ### -Terminal
-Allocate a pseudo-TTY.
+Allocates a pseudo-TTY.
 
 ```yaml
 Type: SwitchParameter
@@ -194,7 +191,7 @@ Accept wildcard characters: False
 ```
 
 ### -Remove
-Automatically remove the container when it exits.
+Automatically removes the container when it exits.
 
 ```yaml
 Type: SwitchParameter
@@ -209,7 +206,7 @@ Accept wildcard characters: False
 ```
 
 ### -StringOutput
-{{ Fill StringOutput Description }}
+Returns the Docker command output as a string.
 
 ```yaml
 Type: SwitchParameter
@@ -224,7 +221,7 @@ Accept wildcard characters: False
 ```
 
 ### -ArgumentList
-Specifies a command or arguments to run on the container.
+Specifies the command and arguments to run in the container.
 
 ```yaml
 Type: String[]

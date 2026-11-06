@@ -38,7 +38,7 @@ PS C:\> $container | Remove-DockerContainer
 ## PARAMETERS
 
 ### -Name
-Specifies the name of the container, that should be removed.
+Specifies the name of the container that should be removed.
 
 ```yaml
 Type: String
@@ -83,7 +83,7 @@ Accept wildcard characters: False
 ```
 
 ### -StopTimeout
-Specifies the timeout of the docker client command for the stop operation.
+Specifies the timeout of the Docker client command for the stop operation.
 
 ```yaml
 Type: Int32

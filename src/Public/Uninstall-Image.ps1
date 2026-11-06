@@ -16,18 +16,6 @@ function Uninstall-Image {
     .LINK
     Install-Image
 
-    .PARAMETER Name
-    Specifies the name of the image to be removed.
-
-    .PARAMETER Force
-    Specifies if the image should be removed, even if a container is using this image.
-
-    .PARAMETER NoPrune
-    Specifies if untagged parents should not be removed.
-
-    .PARAMETER Timeout
-    Specifies how long to wait for the command to finish.
-
     .EXAMPLE
     PS C:\> Get-DockerImage -Repository 'microsoft/powershell' | Uninstall-DockerImage
 
@@ -35,17 +23,21 @@ function Uninstall-Image {
 
     [CmdletBinding()]
     param (
+        # Specifies the name of the image to be removed.
         [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
         [Alias( 'Image', 'ImageName' )]
         [ValidateNotNullOrEmpty()]
         [string] $Name,
 
+        # Removes the image even if a container is using it.
         [Parameter( Mandatory = $false )]
         [switch] $Force = $false,
 
+        # Prevents removal of untagged parent images.
         [Parameter( Mandatory = $false )]
         [switch] $NoPrune = $false,
 
+        # Specifies how long to wait for the command to finish.
         [Parameter( Mandatory = $false )]
         [int] $Timeout = 10
     )

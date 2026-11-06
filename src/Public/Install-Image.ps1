@@ -18,24 +18,6 @@ function Install-Image {
     .LINK
     Uninstall-Image
 
-    .PARAMETER Registry
-    Specifies the registry that contains the repository or image.
-
-    .PARAMETER Repository
-    Specifies the name of the repository of the image to install.
-
-    .PARAMETER Tag
-    Specifies the tag of the image to install.
-
-    .PARAMETER AllTags
-    Specifies if the images for all tags should be installed.
-
-    .PARAMETER Digest
-    Specifies the digest of the specific image that should be installed.
-
-    .PARAMETER Timeout
-    Specifies the number of seconds to wait for the command to finish.
-
     .OUTPUTS
     Image: Returns `Image` objects for the images that are installed and match the parameter.
 
@@ -46,27 +28,33 @@ function Install-Image {
 
     [CmdletBinding()]
     param (
+        # Specifies the registry that contains the repository or image.
         [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
         [ValidateNotNullOrEmpty()]
         [string] $Registry,
 
+        # Specifies the name of the repository of the image to install.
         [Parameter( Mandatory = $true, ValueFromPipelineByPropertyName = $true )]
         [ValidateNotNullOrEmpty()]
         [Alias( 'Name', 'ImageName' )]
         [string] $Repository,
 
+        # Specifies the tag of the image to install.
         [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
         [ValidateNotNullOrEmpty()]
         [string] $Tag,
 
+        # Specifies if the images for all tags should be installed.
         [Parameter( Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [switch] $AllTags,
 
+        # Specifies the digest of the specific image that should be installed.
         [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
         [ValidateNotNullOrEmpty()]
         [string] $Digest,
 
+        # Specifies the number of seconds to wait for the command to finish.
         [Parameter( ValueFromPipelineByPropertyName = $true )]
         [int] $Timeout = 5 * 60
     )

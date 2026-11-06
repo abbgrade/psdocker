@@ -15,46 +15,6 @@ function New-Container {
     .LINK
     https://docs.docker.com/engine/reference/commandline/run/
 
-    .PARAMETER Name
-    Specifies the name of the new container.
-    If not specified, a name will be generated.
-
-    .PARAMETER Image
-    Specifies the name if the image to create the container based on.
-
-    .PARAMETER Environment
-    Specifies the environment variables that are used during the container creation.
-
-    .PARAMETER Ports
-    Specifies the portmapping of the created container.
-
-    .PARAMETER Volumes
-    Specifies the volumes to mount as a hashmap,
-    where the key is the path on the host and the value the path in the container.
-
-    .PARAMETER Timeout
-    Specifies the number of seconds to wait for the command to finish.
-
-    .PARAMETER StatusTimeout
-    Specifies the timeout of the docker client for the container lookup after creation.
-
-    .PARAMETER Detach
-    Specifies if the container should be detached.
-    That means to run the container without connection to the client shell.
-
-    .PARAMETER Interactive
-    Specifies if the container should be interactive.
-    That means to connect the standard-in stream of container and client.
-
-    .PARAMETER Terminal
-    Allocate a pseudo-TTY.
-
-    .PARAMETER Remove
-    Automatically remove the container when it exits.
-
-    .PARAMETER ArgumentList
-    Specifies a command or arguments to run on the container.
-
     .OUTPUTS
     Container: Returns a Container object for the created container.
 
@@ -72,48 +32,61 @@ function New-Container {
 
     [CmdletBinding()]
     param (
+        # Specifies the name of the new container. If not specified, a name will be generated.
         [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
         [ValidateNotNullOrEmpty()]
         [string] $Name,
 
+        # Specifies the name of the image to create the container from.
         [Parameter( Mandatory = $true, ValueFromPipelineByPropertyName = $true )]
         [ValidateNotNullOrEmpty()]
         [Alias( 'Image' )]
         [string] $ImageName,
 
+        # Specifies the environment variables to use during container creation.
         [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
         [ValidateNotNullOrEmpty()]
         [hashtable] $Environment,
 
+        # Specifies the port mappings for the created container.
         [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
         [ValidateNotNullOrEmpty()]
         [hashtable] $Ports,
 
+        # Specifies the volumes to mount, mapping host paths to container paths.
         [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
         [ValidateNotNullOrEmpty()]
         [hashtable] $Volumes,
 
+        # Specifies the number of seconds to wait for the command to finish.
         [Parameter( Mandatory = $false )]
         [int] $Timeout = 30,
 
+        # Specifies the timeout of the Docker client for the container lookup after creation.
         [Parameter( Mandatory = $false )]
         [int] $StatusTimeout = 1,
 
+        # Runs the container without a connection to the client shell.
         [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
         [switch] $Detach,
 
+        # Connects the container's standard input to the client.
         [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
         [switch] $Interactive,
 
+        # Allocates a pseudo-TTY.
         [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
         [switch] $Terminal,
 
+        # Automatically removes the container when it exits.
         [Parameter( Mandatory = $false )]
         [switch] $Remove,
 
+        # Returns the Docker command output as a string.
         [Parameter( Mandatory = $false )]
         [switch] $StringOutput,
 
+        # Specifies the command and arguments to run in the container.
         [Parameter( Mandatory = $false )]
         [string[]] $ArgumentList
     )

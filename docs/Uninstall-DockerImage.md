@@ -45,7 +45,7 @@ Accept wildcard characters: False
 ```
 
 ### -Force
-Specifies if the image should be removed, even if a container is using this image.
+Removes the image even if a container is using it.
 
 ```yaml
 Type: SwitchParameter
@@ -60,7 +60,7 @@ Accept wildcard characters: False
 ```
 
 ### -NoPrune
-Specifies if untagged parents should not be removed.
+Prevents removal of untagged parent images.
 
 ```yaml
 Type: SwitchParameter

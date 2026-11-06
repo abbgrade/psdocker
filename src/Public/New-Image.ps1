@@ -2,19 +2,23 @@ function New-Image {
 
     [CmdletBinding()]
     param (
+        # Specifies the repository name for the image to build.
         [Parameter( Mandatory, ValueFromPipelineByPropertyName = $true )]
         [Alias( 'Name' )]
         [ValidateNotNullOrEmpty()]
         [string] $Repository,
 
+        # Specifies the tag to apply to the image. Defaults to 'latest'.
         [Parameter( ValueFromPipelineByPropertyName = $true )]
         [ValidateNotNullOrEmpty()]
         [string] $Tag = 'latest',
 
+        # Specifies the directory containing the Dockerfile and build context.
         [Parameter( ValueFromPipelineByPropertyName = $true )]
         [ValidateScript({ $_.Exists })]
         [System.IO.DirectoryInfo] $Path,
 
+        # Specifies the number of seconds to wait for the command to finish.
         [Parameter()]
         [int] $Timeout = 10
     )

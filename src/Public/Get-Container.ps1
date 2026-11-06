@@ -15,18 +15,6 @@ function Get-Container {
     .LINK
     https://docs.docker.com/engine/reference/commandline/ps/
 
-    .PARAMETER Running
-    Specifies if only running containers should be returned.
-
-    .PARAMETER Latest
-    Specifies if only the latest created container should be returned.
-
-    .PARAMETER Name
-    Specifies if only the container with the given name should be returned.
-
-    .PARAMETER Timeout
-    Specifies the number of seconds to wait for the command to finish.
-
     .OUTPUTS
     Container:  It returns a `Container` object for each container matching the parameters.
 
@@ -45,16 +33,20 @@ function Get-Container {
 
     [CmdletBinding()]
     param (
+        # Specifies if only running containers should be returned.
         [Parameter(Mandatory=$false)]
         [switch] $Running,
 
+        # Specifies if only the latest created container should be returned.
         [Parameter(Mandatory=$false)]
         [switch] $Latest,
 
+        # Specifies if only the container with the given name should be returned.
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [string] $Name,
 
+        # Specifies the number of seconds to wait for the command to finish.
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [int] $Timeout = 1
