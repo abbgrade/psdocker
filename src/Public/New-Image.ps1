@@ -1,0 +1,33 @@
+function New-Image {
+
+    [CmdletBinding()]
+    param (
+        # Specifies the repository name for the image to build.
+        [Parameter( Mandatory, ValueFromPipelineByPropertyName = $true )]
+        [Alias( 'Name' )]
+        [ValidateNotNullOrEmpty()]
+        [string] $Repository,
+
+        # Specifies the tag to apply to the image. Defaults to 'latest'.
+        [Parameter( ValueFromPipelineByPropertyName = $true )]
+        [ValidateNotNullOrEmpty()]
+        [string] $Tag = 'latest',
+
+        # Specifies the directory containing the Dockerfile and build context.
+        [Parameter( ValueFromPipelineByPropertyName = $true )]
+        [ValidateScript({ $_.Exists })]
+        [System.IO.DirectoryInfo] $Path,
+
+        # Specifies the number of seconds to wait for the command to finish.
+        [Parameter()]
+        [int] $Timeout = 10
+    )
+
+    process {
+        $arguments = New-Object System.Collections.ArrayList
+        $arguments.Add("-t $( $Repository ):$Tag") | Out-Null
+        $arguments.Add("$Path") | Out-Null
+
+        Invoke-ClientCommand "build", $arguments -Timeout $Timeout | Write-Output
+    }
+}

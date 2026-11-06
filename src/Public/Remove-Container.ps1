@@ -14,18 +14,6 @@ function Remove-Container {
     .LINK
     https://docs.docker.com/engine/reference/commandline/rm/
 
-    .PARAMETER Name
-    Specifies the name of the container, that should be removed.
-
-    .PARAMETER Force
-    Specifies if the container should be stopped before removal.
-
-    .PARAMETER Timeout
-    Specifies the number of seconds to wait for the command to finish.
-
-    .PARAMETER StopTimeout
-    Specifies the timeout of the docker client command for the stop operation.
-
     .EXAMPLE
     PS C:\> New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer' | Out-Null
     PS C:\> Remove-DockerContainer -Name 'mycontainer'
@@ -38,16 +26,20 @@ function Remove-Container {
 
     [CmdletBinding()]
     param (
+        # Specifies the name of the container that should be removed.
         [Parameter( Mandatory = $true, ValueFromPipelineByPropertyName = $true )]
         [ValidateNotNullOrEmpty()]
         [string] $Name,
 
+        # Specifies if the container should be stopped before removal.
         [Parameter( Mandatory = $false )]
         [switch] $Force,
 
+        # Specifies the number of seconds to wait for the command to finish.
         [Parameter( Mandatory = $false )]
         [int] $Timeout = 10,
 
+        # Specifies the timeout of the Docker client command for the stop operation.
         [Parameter( Mandatory = $false )]
         [int] $StopTimeout = 10
     )

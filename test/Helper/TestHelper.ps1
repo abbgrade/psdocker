@@ -1,7 +1,27 @@
 
 param (
-    [string] $ModuleManifestPath = "$PSScriptRoot\..\..\Source\psdocker.psd1"
+    [string] $ModuleManifestPath = "$PSScriptRoot\..\..\src\psdocker.psd1"
 )
+
+function Get-WindowsContainerImageTag {
+    param (
+        [Parameter(Mandatory)][string] $ProductName,
+        [Parameter(Mandatory)][int] $BuildNumber,
+        [Parameter(Mandatory)][string] $ReleaseId
+    )
+
+    if ($ProductName -notlike 'Windows Server*') {
+        return $ReleaseId
+    }
+
+    switch ($BuildNumber) {
+        14393 { 'ltsc2016' }
+        17763 { 'ltsc2019' }
+        20348 { 'ltsc2022' }
+        26100 { 'ltsc2025' }
+        default { $ReleaseId }
+    }
+}
 
 Import-Module $ModuleManifestPath -Force
 
@@ -10,15 +30,21 @@ $global:TestConfig = New-Object -Type PsObject -Property $(
     switch ( $version.Server.Engine.OSArch ) {
         'windows/amd64' {
 
+            $local:windowsVersion = Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion"
             $local:image = [ordered] @{
                 Repository = 'mcr.microsoft.com/windows/nanoserver'
-                Tag = [string] (Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion").ReleaseId
+                Tag = Get-WindowsContainerImageTag `
+                    -ProductName $windowsVersion.ProductName `
+                    -BuildNumber $windowsVersion.CurrentBuildNumber `
+                    -ReleaseId $windowsVersion.ReleaseId
             }
             $local:image.Name = $local:image.Repository + ':' + $local:image.Tag
             @{
                 Image = [PSCustomObject] $local:image
-                PrintCommand = 'powershell -c Write-Host'
-                PowershellCommand = 'powershell -c '
+                PrintCommand = 'cmd /c echo'
+                ReadFileCommand = 'cmd /c type'
+                ContainerCommand = @('cmd.exe', '/c', 'echo', 'psdocker')
+                PathSeparator = '\'
                 MountPoint = 'C:\volume'
             } | Write-Output
         }
@@ -31,7 +57,9 @@ $global:TestConfig = New-Object -Type PsObject -Property $(
             @{
                 Image = [PSCustomObject] $local:image
                 PrintCommand = 'echo'
-                PowershellCommand = 'pwsh -c '
+                ReadFileCommand = 'cat'
+                ContainerCommand = @('echo', 'psdocker')
+                PathSeparator = '/'
                 MountPoint = '/tmp/volume'
             } | Write-Output
         }

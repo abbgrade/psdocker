@@ -15,8 +15,7 @@ Describe 'Install-DockerImage' {
     }
 
     It 'works with pipeline parameters' {
-        Search-DockerRepository -Term ( $global:TestConfig.Image.Repository -split '/', 2)[1] -Limit 1 -ErrorAction Stop |
-        Install-DockerImage -ErrorAction Stop
+        $global:TestConfig.Image | Install-DockerImage -ErrorAction Stop
     }
 
     It 'works with name and tag' {

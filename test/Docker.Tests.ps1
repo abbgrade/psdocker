@@ -9,9 +9,11 @@ BeforeAll {
 }
 
 Describe 'Docker Service' {
-    It 'docker port is open / service is running' {
+    It 'docker daemon is available and responding' {
         if ( -not $ENV:APPVEYOR ) {
-            Get-Process -Name com.docker.service | Should -Not -BeNullOrEmpty
+            $version = Get-DockerVersion -ErrorAction Stop
+            $version.Server | Should -Not -BeNullOrEmpty
+            $version.Server.Version | Should -Not -BeNullOrEmpty
         }
     }
 }

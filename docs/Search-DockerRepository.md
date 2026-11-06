@@ -14,7 +14,7 @@ Search the Docker Hub for repositories
 
 ```
 Search-DockerRepository [-Term] <String> [-Limit] <Int32> [[-Timeout] <Int32>] [-IsAutomated] [-IsOfficial]
- [[-MinimumStars] <Int32>] [<CommonParameters>]
+ [[-MinimumStars] <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -59,7 +59,7 @@ Accept wildcard characters: False
 
 ### -Limit
 Specifies the maximum number of results.
-If the limit is $null or 0 the docker default (25) is used instead.
+If 0, Docker's default limit (25) is used.
 
 ```yaml
 Type: Int32
@@ -89,7 +89,7 @@ Accept wildcard characters: False
 ```
 
 ### -IsAutomated
-Returns only repositories with automated build.
+Returns only repositories with automated builds.
 
 ```yaml
 Type: SwitchParameter
@@ -119,7 +119,7 @@ Accept wildcard characters: False
 ```
 
 ### -MinimumStars
-{{ Fill MinimumStars Description }}
+Returns only repositories with at least this many stars.
 
 ```yaml
 Type: Int32
@@ -129,6 +129,21 @@ Aliases:
 Required: False
 Position: 4
 Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

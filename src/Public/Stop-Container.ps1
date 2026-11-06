@@ -13,12 +13,6 @@ function Stop-Container {
     .LINK
     https://docs.docker.com/engine/reference/commandline/stop/
 
-    .PARAMETER Name
-    Specifies the name of the container to stop.
-
-    .PARAMETER Timeout
-    Specifies the number of seconds to wait for the command to finish.
-
     .EXAMPLE
     PS C:\> $container = New-DockerContainer -Image 'microsoft/nanoserver'
     PS C:\> $container | Stop-DockerContainer
@@ -27,10 +21,12 @@ function Stop-Container {
 
     [CmdletBinding()]
     param (
+        # Specifies the name of the container to stop.
         [Parameter( Mandatory = $true, ValueFromPipelineByPropertyName = $true )]
         [ValidateNotNullOrEmpty()]
         [string] $Name,
 
+        # Specifies the number of seconds to wait for the command to finish.
         [Parameter( Mandatory = $false )]
         [int] $Timeout = 10
     )

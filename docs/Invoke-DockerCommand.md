@@ -14,7 +14,7 @@ Invoke command
 
 ```
 Invoke-DockerCommand [-Name] <String> [-Command] <String> [[-ArgumentList] <String[]>] [[-Timeout] <Int32>]
- [-StringOutput] [<CommonParameters>]
+ [-StringOutput] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -33,7 +33,7 @@ PS C:\> Invoke-DockerCommand -Name $container.Name -Command 'hostname' -StringOu
 ## PARAMETERS
 
 ### -Name
-Specifies the name of the docker container to run the command on.
+Specifies the name of the Docker container to run the command on.
 
 ```yaml
 Type: String
@@ -48,7 +48,7 @@ Accept wildcard characters: False
 ```
 
 ### -Command
-Specifies the command to run on the docker container.
+Specifies the command to run in the Docker container.
 
 ```yaml
 Type: String
@@ -63,7 +63,7 @@ Accept wildcard characters: False
 ```
 
 ### -ArgumentList
-Specifies the list of arguments of the command.
+Specifies the arguments to pass to the command.
 
 ```yaml
 Type: String[]
@@ -93,7 +93,7 @@ Accept wildcard characters: False
 ```
 
 ### -StringOutput
-Specifies if the output of the container command should be returned as string.
+Returns the container command output as a string.
 
 ```yaml
 Type: SwitchParameter
@@ -103,6 +103,21 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

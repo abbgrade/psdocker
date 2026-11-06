@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.0] - 2026-11-06
+
+### Changed
+
+- Updated Get-DockerVersion to parse Docker's JSON output and support current Engine version details.
+
+## [1.8.0]
+
+### Added
+
+- New-Image command to build an image.
+
 ## [1.7.0] - 2022-02-26
 
 ### Added

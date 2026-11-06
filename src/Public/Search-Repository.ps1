@@ -11,25 +11,6 @@ function Search-Repository {
     .LINK
     https://docs.docker.com/engine/reference/commandline/search/
 
-    .PARAMETER Term
-    Specifies the search term.
-
-    .PARAMETER Limit
-    Specifies the maximum number of results.
-    If the limit is $null or 0 the docker default (25) is used instead.
-
-    .PARAMETER Timeout
-    Specifies the number of seconds to wait for the command to finish.
-
-    .PARAMETER IsAutomated
-    Returns only repositories with automated build.
-
-    .PARAMETER IsOfficial
-    Returns only official repositories.
-
-    .PARAMETER MininumStars
-    Returns only repositories with at least specified stars.
-
     .OUTPUTS
     Repository: Returns objects of type `Repository` that has the following properties:
     - Name
@@ -57,22 +38,28 @@ function Search-Repository {
 
     [CmdletBinding()]
     param(
+        # Specifies the search term.
         [Parameter( Mandatory = $true, ValueFromPipelineByPropertyName = $true )]
         [ValidateNotNullOrEmpty()]
         [string] $Term,
 
+        # Specifies the maximum number of results. If 0, Docker's default limit (25) is used.
         [Parameter( Mandatory = $true )]
         [int] $Limit,
 
+        # Specifies the number of seconds to wait for the command to finish.
         [Parameter( Mandatory = $false )]
         [int] $Timeout = 30,
 
+        # Returns only repositories with automated builds.
         [Parameter( Mandatory = $false )]
         [switch] $IsAutomated,
 
+        # Returns only official repositories.
         [Parameter( Mandatory = $false )]
         [switch] $IsOfficial,
 
+        # Returns only repositories with at least this many stars.
         [Parameter( Mandatory = $false )]
         [int] $MinimumStars
     )

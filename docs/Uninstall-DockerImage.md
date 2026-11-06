@@ -13,7 +13,8 @@ Remove docker image
 ## SYNTAX
 
 ```
-Uninstall-DockerImage [[-Name] <String>] [-Force] [-NoPrune] [[-Timeout] <Int32>] [<CommonParameters>]
+Uninstall-DockerImage [[-Name] <String>] [-Force] [-NoPrune] [[-Timeout] <Int32>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -44,7 +45,7 @@ Accept wildcard characters: False
 ```
 
 ### -Force
-Specifies if the image should be removed, even if a container is using this image.
+Removes the image even if a container is using it.
 
 ```yaml
 Type: SwitchParameter
@@ -59,7 +60,7 @@ Accept wildcard characters: False
 ```
 
 ### -NoPrune
-Specifies if untagged parents should not be removed.
+Prevents removal of untagged parent images.
 
 ```yaml
 Type: SwitchParameter
@@ -84,6 +85,21 @@ Aliases:
 Required: False
 Position: 2
 Default value: 10
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

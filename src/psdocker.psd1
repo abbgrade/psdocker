@@ -12,7 +12,7 @@
 RootModule = 'psdocker.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.7.0'
+ModuleVersion = '1.9.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -129,4 +129,3 @@ PrivateData = @{
 DefaultCommandPrefix = 'Docker'
 
 }
-

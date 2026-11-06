@@ -14,15 +14,6 @@ function Get-Image {
     .LINK
     https://docs.docker.com/engine/reference/commandline/image_ls/
 
-    .PARAMETER Repository
-    Specifies the repository to filter the images on.
-
-    .PARAMETER Tag
-    Specifies the tag to filter the images on.
-
-    .PARAMETER Timeout
-    Specifies the number of seconds to wait for the command to finish.
-
     .OUTPUTS
     Image: Returns a `Image` object for each object matching the parameters.
 
@@ -38,15 +29,18 @@ function Get-Image {
 
     [CmdletBinding()]
     param (
+        # Specifies the repository to filter the images on.
         [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
         [Alias( 'Name' )]
         [ValidateNotNullOrEmpty()]
         [string] $Repository,
 
+        # Specifies the tag to filter the images on.
         [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
         [ValidateNotNullOrEmpty()]
         [string] $Tag,
 
+        # Specifies the number of seconds to wait for the command to finish.
         [Parameter( Mandatory = $false )]
         [int] $Timeout = 10
     )

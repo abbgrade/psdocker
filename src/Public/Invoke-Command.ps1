@@ -14,21 +14,6 @@ function Invoke-Command {
     .LINK
     https://docs.docker.com/engine/reference/commandline/exec/
 
-    .PARAMETER Name
-    Specifies the name of the docker container to run the command on.
-
-    .PARAMETER Command
-    Specifies the command to run on the docker container.
-
-    .PARAMETER ArgumentList
-    Specifies the list of arguments of the command.
-
-    .PARAMETER Timeout
-    Specifies the number of seconds to wait for the command to finish.
-
-    .PARAMETER StringOutput
-    Specifies if the output of the container command should be returned as string.
-
     .OUTPUTS
     System.string: Returns a string if the parameter StringOutput is set.
 
@@ -41,20 +26,25 @@ function Invoke-Command {
 
     [CmdletBinding()]
     param (
+        # Specifies the name of the Docker container to run the command on.
         [Parameter( Mandatory = $true )]
         [ValidateNotNullOrEmpty()]
         [string] $Name,
 
+        # Specifies the command to run in the Docker container.
         [Parameter( Mandatory = $true )]
         [ValidateNotNullOrEmpty()]
         [string] $Command,
 
+        # Specifies the arguments to pass to the command.
         [Parameter( Mandatory = $false )]
         [string[]] $ArgumentList,
 
+        # Specifies the number of seconds to wait for the command to finish.
         [Parameter( Mandatory = $false )]
         [int] $Timeout = 30,
 
+        # Returns the container command output as a string.
         [Parameter( Mandatory = $false )]
         [switch] $StringOutput
     )
