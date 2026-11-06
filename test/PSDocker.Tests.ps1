@@ -15,3 +15,21 @@ Describe 'ModuleManifest' {
         $? | Should -Be $true
     }
 }
+
+Describe 'Windows container image selection' {
+    It 'uses the Windows Server 2025 image on build 26100' {
+        Get-WindowsContainerImageTag `
+            -ProductName 'Windows Server 2025 Datacenter' `
+            -BuildNumber 26100 `
+            -ReleaseId '2009' |
+        Should -Be 'ltsc2025'
+    }
+
+    It 'preserves the release ID for Windows client editions' {
+        Get-WindowsContainerImageTag `
+            -ProductName 'Windows 11 Pro' `
+            -BuildNumber 26100 `
+            -ReleaseId '2009' |
+        Should -Be '2009'
+    }
+}
