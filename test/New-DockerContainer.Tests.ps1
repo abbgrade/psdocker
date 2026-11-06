@@ -40,7 +40,10 @@ Describe 'New-DockerContainer' {
             # test if new container returns one element
             ( @() + $container ).Count | Should -Be 1
 
-            Invoke-DockerCommand -Name $container.Name -Command "$( $global:TestConfig.PowershellCommand ) `"Get-Content -Path '$( $global:TestConfig.MountPoint )/test.txt'`"" -StringOutput |
+            Invoke-DockerCommand -Name $container.Name `
+                -Command $global:TestConfig.ReadFileCommand `
+                -ArgumentList "$( $global:TestConfig.MountPoint )/test.txt" `
+                -StringOutput |
             Should -Be $testText
 
             Remove-DockerContainer -Name $container.Name -Force

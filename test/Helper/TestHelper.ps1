@@ -41,8 +41,8 @@ $global:TestConfig = New-Object -Type PsObject -Property $(
             $local:image.Name = $local:image.Repository + ':' + $local:image.Tag
             @{
                 Image = [PSCustomObject] $local:image
-                PrintCommand = 'powershell -c Write-Host'
-                PowershellCommand = 'powershell -c '
+                PrintCommand = 'cmd /c echo'
+                ReadFileCommand = 'cmd /c type'
                 MountPoint = 'C:\volume'
             } | Write-Output
         }
@@ -55,7 +55,7 @@ $global:TestConfig = New-Object -Type PsObject -Property $(
             @{
                 Image = [PSCustomObject] $local:image
                 PrintCommand = 'echo'
-                PowershellCommand = 'pwsh -c '
+                ReadFileCommand = 'cat'
                 MountPoint = '/tmp/volume'
             } | Write-Output
         }
