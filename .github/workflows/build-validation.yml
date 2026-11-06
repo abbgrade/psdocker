@@ -13,4 +13,4 @@ on:
 jobs:
   # Delegate the matrix build validation to the reusable workflow at this pinned version
   build-validation:
-    uses: abbgrade/PsBuildTasks/.github/workflows/build-validation-matrix.yml@1.15.0
+    uses: abbgrade/PsBuildTasks/.github/workflows/build-validation-matrix.yml@1.15.2

@@ -9,7 +9,7 @@ on:
 jobs:
   # Reuse the Windows release workflow and force publication for hotfixes.
   release:
-    uses: abbgrade/PsBuildTasks/.github/workflows/release-windows.yml@1.15.0
+    uses: abbgrade/PsBuildTasks/.github/workflows/release-windows.yml@1.15.2
     with:
       # Replace this placeholder with the module name published to PowerShell Gallery
       module-name: psdocker
