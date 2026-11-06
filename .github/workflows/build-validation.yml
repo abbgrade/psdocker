@@ -1,9 +1,16 @@
 on:
+  # Runs on pushes targeting branches following git-flow naming convention
   push:
-    branches: [ develop, bugfix/*, feature/*, release/* ]
+    branches: [ develop, bugfix/*, feature/*, release/*, dependabot/* ]
+
+  # Runs on pull requests targeting the develop branch
   pull_request:
     branches: [ develop ]
 
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
 jobs:
+  # Delegate the matrix build validation to the reusable workflow at this pinned version
   build-validation:
-    uses: abbgrade/PsBuildTasks/.github/workflows/build-validation-matrix.yml@1.14.5
+    uses: abbgrade/PsBuildTasks/.github/workflows/build-validation-matrix.yml@1.15.0

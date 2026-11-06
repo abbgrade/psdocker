@@ -1,12 +1,20 @@
 on:
+  # Runs on pushes targeting the release branches following git-flow naming convention
   push:
     branches: [ release/* ]
+
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
+
+  # Delegate packaging and prerelease publication to the reusable Windows workflow
   pre-release:
-    uses: abbgrade/PsBuildTasks/.github/workflows/pre-release-windows.yml@1.14.5
+    uses: abbgrade/PsBuildTasks/.github/workflows/pre-release-windows.yml@1.15.0
     with:
+      # Replace this placeholder with the module name published to PowerShell Gallery
       module-name: psdocker
+
     secrets:
+      # Configure this repository secret with a PowerShell Gallery API key
       ps-gallery-key: ${{ secrets.PS_GALLERY_KEY }}

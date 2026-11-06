@@ -1,13 +1,22 @@
 on:
+  # Runs on pushes targeting the hotfix branches following git-flow naming convention
   push:
     branches: [ 'hotfix/*' ]
+    
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
+  # Reuse the Windows release workflow and force publication for hotfixes.
   release:
-    uses: abbgrade/PsBuildTasks/.github/workflows/release-windows.yml@1.14.5
+    uses: abbgrade/PsBuildTasks/.github/workflows/release-windows.yml@1.15.0
     with:
+      # Replace this placeholder with the module name published to PowerShell Gallery
       module-name: psdocker
+
+      # Publish even when the reusable workflow's normal release checks would not
       force-publish: true
     secrets:
+
+      # Configure this repository secret with a PowerShell Gallery API key
       ps-gallery-key: ${{ secrets.PS_GALLERY_KEY }}
