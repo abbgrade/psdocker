@@ -4,55 +4,78 @@ param (
     [string] $PSScriptRoot = $( if ( $PSScriptRoot ) { $PSScriptRoot } else { Get-Location } )
 )
 
-BeforeAll {
-    . $PSScriptRoot\Helper\TestHelper.ps1
-}
-
 Describe 'Install-DockerImage' {
 
-    It 'works with named parameters' {
-        # Arrange
-        $repository = $global:TestConfig.Image.Repository
-        $tag = $global:TestConfig.Image.Tag
+    BeforeAll {
+        . $PSScriptRoot\Helper\UnitTestSetup.ps1
+        Import-Module $ModuleManifestPath -Force
+    }
+    Context 'pulling images' -Tag UnitTest {
+        It 'pulls the requested image and returns its image object' {
+            # Arrange
+            InModuleScope psdocker {
+                Mock Invoke-ClientCommand {
+                    param ( $ArgumentList, $Timeout, $JsonOutput )
 
-        # Act
-        $install = { Install-DockerImage -Repository $repository -Tag $tag -ErrorAction Stop }
+                    if ( $JsonOutput ) {
+                        [pscustomobject] @{
+                            Repository = 'example/app'
+                            Tag        = 'v1'
+                            ID         = 'sha256:456'
+                            CreatedAt  = 'now'
+                            Size       = '2MB'
+                        }
+                    }
+                }
 
-        # Assert
-        $install | Should -Not -Throw
+                # Act
+                $image = Install-Image -Repository 'example/app' -Tag 'v1' -ErrorAction Stop
+
+                # Assert
+                $image.ImageName | Should -Be 'example/app:v1'
+                Should -Invoke Invoke-ClientCommand -Times 2 -Exactly
+            }
+        }
     }
 
-    It 'works with pipeline parameters' {
-        # Arrange
-        $image = $global:TestConfig.Image
+    Context 'pulling images from Docker' -Tag IntegrationTest {
+        BeforeAll {
+            . $PSScriptRoot\Helper\IntegrationTestSetup.ps1
+        }
 
-        # Act
-        $install = { $image | Install-DockerImage -ErrorAction Stop }
+        It 'works with named parameters' {
+            # Arrange
+            $repository = $global:TestConfig.Image.Repository
+            $tag = $global:TestConfig.Image.Tag
 
-        # Assert
-        $install | Should -Not -Throw
-    }
+            # Act
+            $image = Install-DockerImage -Repository $repository -Tag $tag -ErrorAction Stop
 
-    It 'works with name and tag' {
-        # Arrange
-        $repository = $global:TestConfig.Image.Repository
-        $tag = $global:TestConfig.Image.Tag
+            # Assert
+            $image.Repository | Should -Contain $repository
+            $image.Tag | Should -Contain $tag
+        }
 
-        # Act
-        $install = { Install-DockerImage -Repository $repository -Tag $tag -ErrorAction Stop }
+        It 'works with pipeline parameters' {
+            # Arrange
+            $image = $global:TestConfig.Image
 
-        # Assert
-        $install | Should -Not -Throw
-    }
+            # Act
+            $install = { $image | Install-DockerImage -ErrorAction Stop }
 
-    It 'throws on invalid image' {
-        # Arrange
-        $repository = 'foobar'
+            # Assert
+            $install | Should -Not -Throw
+        }
 
-        # Act
-        $install = { Install-DockerImage -Repository $repository -WarningAction SilentlyContinue -ErrorAction Stop }
+        It 'throws on invalid image' {
+            # Arrange
+            $repository = 'foobar'
 
-        # Assert
-        $install | Should -Throw
+            # Act
+            $install = { Install-DockerImage -Repository $repository -WarningAction SilentlyContinue -ErrorAction Stop }
+
+            # Assert
+            $install | Should -Throw
+        }
     }
 }

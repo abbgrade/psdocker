@@ -4,11 +4,11 @@ param (
     [string] $PSScriptRoot = $( if ( $PSScriptRoot ) { $PSScriptRoot } else { Get-Location } )
 )
 
-BeforeAll {
-    . $PSScriptRoot\Helper\TestHelper.ps1
-}
+Describe 'Invoke-DockerCommand' -Tag IntegrationTest {
 
-Describe 'Invoke-DockerCommand' {
+    BeforeAll {
+        . $PSScriptRoot\Helper\IntegrationTestSetup.ps1
+    }
     Context 'running container' {
         BeforeAll {
             $global:TestConfig.Image | Install-DockerImage
@@ -25,10 +25,10 @@ Describe 'Invoke-DockerCommand' {
             $name = $script:Container.Name
 
             # Act
-            $command = { Invoke-DockerCommand -Name $name -Command 'hostname' }
+            $output = Invoke-DockerCommand -Name $name -Command 'hostname' -StringOutput -ErrorAction Stop
 
             # Assert
-            $command | Should -Not -Throw
+            $output | Should -Not -BeNullOrEmpty
         }
 
         It 'returns string output' {

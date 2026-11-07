@@ -4,28 +4,32 @@ param (
     [string] $PSScriptRoot = $( if ( $PSScriptRoot ) { $PSScriptRoot } else { Get-Location } )
 )
 
-BeforeAll {
-    . $PSScriptRoot\Helper\TestHelper.ps1
-}
+Describe 'Uninstall-DockerImage' -Tag IntegrationTest {
 
-Describe 'Uninstall-DockerImage' {
-    Context 'installed image' {
-        BeforeAll {
-            $global:TestConfig.Image | Install-DockerImage -ErrorAction Continue
-        }
+    BeforeAll {
+        . $PSScriptRoot\Helper\IntegrationTestSetup.ps1
+    }
+    It 'removes a test-owned image without removing the configured base image' {
+        # Arrange
+        $repository = "psdocker-test-$([guid]::NewGuid().ToString('N'))"
+        $buildContext = Join-Path ( Get-Item 'TestDrive:\' ).FullName $repository
+        New-Item -Path $buildContext -ItemType Directory | Out-Null
+        Set-Content -Path ( Join-Path $buildContext 'Dockerfile' ) `
+            -Value "FROM $($global:TestConfig.Image.Name)"
 
-        It 'removes the image from pipeline' {
-            # Arrange
-            $repository = $global:TestConfig.Image.Repository
-            $tag = $global:TestConfig.Image.Tag
-
+        try {
             # Act
-            Get-DockerImage -Repository $repository -Tag $tag |
-            Uninstall-DockerImage -Force
+            New-DockerImage -Repository $repository -Path $buildContext -ErrorAction Stop
+            Uninstall-DockerImage -Name $repository -Force -ErrorAction Stop
 
             # Assert
-            Get-DockerImage -Repository $repository -Tag $tag |
+            Get-DockerImage -Repository $repository -Tag 'latest' |
             Should -BeNullOrEmpty
+        }
+        finally {
+            if ( Get-DockerImage -Repository $repository -Tag 'latest' -ErrorAction SilentlyContinue ) {
+                Uninstall-DockerImage -Name $repository -Force -ErrorAction Continue
+            }
         }
     }
 }

@@ -4,38 +4,41 @@ param (
     [string] $PSScriptRoot = $( if ( $PSScriptRoot ) { $PSScriptRoot } else { Get-Location } )
 )
 
-BeforeAll {
-    . $PSScriptRoot\Helper\TestHelper.ps1
-}
+Describe 'Get-DockerContainer' -Tag IntegrationTest {
 
-Describe 'Get-DockerContainer' {
+    BeforeAll {
+        . $PSScriptRoot\Helper\IntegrationTestSetup.ps1
+    }
     Context 'there are some containers' {
         BeforeAll {
             $global:TestConfig.Image | Install-DockerImage -ErrorAction Stop
 
-            $script:Container = New-Object System.Collections.ArrayList
-            $script:Container.Add(( New-DockerContainer -Image $global:TestConfig.Image.Name )) | Out-Null
-            $script:Container.Add(( New-DockerContainer -Image $global:TestConfig.Image.Name )) | Out-Null
+            $script:ContainerNames = New-Object System.Collections.ArrayList
+            1..2 | ForEach-Object {
+                $name = "psdocker-test-$([guid]::NewGuid().ToString('N'))"
+                New-DockerContainer -Image $global:TestConfig.Image.Name -Name $name -ErrorAction Stop | Out-Null
+                $script:ContainerNames.Add($name) | Out-Null
+            }
         }
 
         AfterAll {
-            @() + $script:Container | Remove-DockerContainer
+            foreach ( $name in $script:ContainerNames ) {
+                Remove-DockerContainer -Name $name -Force -ErrorAction Continue
+            }
         }
 
-        It 'returns the correct number of containers' {
-
+        It 'returns the containers matching a unique name prefix' {
             # Arrange
-            $previousCount = ( Get-DockerContainer ).Count
+            $namePrefix = 'psdocker-test-'
 
             # Act
-            $script:Container.Add(( New-DockerContainer -Image $global:TestConfig.Image.Name )) | Out-Null
-            $script:Container.Add(( New-DockerContainer -Image $global:TestConfig.Image.Name )) | Out-Null
-            $script:Container.Add(( New-DockerContainer -Image $global:TestConfig.Image.Name )) | Out-Null
-            $script:Container.Add(( New-DockerContainer -Image $global:TestConfig.Image.Name )) | Out-Null
+            $matchingContainers = @( Get-DockerContainer -Name $namePrefix )
 
             # Assert
-            ( Get-DockerContainer ).Count |
-            Should -Be $( $previousCount + 4 )
+            $matchingContainers.Count | Should -Be 2
+            foreach ( $name in $script:ContainerNames ) {
+                $matchingContainers.Name | Should -Contain $name
+            }
         }
     }
 }

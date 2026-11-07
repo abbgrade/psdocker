@@ -5,10 +5,10 @@ param (
 )
 
 BeforeAll {
-    . $PSScriptRoot\Helper\TestHelper.ps1
+    . $PSScriptRoot\Helper\UnitTestSetup.ps1
 }
 
-Describe 'ModuleManifest' {
+Describe 'ModuleManifest' -Tag UnitTest {
     It 'is valid' {
         # Arrange
         $manifestPath = $ModuleManifestPath
@@ -22,7 +22,7 @@ Describe 'ModuleManifest' {
     }
 }
 
-Describe 'Windows container image selection' {
+Describe 'Windows container image selection' -Tag UnitTest {
     It 'uses the Windows Server 2025 image on build 26100' {
         # Arrange
         $productName = 'Windows Server 2025 Datacenter'

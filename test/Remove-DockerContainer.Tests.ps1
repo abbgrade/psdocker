@@ -4,14 +4,21 @@ param (
     [string] $PSScriptRoot = $( if ( $PSScriptRoot ) { $PSScriptRoot } else { Get-Location } )
 )
 
-BeforeAll {
-    . $PSScriptRoot\Helper\TestHelper.ps1
-}
+Describe 'Remove-DockerContainer' -Tag IntegrationTest {
 
-Describe 'Remove-DockerContainer' {
-    Context 'running container' {
+    BeforeAll {
+        . $PSScriptRoot\Helper\IntegrationTestSetup.ps1
+    }
+    Context 'container created for the test' {
         BeforeEach {
-            $container = New-DockerContainer -Image $global:TestConfig.Image.Name
+            $name = "psdocker-test-$([guid]::NewGuid().ToString('N'))"
+            $container = New-DockerContainer -Image $global:TestConfig.Image.Name -Name $name -ErrorAction Stop
+        }
+
+        AfterEach {
+            if ( $container ) {
+                Remove-DockerContainer -Name $container.Name -Force -ErrorAction Continue
+            }
         }
 
         It 'works with named parameters' {
@@ -25,19 +32,29 @@ Describe 'Remove-DockerContainer' {
             Get-DockerContainer -Name $name | Should -BeNullOrEmpty
         }
     }
-    Context 'two running containers' {
+    Context 'two containers created for the test' {
         BeforeEach {
             $container = @( 1, 2 ) | Foreach-Object {
-                New-DockerContainer -Image $global:TestConfig.Image.Name
+                $name = "psdocker-test-$([guid]::NewGuid().ToString('N'))"
+                New-DockerContainer -Image $global:TestConfig.Image.Name -Name $name -ErrorAction Stop
+            }
+        }
+
+        AfterEach {
+            foreach ( $item in $container ) {
+                Remove-DockerContainer -Name $item.Name -Force -ErrorAction Continue
             }
         }
 
         It 'works with pipeline parameters' {
+            # Arrange
+            $containers = $container
+
             # Act
-            $container | Remove-DockerContainer
+            $containers | Remove-DockerContainer
 
             # Assert
-            foreach ( $item in $container ) {
+            foreach ( $item in $containers ) {
                 Get-DockerContainer -Name $item.Name |
                 Should -BeNullOrEmpty
             }

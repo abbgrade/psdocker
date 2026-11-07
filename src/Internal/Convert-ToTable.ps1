@@ -4,21 +4,17 @@ function Convert-ToTable {
 
     .SYNOPSIS Converts the output of the docker client to a table of PsObjects
 
-    .PARAMETER Content
-    Specifies the lines, returned from the docker client.
-
-    .PARAMETER Columns
-    Specifies the column name of the source and the property name in the result.
-
     #>
 
     [CmdletBinding()]
     param (
+        # Lines returned from the docker client.
         [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
         [string[]]
         $Content,
 
+        # Maps source column names to property names in the result.
         [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
         [hashtable]
