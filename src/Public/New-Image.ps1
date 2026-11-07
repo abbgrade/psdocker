@@ -1,6 +1,23 @@
 function New-Image {
 
-    [CmdletBinding()]
+    <#
+
+    .SYNOPSIS
+    Build a docker image.
+
+    .DESCRIPTION
+    Builds a docker image from a Dockerfile and context directory.
+    Wraps the command `docker build`.
+
+    .LINK
+    https://docs.docker.com/engine/reference/commandline/build/
+
+    .EXAMPLE
+    PS C:\> New-DockerImage -Repository 'myapp' -Tag 'latest' -Path 'C:\\src\\myapp'
+
+    #>
+
+    [CmdletBinding(SupportsShouldProcess = $true)]
     param (
         # Specifies the repository name for the image to build.
         [Parameter( Mandatory, ValueFromPipelineByPropertyName = $true )]
@@ -28,6 +45,9 @@ function New-Image {
         $arguments.Add("-t $( $Repository ):$Tag") | Out-Null
         $arguments.Add("$Path") | Out-Null
 
-        Invoke-ClientCommand "build", $arguments -Timeout $Timeout | Write-Output
+        Write-Verbose "Building Docker image '$Repository`:$Tag' from '$Path'."
+        if ( $PSCmdlet.ShouldProcess( "$Repository`:$Tag", 'Build Docker image' ) ) {
+            Invoke-ClientCommand "build", $arguments -Timeout $Timeout | Write-Output
+        }
     }
 }

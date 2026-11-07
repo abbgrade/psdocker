@@ -9,7 +9,7 @@ function Invoke-Command {
 
     .DESCRIPTION
     Invokes a command on a docker container.
-    Wraps the docker `command exec`.
+    Wraps the docker `exec` command.
 
     .LINK
     https://docs.docker.com/engine/reference/commandline/exec/
@@ -24,7 +24,7 @@ function Invoke-Command {
 
     #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     param (
         # Specifies the name of the Docker container to run the command on.
         [Parameter( Mandatory = $true )]
@@ -57,10 +57,13 @@ function Invoke-Command {
         $arguments.AddRange( $ArgumentList )
     }
 
-    Invoke-ClientCommand 'exec', $arguments `
-        -StringOutput:$StringOutput `
-        -Timeout $Timeout |
-    Write-Output
+    Write-Verbose "Executing a command in Docker container '$Name'."
+    if ( $PSCmdlet.ShouldProcess( $Name, "Run command '$Command' in Docker container" ) ) {
+        Invoke-ClientCommand 'exec', $arguments `
+            -StringOutput:$StringOutput `
+            -Timeout $Timeout |
+        Write-Output
 
-    Write-Verbose "Command on Docker container executed."
+        Write-Verbose "Command on Docker container executed."
+    }
 }

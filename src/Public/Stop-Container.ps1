@@ -19,7 +19,7 @@ function Stop-Container {
 
     #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     param (
         # Specifies the name of the container to stop.
         [Parameter( Mandatory = $true, ValueFromPipelineByPropertyName = $true )]
@@ -33,8 +33,10 @@ function Stop-Container {
 
     process {
 
-        Invoke-ClientCommand 'stop', $Name -Timeout $Timeout
-        Write-Verbose "Docker container removed."
+        if ( $PSCmdlet.ShouldProcess( $Name, 'Stop Docker container' ) ) {
+            Invoke-ClientCommand 'stop', $Name -Timeout $Timeout
+            Write-Verbose "Docker container '$Name' stopped."
+        }
 
     }
 }

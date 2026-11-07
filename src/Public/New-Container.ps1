@@ -30,7 +30,7 @@ function New-Container {
 
     #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     param (
         # Specifies the name of the new container. If not specified, a name will be generated.
         [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
@@ -141,18 +141,23 @@ function New-Container {
         }
 
         # create container
-        Invoke-ClientCommand 'run', $arguments -StringOutput:$StringOutput -Timeout $Timeout
+        $containerDescription = if ( $Name ) { " '$Name'" } else { '' }
+        Write-Verbose "Creating Docker container$containerDescription from image '$ImageName'."
 
-        if ( -Not $Remove ) {
-            # check container
-            $container = Get-Container -Latest -Timeout $StatusTimeout
-            if ( -not $container.Name ) {
-                Write-Error "Failed to create container"
+        if ( $PSCmdlet.ShouldProcess( "image '$ImageName'$containerDescription", 'Create Docker container' ) ) {
+            Invoke-ClientCommand 'run', $arguments -StringOutput:$StringOutput -Timeout $Timeout
+
+            if ( -Not $Remove ) {
+                # check container
+                $container = Get-Container -Latest -Timeout $StatusTimeout
+                if ( -not $container.Name ) {
+                    Write-Error "Failed to create container"
+                }
+                Write-Verbose "Docker container '$( $container.Name )' created."
+
+                # return result
+                Write-Output $container
             }
-            Write-Verbose "Docker container '$( $container.Name )' created."
-
-            # return result
-            Write-Output $container
         }
     }
 }

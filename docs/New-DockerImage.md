@@ -1,14 +1,14 @@
 ---
 external help file: psdocker-help.xml
 Module Name: psdocker
-online version: https://docs.docker.com/engine/reference/commandline/run/
+online version: https://docs.docker.com/engine/reference/commandline/build/
 schema: 2.0.0
 ---
 
 # New-DockerImage
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Build a docker image.
 
 ## SYNTAX
 
@@ -18,36 +18,20 @@ New-DockerImage [-Repository] <String> [[-Tag] <String>] [[-Path] <DirectoryInfo
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+Builds a docker image from a Dockerfile and context directory.
+Wraps the command \`docker build\`.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+New-DockerImage -Repository 'myapp' -Tag 'latest' -Path 'C:\\src\\myapp'
+```
 
 ## PARAMETERS
 
-### -Path
-{{ Fill Path Description }}
-
-```yaml
-Type: DirectoryInfo
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 2
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
 ### -Repository
-{{ Fill Repository Description }}
+Specifies the repository name for the image to build.
 
 ```yaml
 Type: String
@@ -55,14 +39,15 @@ Parameter Sets: (All)
 Aliases: Name
 
 Required: True
-Position: 0
+Position: 1
 Default value: None
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
 ### -Tag
-{{ Fill Tag Description }}
+Specifies the tag to apply to the image.
+Defaults to 'latest'.
 
 ```yaml
 Type: String
@@ -70,14 +55,29 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 1
+Position: 2
+Default value: Latest
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Path
+Specifies the directory containing the Dockerfile and build context.
+
+```yaml
+Type: DirectoryInfo
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 3
 Default value: None
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
 ### -Timeout
-{{ Fill Timeout Description }}
+Specifies the number of seconds to wait for the command to finish.
 
 ```yaml
 Type: Int32
@@ -85,8 +85,8 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 3
-Default value: None
+Position: 4
+Default value: 10
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -111,13 +111,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.String
-
-### System.IO.DirectoryInfo
-
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS
+
+[https://docs.docker.com/engine/reference/commandline/build/](https://docs.docker.com/engine/reference/commandline/build/)
+

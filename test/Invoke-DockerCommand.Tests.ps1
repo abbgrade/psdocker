@@ -4,13 +4,33 @@ param (
     [string] $PSScriptRoot = $( if ( $PSScriptRoot ) { $PSScriptRoot } else { Get-Location } )
 )
 
-BeforeAll {
-    . $PSScriptRoot\Helper\TestHelper.ps1
-}
-
 Describe 'Invoke-DockerCommand' {
-    Context 'running container' {
+
+    BeforeAll {
+        . $PSScriptRoot\Helper\UnitTestSetup.ps1
+        Import-Module $ModuleManifestPath
+    }
+
+    Context 'UnitTests' -Tag UnitTest {
+
+        It 'does not run a command in a container with WhatIf' {
+            # Arrange
+            InModuleScope psdocker {
+                Mock Invoke-ClientCommand {}
+
+                # Act
+                Invoke-Command -Name 'example-container' -Command 'hostname' -WhatIf
+
+                # Assert
+                Should -Invoke Invoke-ClientCommand -Times 0 -Exactly
+            }
+        }
+    }
+
+    Context 'IntegrationTests' -Tag IntegrationTest {
+
         BeforeAll {
+            . $PSScriptRoot\Helper\IntegrationTestSetup.ps1
             $global:TestConfig.Image | Install-DockerImage
 
             $script:Container = New-DockerContainer -Image $global:TestConfig.Image.Name -Interactive -Detach
@@ -21,15 +41,28 @@ Describe 'Invoke-DockerCommand' {
         }
 
         It 'does not throw' {
-            {
-                Invoke-DockerCommand -Name $script:Container.Name -Command 'hostname'
-            } | Should -Not -Throw
+            # Arrange
+            $name = $script:Container.Name
+
+            # Act
+            $output = Invoke-DockerCommand -Name $name -Command 'hostname' -StringOutput -ErrorAction Stop
+
+            # Assert
+            $output | Should -Not -BeNullOrEmpty
         }
 
         It 'returns string output' {
-            Invoke-DockerCommand -Name $script:Container.Name `
+            # Arrange
+            $name = $script:Container.Name
+            $argument = 'foobar'
+
+            # Act
+            $output = Invoke-DockerCommand -Name $name `
                 -Command $global:TestConfig.PrintCommand `
-                -ArgumentList 'foobar' -StringOutput | Should -Be 'foobar'
+                -ArgumentList $argument -StringOutput
+
+            # Assert
+            $output | Should -Be $argument
         }
     }
 }

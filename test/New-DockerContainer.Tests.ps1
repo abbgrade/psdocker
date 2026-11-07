@@ -4,70 +4,132 @@ param (
     [string] $PSScriptRoot = $( if ( $PSScriptRoot ) { $PSScriptRoot } else { Get-Location } )
 )
 
-BeforeAll {
-    . $PSScriptRoot\Helper\TestHelper.ps1
-}
-
 Describe 'New-DockerContainer' {
-    Context 'installed Image' {
+
+    BeforeAll {
+        . $PSScriptRoot\Helper\UnitTestSetup.ps1
+        Import-Module $ModuleManifestPath
+    }
+
+    Context 'UnitTests' -Tag UnitTest {
+        It 'does not create a container or query it with WhatIf' {
+            # Arrange
+            InModuleScope psdocker {
+                Mock Invoke-ClientCommand {}
+                Mock Get-Container {}
+
+                # Act
+                New-Container -ImageName 'example/app' -WhatIf
+
+                # Assert
+                Should -Invoke Invoke-ClientCommand -Times 0 -Exactly
+                Should -Invoke Get-Container -Times 0 -Exactly
+            }
+        }
+    }
+
+    Context 'IntegrationTests' -Tag IntegrationTest {
         BeforeAll {
+            . $PSScriptRoot\Helper\IntegrationTestSetup.ps1
             $global:TestConfig.Image | Install-DockerImage
         }
 
-        It 'does not throw' {
-            $container = New-DockerContainer -Image $global:TestConfig.Image.Name -Environment @{"A" = 1; "B" = "C"}
-            $container.Image | Should -Be $global:TestConfig.Image.Name
+        BeforeEach {
+            $script:CreatedContainer = $null
+            $script:CreatedContainerName = "psdocker-test-$([guid]::NewGuid().ToString('N'))"
+        }
 
-            $container | Remove-DockerContainer
+        AfterEach {
+            if ( Get-DockerContainer -Name $script:CreatedContainerName -ErrorAction SilentlyContinue ) {
+                Remove-DockerContainer -Name $script:CreatedContainerName -Force -ErrorAction Continue
+            }
+        }
+
+        It 'does not throw' {
+            # Arrange
+            $image = $global:TestConfig.Image.Name
+            $environment = @{ "A" = 1; "B" = "C" }
+
+            # Act
+            $script:CreatedContainer = New-DockerContainer -Image $image -Name $script:CreatedContainerName `
+                -Environment $environment -Detach -ArgumentList $global:TestConfig.KeepAliveCommand
+
+            # Assert
+            $script:CreatedContainer.Image | Should -Be $global:TestConfig.Image.Name
+            $output = Invoke-DockerCommand -Name $script:CreatedContainer.Name `
+                -Command $global:TestConfig.EnvironmentCommand `
+                -ArgumentList $global:TestConfig.EnvironmentArguments `
+                -StringOutput -ErrorAction Stop
+            $output | Should -Be '1'
         }
 
         It 'accepts Get-Image as parameter' {
-            $container = Get-DockerImage -Repository $global:TestConfig.Image.Repository -Tag $global:TestConfig.Image.Tag | New-DockerContainer
-            $container.Image | Should -Be $global:TestConfig.Image.Name
+            # Arrange
+            $repository = $global:TestConfig.Image.Repository
+            $tag = $global:TestConfig.Image.Tag
 
-            $container | Remove-DockerContainer
+            # Act
+            $script:CreatedContainer = Get-DockerImage -Repository $repository -Tag $tag |
+            New-DockerContainer -Name $script:CreatedContainerName
+
+            # Assert
+            $script:CreatedContainer.Image | Should -Be $global:TestConfig.Image.Name
         }
 
         It 'supports a name, terminal, and command arguments' {
-            $name = "psdocker-test-$([guid]::NewGuid().ToString('N'))"
-            $container = New-DockerContainer `
+            # Arrange
+
+            # Act
+            $script:CreatedContainer = New-DockerContainer `
                 -Image $global:TestConfig.Image.Name `
-                -Name $name `
+                -Name $script:CreatedContainerName `
                 -Terminal `
                 -ArgumentList $global:TestConfig.ContainerCommand
 
-            $container.Name | Should -Be $name
-            $container | Remove-DockerContainer
+            # Assert
+            $script:CreatedContainer.Name | Should -Be $script:CreatedContainerName
         }
 
         It 'mounts a volume' {
 
-            $testSharePath = ( Get-Item 'TestDrive:\' ).FullName
+            # Arrange
+            $testSharePath = Join-Path ( Get-Item 'TestDrive:\' ).FullName 'volume'
+            New-Item -Path $testSharePath -ItemType Directory | Out-Null
+            if ( $global:TestConfig.PathSeparator -eq '\' ) {
+                Grant-TestContainerReadAccess -Path $testSharePath
+            }
             $testText = 'lorem ipsum'
-            Set-Content "$testSharePath\test.txt" -Value $testText
+            Set-Content ( Join-Path $testSharePath 'test.txt' ) -Value $testText
 
             $containerFilePath = $global:TestConfig.MountPoint.TrimEnd([char[]]@('\', '/')) +
-                $global:TestConfig.PathSeparator + 'test.txt'
-            $container = Get-DockerImage -Repository $global:TestConfig.Image.Repository -Tag $global:TestConfig.Image.Tag |
-            New-DockerContainer -Volumes @{ $testSharePath = $global:TestConfig.MountPoint } -Detach -Interactive
+            $global:TestConfig.PathSeparator + 'test.txt'
 
-            # test if new container returns one element
-            ( @() + $container ).Count | Should -Be 1
+            # Act
+            $script:CreatedContainer = Get-DockerImage -Repository $global:TestConfig.Image.Repository -Tag $global:TestConfig.Image.Tag |
+            New-DockerContainer -Name $script:CreatedContainerName `
+                -Volumes @{ $testSharePath = $global:TestConfig.MountPoint } -Detach -Interactive
 
-            Invoke-DockerCommand -Name $container.Name `
+            $fileContents = Invoke-DockerCommand -Name $script:CreatedContainer.Name `
                 -Command $global:TestConfig.ReadFileCommand `
                 -ArgumentList $containerFilePath `
-                -StringOutput |
-            Should -Be $testText
+                -StringOutput
 
-            Remove-DockerContainer -Name $container.Name -Force
+            # Assert
+            ( @() + $script:CreatedContainer ).Count | Should -Be 1
+            $fileContents | Should -Be $testText
         }
 
-        It 'Removes with -Remove' {
-            $previousCount = ( Get-DockerContainer ).Count
-            New-DockerContainer -Image $global:TestConfig.Image.Name -Remove
+        It 'does not return a container with -Remove' {
+            # Arrange
+            $name = "psdocker-test-$([guid]::NewGuid().ToString('N'))"
 
-            ( Get-DockerContainer ).Count | Should -Be $previousCount
+            # Act
+            New-DockerContainer -Image $global:TestConfig.Image.Name -Name $name `
+                -ArgumentList $global:TestConfig.ContainerCommand -Remove -ErrorAction Stop
+
+            # Assert
+            $containers = @( Get-DockerContainer -Name $name )
+            $containers | Should -BeNullOrEmpty
         }
     }
 }

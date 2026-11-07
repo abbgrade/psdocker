@@ -25,7 +25,7 @@ Wraps the command \`docker pull\`.
 
 ### EXAMPLE 1
 ```
-Install-DockerImage -Name 'microsoft/nanoserver'
+Install-DockerImage -Repository 'microsoft/nanoserver'
 ```
 
 ## PARAMETERS

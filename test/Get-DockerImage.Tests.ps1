@@ -4,28 +4,74 @@ param (
     [string] $PSScriptRoot = $( if ( $PSScriptRoot ) { $PSScriptRoot } else { Get-Location } )
 )
 
-BeforeAll {
-    . $PSScriptRoot\Helper\TestHelper.ps1
-}
-
 Describe 'Get-DockerImage' {
-    Context 'one image of a repository is installed' {
-        BeforeAll {
-            if ( Get-DockerImage | Where-Object Name -eq $global:TestConfig.Image.Repository ) {
-                Uninstall-DockerImage -Name $global:TestConfig.Image.Repository
+
+    BeforeAll {
+        . $PSScriptRoot\Helper\UnitTestSetup.ps1
+        Import-Module $ModuleManifestPath
+    }
+    Context 'UnitTests' -Tag UnitTest {
+        It 'maps image fields and translates an untagged image tag to null' {
+            # Arrange
+            InModuleScope psdocker {
+                Mock Invoke-ClientCommand {
+                    param ( $ArgumentList, $Timeout, $JsonOutput )
+
+                    [pscustomobject] @{
+                        Repository = 'example/app'
+                        Tag        = '<none>'
+                        ID         = 'sha256:123'
+                        CreatedAt  = 'now'
+                        Size       = '1MB'
+                    }
+                }
+
+                # Act
+                $image = Get-Image -Repository 'example/app' -ErrorAction Stop
+
+                # Assert
+                $image.Repository | Should -Be 'example/app'
+                $image.Tag | Should -BeNullOrEmpty
+                $image.Id | Should -Be 'sha256:123'
+                $image.ImageName | Should -Be 'example/app'
+                Should -Invoke Invoke-ClientCommand -Times 1 -Exactly -ParameterFilter {
+                    $ArgumentList[0] -eq 'image ls' -and $JsonOutput
+                }
             }
-            Install-DockerImage -Repository $global:TestConfig.Image.Repository -Tag $global:TestConfig.Image.Tag -ErrorAction Stop
+        }
+    }
+
+    Context 'IntegrationTests' -Tag IntegrationTest {
+        BeforeAll {
+            . $PSScriptRoot\Helper\IntegrationTestSetup.ps1
+            $image = $global:TestConfig.Image
+            Install-DockerImage -Repository $image.Repository -Tag $image.Tag -ErrorAction Stop
         }
 
         It 'returns a list of images' {
-            Get-DockerImage -ErrorAction Stop |
-            Where-Object Name -eq $global:TestConfig.Image.Repository | Should -Be
+            # Arrange
+            $repository = $global:TestConfig.Image.Repository
+
+            # Act
+            $images = @( Get-DockerImage -Repository $repository -ErrorAction Stop )
+
+            # Assert
+            $images.Count | Should -BeGreaterThan 0
+            $images.Repository | Should -Not -Contain $null
         }
 
         It 'returns a specific image' {
-            (
-                Get-DockerImage -Repository $global:TestConfig.Image.Repository -Tag $global:TestConfig.Image.Tag -ErrorAction Stop
-            ).Repository | Should -Be $global:TestConfig.Image.Repository
+            # Arrange
+            $repository = $global:TestConfig.Image.Repository
+            $tag = $global:TestConfig.Image.Tag
+
+            # Act
+            $image = Get-DockerImage -Repository $repository -Tag $tag -ErrorAction Stop
+
+            # Assert
+            $image.Repository | Should -Be $repository
+            $image.Tag | Should -Be $tag
+            $image.Id | Should -Not -BeNullOrEmpty
         }
     }
 }

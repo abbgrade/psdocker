@@ -60,6 +60,13 @@ function Get-Image {
             }
         }
 
+        $imageDescription = if ( $Repository ) {
+            if ( $Tag ) { "$Repository`:$Tag" } else { "repository '$Repository'" }
+        } else {
+            'all images'
+        }
+        Write-Verbose "Retrieving Docker images for $imageDescription."
+
         Invoke-ClientCommand 'image ls', $arguments -Timeout $Timeout -JsonOutput |
             ForEach-Object {
                 New-Object -TypeName Image -Property @{

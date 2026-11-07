@@ -19,7 +19,7 @@ Invoke-DockerCommand [-Name] <String> [-Command] <String> [[-ArgumentList] <Stri
 
 ## DESCRIPTION
 Invokes a command on a docker container.
-Wraps the docker \`command exec\`.
+Wraps the docker \`exec\` command.
 
 ## EXAMPLES
 

@@ -4,42 +4,32 @@ function Invoke-ClientCommand {
 
     .SYNOPSIS Invokes a docker client command
 
-    .PARAMETER ArgumentList
-    Specifies the arguments that are passed to the docker client.
-    All arguments are casted to string.
-
-    .PARAMETER Timeout
-    Specifies a timeout in seconds for the command.
-
-    .PARAMETER StringOutput
-    Specifies if the output should be returned as string.
-
-    .PARAMETER TableOutput
-    Specifies if the output should be returned as table.
-    The value is a hashtable that specifies the column mapping
-    beween docker output and the properties of the result objects.
-
     #>
 
     [CmdletBinding()]
     param (
+        # Arguments to pass to the docker client; all values are cast to strings.
         [Parameter(Mandatory=$true)]
         [string[]]
         $ArgumentList,
 
+        # Maximum time to wait for the command, in seconds.
         [Parameter(Mandatory=$true)]
         [ValidateNotNull()]
         [int]
         $Timeout,
 
+        # Return the command output as a single string.
         [Parameter(Mandatory=$false)]
         [switch]
         $StringOutput,
 
+        # Map Docker output columns to properties in the result objects.
         [Parameter(Mandatory=$false)]
         [hashtable]
         $TableOutput,
 
+        # Parse Docker output as JSON.
         [Parameter(Mandatory=$false)]
         [switch]
         $JsonOutput
@@ -106,15 +96,15 @@ function Invoke-ClientCommand {
         Write-Verbose 'No process output'
     }
 
-    # process error
-    if ( $standardErrorBuffer.Count -or $process.ExitCode ) {
+    # A successful command may write progress or diagnostic output to stderr.
+    if ( $process.ExitCode ) {
         foreach ( $line in $standardErrorBuffer.Values ) {
             if ( $line ) {
                 Write-Warning "Process error: $line" -ErrorAction 'Continue'
             }
         }
         Write-Error "Proccess failed ($processCall) after $( $process.TotalProcessorTime )."
-    } else {
+    } elseif ( -not $standardErrorBuffer.Count ) {
         Write-Verbose 'No process error output'
     }
     if ( $Timeout -gt 0 -and $process.TotalProcessorTime.TotalSeconds -ge $Timeout ) {

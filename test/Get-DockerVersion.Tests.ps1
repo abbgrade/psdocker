@@ -4,14 +4,28 @@ param (
     [string] $PSScriptRoot = $( if ( $PSScriptRoot ) { $PSScriptRoot } else { Get-Location } )
 )
 
-BeforeAll {
-    . $PSScriptRoot\Helper\TestHelper.ps1
-}
-
 Describe 'Get-DockerVersion' {
-    It 'is Linux or Windows mode' {
-        $dockerVersion = Get-DockerVersion
-        $dockerVersion.Server.Engine.OSArch |
-        Should -BeIn @( 'windows/amd64', 'linux/amd64' )
+
+    BeforeAll {
+        . $PSScriptRoot\Helper\UnitTestSetup.ps1
+        Import-Module $ModuleManifestPath
+    }
+
+    Context 'IntegrationTests' -Tag IntegrationTest {
+        BeforeAll {
+            . $PSScriptRoot\Helper\IntegrationTestSetup.ps1
+        }
+
+        It 'reports a server operating system and architecture' {
+            # Arrange
+
+            # Act
+            $dockerVersion = Get-DockerVersion -ErrorAction Stop
+
+            # Assert
+            $dockerVersion.Server | Should -Not -BeNullOrEmpty
+            $dockerVersion.Server.Version | Should -Not -BeNullOrEmpty
+            $dockerVersion.Server.Engine.OSArch | Should -Match '^(windows|linux)/.+'
+        }
     }
 }

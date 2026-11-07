@@ -22,11 +22,11 @@ function Install-Image {
     Image: Returns `Image` objects for the images that are installed and match the parameter.
 
     .EXAMPLE
-    PS C:\> Install-DockerImage -Name 'microsoft/nanoserver'
+    PS C:\> Install-DockerImage -Repository 'microsoft/nanoserver'
 
     #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     param (
         # Specifies the registry that contains the repository or image.
         [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
@@ -84,10 +84,12 @@ function Install-Image {
             $arguments.Insert( '--all-tags', 0 ) | Out-Null
         }
 
-        Invoke-ClientCommand 'pull', $arguments -Timeout $Timeout
-        Write-Verbose "Docker image '$query' pulled."
+        if ( $PSCmdlet.ShouldProcess( $query, 'Pull Docker image' ) ) {
+            Invoke-ClientCommand 'pull', $arguments -Timeout $Timeout
+            Write-Verbose "Docker image '$query' pulled."
 
-        Get-Image -Name $query | Write-Output
+            Get-Image -Name $query | Write-Output
+        }
 
     }
 }
