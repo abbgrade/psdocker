@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.0] - 2026-11-07
+
 ### Added
 
 - Added `-WhatIf` support to commands that create, build, pull, remove, stop, or execute commands in Docker containers.
