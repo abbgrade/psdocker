@@ -9,7 +9,7 @@ function Invoke-Command {
 
     .DESCRIPTION
     Invokes a command on a docker container.
-    Wraps the docker `command exec`.
+    Wraps the docker `exec` command.
 
     .LINK
     https://docs.docker.com/engine/reference/commandline/exec/

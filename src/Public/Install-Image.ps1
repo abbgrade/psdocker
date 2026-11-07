@@ -22,7 +22,7 @@ function Install-Image {
     Image: Returns `Image` objects for the images that are installed and match the parameter.
 
     .EXAMPLE
-    PS C:\> Install-DockerImage -Name 'microsoft/nanoserver'
+    PS C:\> Install-DockerImage -Repository 'microsoft/nanoserver'
 
     #>
 

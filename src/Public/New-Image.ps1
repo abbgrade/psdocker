@@ -1,5 +1,22 @@
 function New-Image {
 
+    <#
+
+    .SYNOPSIS
+    Build a docker image.
+
+    .DESCRIPTION
+    Builds a docker image from a Dockerfile and context directory.
+    Wraps the command `docker build`.
+
+    .LINK
+    https://docs.docker.com/engine/reference/commandline/build/
+
+    .EXAMPLE
+    PS C:\> New-DockerImage -Repository 'myapp' -Tag 'latest' -Path 'C:\\src\\myapp'
+
+    #>
+
     [CmdletBinding()]
     param (
         # Specifies the repository name for the image to build.
