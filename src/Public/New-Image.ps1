@@ -45,6 +45,7 @@ function New-Image {
         $arguments.Add("-t $( $Repository ):$Tag") | Out-Null
         $arguments.Add("$Path") | Out-Null
 
+        Write-Verbose "Building Docker image '$Repository`:$Tag' from '$Path'."
         Invoke-ClientCommand "build", $arguments -Timeout $Timeout | Write-Output
     }
 }

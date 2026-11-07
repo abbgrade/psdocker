@@ -69,6 +69,19 @@ function Get-Container {
     $arguments.Add( '--no-trunc' ) | Out-Null
     $arguments.Add( '--format="{{json .}}"' ) | Out-Null
 
+    $filters = @()
+    if ( $Running ) {
+        $filters += 'running containers'
+    }
+    if ( $Latest ) {
+        $filters += 'latest container'
+    }
+    if ( $Name ) {
+        $filters += "name '$Name'"
+    }
+    $filterDescription = if ( $filters.Count ) { " matching $($filters -join ', ')" } else { '' }
+    Write-Verbose "Retrieving Docker containers$filterDescription."
+
     Invoke-ClientCommand 'ps', $arguments `
         -Timeout $Timeout `
         -JsonOutput |

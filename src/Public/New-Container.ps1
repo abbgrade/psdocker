@@ -141,6 +141,8 @@ function New-Container {
         }
 
         # create container
+        $containerDescription = if ( $Name ) { " '$Name'" } else { '' }
+        Write-Verbose "Creating Docker container$containerDescription from image '$ImageName'."
         Invoke-ClientCommand 'run', $arguments -StringOutput:$StringOutput -Timeout $Timeout
 
         if ( -Not $Remove ) {

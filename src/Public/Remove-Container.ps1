@@ -51,7 +51,7 @@ function Remove-Container {
         }
 
         Invoke-ClientCommand 'rm', $Name -Timeout $Timeout
-        Write-Verbose "Docker container removed."
+        Write-Verbose "Docker container '$Name' removed."
 
     }
 }

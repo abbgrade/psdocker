@@ -43,6 +43,7 @@ function Get-Version {
         [int] $Timeout = 1
     )
 
+    Write-Verbose 'Retrieving Docker client and server version information.'
     $versionOutput = & docker version --format "{{json .}}" 2>&1
     if ( $LASTEXITCODE -ne 0 -or -not $versionOutput ) {
         Write-Error 'docker version did not return a valid result.'

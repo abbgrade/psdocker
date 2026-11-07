@@ -89,6 +89,21 @@ function Search-Repository {
 
         $arguments.Add( $Term ) | Out-Null
 
+        $searchDescription = "Searching Docker Hub repositories for '$Term'"
+        if ( $IsOfficial ) {
+            $searchDescription += ', official only'
+        }
+        if ( $IsAutomated ) {
+            $searchDescription += ', automated builds only'
+        }
+        if ( $MinimumStars ) {
+            $searchDescription += ", at least $MinimumStars stars"
+        }
+        if ( $Limit ) {
+            $searchDescription += " (limit $Limit)"
+        }
+        Write-Verbose "$searchDescription."
+
         Invoke-ClientCommand 'search', $arguments `
             -Timeout $Timeout `
             -JsonOutput |

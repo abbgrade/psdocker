@@ -57,6 +57,7 @@ function Invoke-Command {
         $arguments.AddRange( $ArgumentList )
     }
 
+    Write-Verbose "Executing a command in Docker container '$Name'."
     Invoke-ClientCommand 'exec', $arguments `
         -StringOutput:$StringOutput `
         -Timeout $Timeout |
