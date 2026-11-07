@@ -11,10 +11,13 @@ BeforeAll {
 Describe 'Get-DockerImage' {
     Context 'one image of a repository is installed' {
         BeforeAll {
-            if ( Get-DockerImage | Where-Object Repository -eq $global:TestConfig.Image.Repository ) {
-                Uninstall-DockerImage -Name $global:TestConfig.Image.Repository
+            $image = $global:TestConfig.Image
+            if ( Get-DockerImage | Where-Object {
+                $_.Repository -eq $image.Repository -and $_.Tag -eq $image.Tag
+            } ) {
+                Uninstall-DockerImage -Name $image.Name
             }
-            Install-DockerImage -Repository $global:TestConfig.Image.Repository -Tag $global:TestConfig.Image.Tag -ErrorAction Stop
+            Install-DockerImage -Repository $image.Repository -Tag $image.Tag -ErrorAction Stop
         }
 
         It 'returns a list of images' {
