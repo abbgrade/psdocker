@@ -17,7 +17,7 @@ function New-Image {
 
     #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     param (
         # Specifies the repository name for the image to build.
         [Parameter( Mandatory, ValueFromPipelineByPropertyName = $true )]
@@ -46,6 +46,8 @@ function New-Image {
         $arguments.Add("$Path") | Out-Null
 
         Write-Verbose "Building Docker image '$Repository`:$Tag' from '$Path'."
-        Invoke-ClientCommand "build", $arguments -Timeout $Timeout | Write-Output
+        if ( $PSCmdlet.ShouldProcess( "$Repository`:$Tag", 'Build Docker image' ) ) {
+            Invoke-ClientCommand "build", $arguments -Timeout $Timeout | Write-Output
+        }
     }
 }

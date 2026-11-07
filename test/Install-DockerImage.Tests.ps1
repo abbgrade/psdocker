@@ -8,9 +8,9 @@ Describe 'Install-DockerImage' {
 
     BeforeAll {
         . $PSScriptRoot\Helper\UnitTestSetup.ps1
-        Import-Module $ModuleManifestPath -Force
+        Import-Module $ModuleManifestPath
     }
-    Context 'pulling images' -Tag UnitTest {
+    Context 'UnitTests' -Tag UnitTest {
         It 'pulls the requested image and returns its image object' {
             # Arrange
             InModuleScope psdocker {
@@ -36,9 +36,24 @@ Describe 'Install-DockerImage' {
                 Should -Invoke Invoke-ClientCommand -Times 2 -Exactly
             }
         }
+
+        It 'does not pull an image or query it with WhatIf' {
+            # Arrange
+            InModuleScope psdocker {
+                Mock Invoke-ClientCommand {}
+                Mock Get-Image {}
+
+                # Act
+                Install-Image -Repository 'example/app' -WhatIf
+
+                # Assert
+                Should -Invoke Invoke-ClientCommand -Times 0 -Exactly
+                Should -Invoke Get-Image -Times 0 -Exactly
+            }
+        }
     }
 
-    Context 'pulling images from Docker' -Tag IntegrationTest {
+    Context 'IntegrationTests' -Tag IntegrationTest {
         BeforeAll {
             . $PSScriptRoot\Helper\IntegrationTestSetup.ps1
         }

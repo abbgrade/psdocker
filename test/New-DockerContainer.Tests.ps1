@@ -4,13 +4,33 @@ param (
     [string] $PSScriptRoot = $( if ( $PSScriptRoot ) { $PSScriptRoot } else { Get-Location } )
 )
 
-Describe 'New-DockerContainer' -Tag IntegrationTest {
+Describe 'New-DockerContainer' {
 
     BeforeAll {
-        . $PSScriptRoot\Helper\IntegrationTestSetup.ps1
+        . $PSScriptRoot\Helper\UnitTestSetup.ps1
+        Import-Module $ModuleManifestPath
     }
-    Context 'installed Image' {
+
+    Context 'UnitTests' -Tag UnitTest {
+        It 'does not create a container or query it with WhatIf' {
+            # Arrange
+            InModuleScope psdocker {
+                Mock Invoke-ClientCommand {}
+                Mock Get-Container {}
+
+                # Act
+                New-Container -ImageName 'example/app' -WhatIf
+
+                # Assert
+                Should -Invoke Invoke-ClientCommand -Times 0 -Exactly
+                Should -Invoke Get-Container -Times 0 -Exactly
+            }
+        }
+    }
+
+    Context 'IntegrationTests' -Tag IntegrationTest {
         BeforeAll {
+            . $PSScriptRoot\Helper\IntegrationTestSetup.ps1
             $global:TestConfig.Image | Install-DockerImage
         }
 
