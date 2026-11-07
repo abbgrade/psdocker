@@ -45,18 +45,7 @@ Describe 'New-DockerContainer' {
             $testSharePath = Join-Path ( Get-Item 'TestDrive:\' ).FullName 'volume'
             New-Item -Path $testSharePath -ItemType Directory | Out-Null
             if ( $global:TestConfig.PathSeparator -eq '\' ) {
-                $acl = Get-Acl $testSharePath
-                $worldSid = [System.Security.Principal.SecurityIdentifier]::new('S-1-1-0')
-                $readRule = [System.Security.AccessControl.FileSystemAccessRule]::new(
-                    $worldSid,
-                    [System.Security.AccessControl.FileSystemRights]::ReadAndExecute,
-                    [System.Security.AccessControl.InheritanceFlags]::ContainerInherit -bor
-                        [System.Security.AccessControl.InheritanceFlags]::ObjectInherit,
-                    [System.Security.AccessControl.PropagationFlags]::None,
-                    [System.Security.AccessControl.AccessControlType]::Allow
-                )
-                $acl.SetAccessRule($readRule)
-                Set-Acl -Path $testSharePath -AclObject $acl
+                Grant-TestContainerReadAccess -Path $testSharePath
             }
             $testText = 'lorem ipsum'
             Set-Content ( Join-Path $testSharePath 'test.txt' ) -Value $testText

@@ -23,6 +23,25 @@ function Get-WindowsContainerImageTag {
     }
 }
 
+function Grant-TestContainerReadAccess {
+    param (
+        [Parameter(Mandatory)][string] $Path
+    )
+
+    $acl = Get-Acl $Path
+    $worldSid = [System.Security.Principal.SecurityIdentifier]::new('S-1-1-0')
+    $readRule = [System.Security.AccessControl.FileSystemAccessRule]::new(
+        $worldSid,
+        [System.Security.AccessControl.FileSystemRights]::ReadAndExecute,
+        [System.Security.AccessControl.InheritanceFlags]::ContainerInherit -bor
+            [System.Security.AccessControl.InheritanceFlags]::ObjectInherit,
+        [System.Security.AccessControl.PropagationFlags]::None,
+        [System.Security.AccessControl.AccessControlType]::Allow
+    )
+    $acl.SetAccessRule($readRule)
+    Set-Acl -Path $Path -AclObject $acl
+}
+
 Import-Module $ModuleManifestPath -Force
 
 $version = Get-DockerVersion -ErrorAction Stop
