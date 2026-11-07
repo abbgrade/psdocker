@@ -4,13 +4,16 @@ param (
     [string] $PSScriptRoot = $( if ( $PSScriptRoot ) { $PSScriptRoot } else { Get-Location } )
 )
 
-Describe 'Get-DockerContainer' -Tag IntegrationTest {
+Describe 'Get-DockerContainer' {
 
     BeforeAll {
-        . $PSScriptRoot\Helper\IntegrationTestSetup.ps1
+        . $PSScriptRoot\Helper\UnitTestSetup.ps1
+        Import-Module $ModuleManifestPath
     }
-    Context 'there are some containers' {
+
+    Context 'IntegrationTests' -Tag IntegrationTest {
         BeforeAll {
+            . $PSScriptRoot\Helper\IntegrationTestSetup.ps1
             $global:TestConfig.Image | Install-DockerImage -ErrorAction Stop
 
             $script:ContainerNames = New-Object System.Collections.ArrayList

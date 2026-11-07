@@ -21,7 +21,7 @@ function Uninstall-Image {
 
     #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     param (
         # Specifies the name of the image to be removed.
         [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
@@ -56,8 +56,10 @@ function Uninstall-Image {
 
         $arguments.Add( $Name ) | Out-Null
 
-        Invoke-ClientCommand 'image rm', $arguments -Timeout $Timeout
-        Write-Verbose "Docker image '$Name' removed."
+        if ( $PSCmdlet.ShouldProcess( $Name, 'Remove Docker image' ) ) {
+            Invoke-ClientCommand 'image rm', $arguments -Timeout $Timeout
+            Write-Verbose "Docker image '$Name' removed."
+        }
 
     }
 }

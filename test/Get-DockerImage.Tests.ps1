@@ -8,9 +8,9 @@ Describe 'Get-DockerImage' {
 
     BeforeAll {
         . $PSScriptRoot\Helper\UnitTestSetup.ps1
-        Import-Module $ModuleManifestPath -Force
+        Import-Module $ModuleManifestPath
     }
-    Context 'mapping command output' -Tag UnitTest {
+    Context 'UnitTests' -Tag UnitTest {
         It 'maps image fields and translates an untagged image tag to null' {
             # Arrange
             InModuleScope psdocker {
@@ -41,7 +41,7 @@ Describe 'Get-DockerImage' {
         }
     }
 
-    Context 'one image of a repository is installed' -Tag IntegrationTest {
+    Context 'IntegrationTests' -Tag IntegrationTest {
         BeforeAll {
             . $PSScriptRoot\Helper\IntegrationTestSetup.ps1
             $image = $global:TestConfig.Image

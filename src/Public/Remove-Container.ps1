@@ -24,7 +24,7 @@ function Remove-Container {
 
     #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     param (
         # Specifies the name of the container that should be removed.
         [Parameter( Mandatory = $true, ValueFromPipelineByPropertyName = $true )]
@@ -46,12 +46,14 @@ function Remove-Container {
 
     process {
 
-        if ( $Force ) {
-            Stop-Container -Name $Name -Timeout $StopTimeout
-        }
+        if ( $PSCmdlet.ShouldProcess( $Name, 'Remove Docker container' ) ) {
+            if ( $Force ) {
+                Stop-Container -Name $Name -Timeout $StopTimeout -Confirm:$false
+            }
 
-        Invoke-ClientCommand 'rm', $Name -Timeout $Timeout
-        Write-Verbose "Docker container '$Name' removed."
+            Invoke-ClientCommand 'rm', $Name -Timeout $Timeout
+            Write-Verbose "Docker container '$Name' removed."
+        }
 
     }
 }

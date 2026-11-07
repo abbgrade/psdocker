@@ -24,7 +24,7 @@ function Invoke-Command {
 
     #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     param (
         # Specifies the name of the Docker container to run the command on.
         [Parameter( Mandatory = $true )]
@@ -58,10 +58,12 @@ function Invoke-Command {
     }
 
     Write-Verbose "Executing a command in Docker container '$Name'."
-    Invoke-ClientCommand 'exec', $arguments `
-        -StringOutput:$StringOutput `
-        -Timeout $Timeout |
-    Write-Output
+    if ( $PSCmdlet.ShouldProcess( $Name, "Run command '$Command' in Docker container" ) ) {
+        Invoke-ClientCommand 'exec', $arguments `
+            -StringOutput:$StringOutput `
+            -Timeout $Timeout |
+        Write-Output
 
-    Write-Verbose "Command on Docker container executed."
+        Write-Verbose "Command on Docker container executed."
+    }
 }
