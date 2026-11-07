@@ -45,13 +45,21 @@ function Get-Version {
 
     Write-Verbose 'Retrieving Docker client and server version information.'
     $versionOutput = & docker version --format "{{json .}}" 2>&1
-    if ( $LASTEXITCODE -ne 0 -or -not $versionOutput ) {
+    $dockerExitCode = $LASTEXITCODE
+    if ( $dockerExitCode -ne 0 -or -not $versionOutput ) {
+        $diagnosticOutput = ($versionOutput | Out-String).Trim()
+        if ( -not $diagnosticOutput ) {
+            $diagnosticOutput = '<no output>'
+        }
+        Write-Verbose "docker version exited with code $dockerExitCode. Captured output: $diagnosticOutput"
         Write-Error 'docker version did not return a valid result.'
         return
     }
 
     $dockerVersion = ($versionOutput | Out-String) | ConvertFrom-Json
     if ( -not $dockerVersion ) {
+        $diagnosticOutput = ($versionOutput | Out-String).Trim()
+        Write-Verbose "docker version returned output that could not be parsed as JSON: $diagnosticOutput"
         Write-Error 'docker version output could not be parsed as JSON.'
         return
     }
