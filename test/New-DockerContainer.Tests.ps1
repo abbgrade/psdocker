@@ -42,9 +42,13 @@ Describe 'New-DockerContainer' {
 
         It 'mounts a volume' {
 
-            $testSharePath = ( Get-Item 'TestDrive:\' ).FullName
+            $testSharePath = Join-Path ( Get-Item 'TestDrive:\' ).FullName 'volume'
+            New-Item -Path $testSharePath -ItemType Directory | Out-Null
+            if ( $global:TestConfig.PathSeparator -eq '\' ) {
+                Grant-TestContainerReadAccess -Path $testSharePath
+            }
             $testText = 'lorem ipsum'
-            Set-Content "$testSharePath\test.txt" -Value $testText
+            Set-Content ( Join-Path $testSharePath 'test.txt' ) -Value $testText
 
             $containerFilePath = $global:TestConfig.MountPoint.TrimEnd([char[]]@('\', '/')) +
                 $global:TestConfig.PathSeparator + 'test.txt'
