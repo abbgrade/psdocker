@@ -11,21 +11,34 @@ BeforeAll {
 Describe 'Get-DockerImage' {
     Context 'one image of a repository is installed' {
         BeforeAll {
-            if ( Get-DockerImage | Where-Object Name -eq $global:TestConfig.Image.Repository ) {
+            if ( Get-DockerImage | Where-Object Repository -eq $global:TestConfig.Image.Repository ) {
                 Uninstall-DockerImage -Name $global:TestConfig.Image.Repository
             }
             Install-DockerImage -Repository $global:TestConfig.Image.Repository -Tag $global:TestConfig.Image.Tag -ErrorAction Stop
         }
 
         It 'returns a list of images' {
-            Get-DockerImage -ErrorAction Stop |
-            Where-Object Name -eq $global:TestConfig.Image.Repository | Should -Be
+            # Arrange
+            $repository = $global:TestConfig.Image.Repository
+
+            # Act
+            $images = Get-DockerImage -ErrorAction Stop |
+                Where-Object Repository -eq $repository
+
+            # Assert
+            $images.Repository | Should -Contain $repository
         }
 
         It 'returns a specific image' {
-            (
-                Get-DockerImage -Repository $global:TestConfig.Image.Repository -Tag $global:TestConfig.Image.Tag -ErrorAction Stop
-            ).Repository | Should -Be $global:TestConfig.Image.Repository
+            # Arrange
+            $repository = $global:TestConfig.Image.Repository
+            $tag = $global:TestConfig.Image.Tag
+
+            # Act
+            $image = Get-DockerImage -Repository $repository -Tag $tag -ErrorAction Stop
+
+            # Assert
+            $image.Repository | Should -Be $repository
         }
     }
 }

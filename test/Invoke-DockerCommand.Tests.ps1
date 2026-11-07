@@ -21,15 +21,28 @@ Describe 'Invoke-DockerCommand' {
         }
 
         It 'does not throw' {
-            {
-                Invoke-DockerCommand -Name $script:Container.Name -Command 'hostname'
-            } | Should -Not -Throw
+            # Arrange
+            $name = $script:Container.Name
+
+            # Act
+            $command = { Invoke-DockerCommand -Name $name -Command 'hostname' }
+
+            # Assert
+            $command | Should -Not -Throw
         }
 
         It 'returns string output' {
-            Invoke-DockerCommand -Name $script:Container.Name `
+            # Arrange
+            $name = $script:Container.Name
+            $argument = 'foobar'
+
+            # Act
+            $output = Invoke-DockerCommand -Name $name `
                 -Command $global:TestConfig.PrintCommand `
-                -ArgumentList 'foobar' -StringOutput | Should -Be 'foobar'
+                -ArgumentList $argument -StringOutput
+
+            # Assert
+            $output | Should -Be $argument
         }
     }
 }

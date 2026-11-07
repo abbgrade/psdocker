@@ -15,33 +15,56 @@ Describe 'New-DockerContainer' {
         }
 
         It 'does not throw' {
-            $container = New-DockerContainer -Image $global:TestConfig.Image.Name -Environment @{"A" = 1; "B" = "C"}
+            # Arrange
+            $image = $global:TestConfig.Image.Name
+            $environment = @{ "A" = 1; "B" = "C" }
+
+            # Act
+            $container = New-DockerContainer -Image $image -Environment $environment
+
+            # Assert
             $container.Image | Should -Be $global:TestConfig.Image.Name
 
+            # Cleanup
             $container | Remove-DockerContainer
         }
 
         It 'accepts Get-Image as parameter' {
-            $container = Get-DockerImage -Repository $global:TestConfig.Image.Repository -Tag $global:TestConfig.Image.Tag | New-DockerContainer
+            # Arrange
+            $repository = $global:TestConfig.Image.Repository
+            $tag = $global:TestConfig.Image.Tag
+
+            # Act
+            $container = Get-DockerImage -Repository $repository -Tag $tag | New-DockerContainer
+
+            # Assert
             $container.Image | Should -Be $global:TestConfig.Image.Name
 
+            # Cleanup
             $container | Remove-DockerContainer
         }
 
         It 'supports a name, terminal, and command arguments' {
+            # Arrange
             $name = "psdocker-test-$([guid]::NewGuid().ToString('N'))"
+
+            # Act
             $container = New-DockerContainer `
                 -Image $global:TestConfig.Image.Name `
                 -Name $name `
                 -Terminal `
                 -ArgumentList $global:TestConfig.ContainerCommand
 
+            # Assert
             $container.Name | Should -Be $name
+
+            # Cleanup
             $container | Remove-DockerContainer
         }
 
         It 'mounts a volume' {
 
+            # Arrange
             $testSharePath = Join-Path ( Get-Item 'TestDrive:\' ).FullName 'volume'
             New-Item -Path $testSharePath -ItemType Directory | Out-Null
             if ( $global:TestConfig.PathSeparator -eq '\' ) {
@@ -52,25 +75,35 @@ Describe 'New-DockerContainer' {
 
             $containerFilePath = $global:TestConfig.MountPoint.TrimEnd([char[]]@('\', '/')) +
                 $global:TestConfig.PathSeparator + 'test.txt'
+
+            # Act
             $container = Get-DockerImage -Repository $global:TestConfig.Image.Repository -Tag $global:TestConfig.Image.Tag |
             New-DockerContainer -Volumes @{ $testSharePath = $global:TestConfig.MountPoint } -Detach -Interactive
 
-            # test if new container returns one element
+            # Assert
             ( @() + $container ).Count | Should -Be 1
 
-            Invoke-DockerCommand -Name $container.Name `
+            # Act
+            $fileContents = Invoke-DockerCommand -Name $container.Name `
                 -Command $global:TestConfig.ReadFileCommand `
                 -ArgumentList $containerFilePath `
-                -StringOutput |
-            Should -Be $testText
+                -StringOutput
 
+            # Assert
+            $fileContents | Should -Be $testText
+
+            # Cleanup
             Remove-DockerContainer -Name $container.Name -Force
         }
 
         It 'Removes with -Remove' {
+            # Arrange
             $previousCount = ( Get-DockerContainer ).Count
+
+            # Act
             New-DockerContainer -Image $global:TestConfig.Image.Name -Remove
 
+            # Assert
             ( Get-DockerContainer ).Count | Should -Be $previousCount
         }
     }

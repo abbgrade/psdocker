@@ -11,20 +11,48 @@ BeforeAll {
 Describe 'Install-DockerImage' {
 
     It 'works with named parameters' {
-        Install-DockerImage -Repository $global:TestConfig.Image.Repository -Tag $global:TestConfig.Image.Tag -ErrorAction Stop
+        # Arrange
+        $repository = $global:TestConfig.Image.Repository
+        $tag = $global:TestConfig.Image.Tag
+
+        # Act
+        $install = { Install-DockerImage -Repository $repository -Tag $tag -ErrorAction Stop }
+
+        # Assert
+        $install | Should -Not -Throw
     }
 
     It 'works with pipeline parameters' {
-        $global:TestConfig.Image | Install-DockerImage -ErrorAction Stop
+        # Arrange
+        $image = $global:TestConfig.Image
+
+        # Act
+        $install = { $image | Install-DockerImage -ErrorAction Stop }
+
+        # Assert
+        $install | Should -Not -Throw
     }
 
     It 'works with name and tag' {
-        Install-DockerImage -Repository $global:TestConfig.Image.Repository -Tag $global:TestConfig.Image.Tag -ErrorAction Stop
+        # Arrange
+        $repository = $global:TestConfig.Image.Repository
+        $tag = $global:TestConfig.Image.Tag
+
+        # Act
+        $install = { Install-DockerImage -Repository $repository -Tag $tag -ErrorAction Stop }
+
+        # Assert
+        $install | Should -Not -Throw
     }
 
     It 'throws on invalid image' {
-        {
-            Install-DockerImage -Repository 'foobar' -WarningAction SilentlyContinue -ErrorAction Stop
-        } | Should -Throw
+        # Arrange
+        $repository = 'foobar'
+
+        # Act
+        $install = { Install-DockerImage -Repository $repository -WarningAction SilentlyContinue -ErrorAction Stop }
+
+        # Assert
+        $install | Should -Throw
     }
 }

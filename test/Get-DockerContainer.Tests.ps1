@@ -24,13 +24,16 @@ Describe 'Get-DockerContainer' {
 
         It 'returns the correct number of containers' {
 
+            # Arrange
             $previousCount = ( Get-DockerContainer ).Count
 
+            # Act
             $script:Container.Add(( New-DockerContainer -Image $global:TestConfig.Image.Name )) | Out-Null
             $script:Container.Add(( New-DockerContainer -Image $global:TestConfig.Image.Name )) | Out-Null
             $script:Container.Add(( New-DockerContainer -Image $global:TestConfig.Image.Name )) | Out-Null
             $script:Container.Add(( New-DockerContainer -Image $global:TestConfig.Image.Name )) | Out-Null
 
+            # Assert
             ( Get-DockerContainer ).Count |
             Should -Be $( $previousCount + 4 )
         }

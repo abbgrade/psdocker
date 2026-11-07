@@ -10,8 +10,13 @@ BeforeAll {
 
 Describe 'Get-DockerVersion' {
     It 'is Linux or Windows mode' {
+        # Arrange
+        $supportedOSArch = @( 'windows/amd64', 'linux/amd64' )
+
+        # Act
         $dockerVersion = Get-DockerVersion
-        $dockerVersion.Server.Engine.OSArch |
-        Should -BeIn @( 'windows/amd64', 'linux/amd64' )
+
+        # Assert
+        $dockerVersion.Server.Engine.OSArch | Should -BeIn $supportedOSArch
     }
 }

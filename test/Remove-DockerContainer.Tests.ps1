@@ -15,7 +15,14 @@ Describe 'Remove-DockerContainer' {
         }
 
         It 'works with named parameters' {
-            Remove-DockerContainer -Name $container.Name
+            # Arrange
+            $name = $container.Name
+
+            # Act
+            Remove-DockerContainer -Name $name
+
+            # Assert
+            Get-DockerContainer -Name $name | Should -BeNullOrEmpty
         }
     }
     Context 'two running containers' {
@@ -26,8 +33,10 @@ Describe 'Remove-DockerContainer' {
         }
 
         It 'works with pipeline parameters' {
+            # Act
             $container | Remove-DockerContainer
 
+            # Assert
             foreach ( $item in $container ) {
                 Get-DockerContainer -Name $item.Name |
                 Should -BeNullOrEmpty

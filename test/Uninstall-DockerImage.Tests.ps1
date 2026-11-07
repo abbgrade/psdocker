@@ -15,10 +15,16 @@ Describe 'Uninstall-DockerImage' {
         }
 
         It 'removes the image from pipeline' {
-            Get-DockerImage -Repository $global:TestConfig.Image.Repository -Tag $global:TestConfig.Image.Tag |
+            # Arrange
+            $repository = $global:TestConfig.Image.Repository
+            $tag = $global:TestConfig.Image.Tag
+
+            # Act
+            Get-DockerImage -Repository $repository -Tag $tag |
             Uninstall-DockerImage -Force
 
-            Get-DockerImage -Repository $global:TestConfig.Image.Repository -Tag $global:TestConfig.Image.Tag |
+            # Assert
+            Get-DockerImage -Repository $repository -Tag $tag |
             Should -BeNullOrEmpty
         }
     }

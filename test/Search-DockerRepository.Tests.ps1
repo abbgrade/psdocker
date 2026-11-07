@@ -10,11 +10,24 @@ BeforeAll {
 
 Describe 'Search-DockerRepository' {
     It 'returns a list of images' {
-        $images = Search-DockerRepository -Term 'Hello' -Limit $null -ErrorAction Stop
+        # Arrange
+        $term = 'Hello'
+
+        # Act
+        $images = Search-DockerRepository -Term $term -Limit $null -ErrorAction Stop
+
+        # Assert
         $images.Count | Should -BeGreaterThan 0
     }
     It 'returns a limited list of images' {
-        $images = Search-DockerRepository -Term 'Hello' -Limit 5 -ErrorAction Stop
-        $images.Count | Should -BeLessOrEqual 5
+        # Arrange
+        $term = 'Hello'
+        $limit = 5
+
+        # Act
+        $images = Search-DockerRepository -Term $term -Limit $limit -ErrorAction Stop
+
+        # Assert
+        $images.Count | Should -BeLessOrEqual $limit
     }
 }

@@ -10,26 +10,48 @@ BeforeAll {
 
 Describe 'ModuleManifest' {
     It 'is valid' {
-        Test-ModuleManifest -Path $ModuleManifestPath |
-        Should -Not -BeNullOrEmpty
+        # Arrange
+        $manifestPath = $ModuleManifestPath
+
+        # Act
+        $manifest = Test-ModuleManifest -Path $manifestPath
+
+        # Assert
+        $manifest | Should -Not -BeNullOrEmpty
         $? | Should -Be $true
     }
 }
 
 Describe 'Windows container image selection' {
     It 'uses the Windows Server 2025 image on build 26100' {
-        Get-WindowsContainerImageTag `
-            -ProductName 'Windows Server 2025 Datacenter' `
-            -BuildNumber 26100 `
-            -ReleaseId '2009' |
-        Should -Be 'ltsc2025'
+        # Arrange
+        $productName = 'Windows Server 2025 Datacenter'
+        $buildNumber = 26100
+        $releaseId = '2009'
+
+        # Act
+        $tag = Get-WindowsContainerImageTag `
+            -ProductName $productName `
+            -BuildNumber $buildNumber `
+            -ReleaseId $releaseId
+
+        # Assert
+        $tag | Should -Be 'ltsc2025'
     }
 
     It 'preserves the release ID for Windows client editions' {
-        Get-WindowsContainerImageTag `
-            -ProductName 'Windows 11 Pro' `
-            -BuildNumber 26100 `
-            -ReleaseId '2009' |
-        Should -Be '2009'
+        # Arrange
+        $productName = 'Windows 11 Pro'
+        $buildNumber = 26100
+        $releaseId = '2009'
+
+        # Act
+        $tag = Get-WindowsContainerImageTag `
+            -ProductName $productName `
+            -BuildNumber $buildNumber `
+            -ReleaseId $releaseId
+
+        # Assert
+        $tag | Should -Be $releaseId
     }
 }
