@@ -4,12 +4,13 @@ param (
     [string] $PSScriptRoot = $( if ( $PSScriptRoot ) { $PSScriptRoot } else { Get-Location } )
 )
 
-BeforeAll {
-    . $PSScriptRoot\Helper\TestHelper.ps1
-}
 
-Describe 'Docker Service' {
+Describe 'Docker Service' -Tag IntegrationTest {
+    BeforeAll {
+        . $PSScriptRoot\Helper\IntegrationTestSetup.ps1
+    }
     It 'docker daemon is available and responding' {
+        # Arrange
         if ( -not $ENV:APPVEYOR ) {
             # Act
             $version = Get-DockerVersion -ErrorAction Stop

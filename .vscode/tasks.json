@@ -58,7 +58,37 @@
             "problemMatcher": []
         },
         {
-            "label": "Test",
+            "label": "Unit Tests",
+            "group": "test",
+            "type": "shell",
+            "command": "Invoke-Pester -Tag UnitTest",
+            "options": {
+                "cwd": "${workspaceFolder}/test"
+            },
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "echo": false,
+                "showReuseMessage": false
+            },
+            "dependsOn": "Build"
+        },
+        {
+            "label": "Integration Tests",
+            "group": "test",
+            "type": "shell",
+            "command": "Invoke-Pester -Tag IntegrationTest",
+            "options": {
+                "cwd": "${workspaceFolder}/test"
+            },
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "echo": false,
+                "showReuseMessage": false
+            },
+            "dependsOn": "Build"
+        },
+        {
+            "label": "All Tests",
             "group": "test",
             "type": "shell",
             "command": "Invoke-Pester",

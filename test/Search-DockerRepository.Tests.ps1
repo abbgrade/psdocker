@@ -4,11 +4,11 @@ param (
     [string] $PSScriptRoot = $( if ( $PSScriptRoot ) { $PSScriptRoot } else { Get-Location } )
 )
 
-BeforeAll {
-    . $PSScriptRoot\Helper\TestHelper.ps1
-}
+Describe 'Search-DockerRepository' -Tag IntegrationTest {
 
-Describe 'Search-DockerRepository' {
+    BeforeAll {
+        . $PSScriptRoot\Helper\IntegrationTestSetup.ps1
+    }
     It 'returns a list of images' {
         # Arrange
         $term = 'Hello'
@@ -18,6 +18,7 @@ Describe 'Search-DockerRepository' {
 
         # Assert
         $images.Count | Should -BeGreaterThan 0
+        $images[0].Name | Should -Not -BeNullOrEmpty
     }
     It 'returns a limited list of images' {
         # Arrange
@@ -29,5 +30,6 @@ Describe 'Search-DockerRepository' {
 
         # Assert
         $images.Count | Should -BeLessOrEqual $limit
+        $images.Name | Should -Not -BeNullOrEmpty
     }
 }
