@@ -9,8 +9,16 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      verbose:
+        description: Show PowerShell verbose output from tested code
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   # Delegate the matrix build validation to the reusable workflow at this pinned version
   build-validation:
-    uses: abbgrade/PsBuildTasks/.github/workflows/build-validation-matrix.yml@1.15.2
+    uses: abbgrade/PsBuildTasks/.github/workflows/build-validation-matrix.yml@1.16.0
+    with:
+      verbose: ${{ inputs.verbose == true }}
