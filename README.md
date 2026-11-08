@@ -16,7 +16,7 @@ Install-Module -Name psdocker -Scope CurrentUser
 
 ## Build
 
-This project uses a [build script](./psdocker.build.ps1) based on [Invoke-Build](https://github.com/nightroman/Invoke-Build).
+This project uses a [build script](./.build.ps1) based on [Invoke-Build](https://github.com/nightroman/Invoke-Build).
 For installation details, see the Invoke-Build documentation; we recommend `Install-Module InvokeBuild -Scope CurrentUser`.
 The documentation is generated with [platyPS](https://github.com/PowerShell/platyPS), so you may also want to run `Install-Module PlatyPs -Scope CurrentUser`.
 
