@@ -10,7 +10,7 @@ jobs:
 
   # Delegate packaging and prerelease publication to the reusable Windows workflow
   pre-release:
-    uses: abbgrade/PsBuildTasks/.github/workflows/pre-release-windows.yml@1.16.1
+    uses: abbgrade/PsBuildTasks/.github/workflows/pre-release-windows.yml@1.17.0
     with:
       # Replace this placeholder with the module name published to PowerShell Gallery
       module-name: psdocker

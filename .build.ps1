@@ -1,28 +1,44 @@
 <#
 .Synopsis
-	Build script <https://github.com/nightroman/Invoke-Build>
+	Build and manage the psdocker PowerShell module.
+
+.Description
+	Project entry point for Invoke-Build. Loads the module build, dependency,
+	and PsBuildTasks definitions. Available tasks include building and installing
+	the module, updating documentation, publishing to the PowerShell Gallery,
+	and refreshing shared PsBuildTasks files.
 
 .Example
-    # Create module from source.
     Invoke-Build Build
+    Builds the module from src, updates its command documentation, and writes
+    the build output to publish.
 
 .Example
-    # Add doc templates for new command.
-    # BE CAREFUL! Existing documents will be overwritten and must be discarded using git.
     Invoke-Build Doc.Init -ForceDocInit
+    Creates or overwrites command documentation templates in docs. Review the
+    generated files and discard unwanted overwrites with version control.
+
+.Example
+    Invoke-Build UpdatePsBuildTasks -PsBuildTasksBranch feature/copilot-task
+    Refreshes the shared PsBuildTasks files from the specified branch instead
+    of the default main branch.
 #>
 
 param(
+    # NuGet API key used to publish the module; defaults to the nuget_apikey environment variable.
 	[string] $NuGetApiKey = $env:nuget_apikey,
 
-	# Overwrite published versions
+	# Allow publishing a module version that already exists in the PowerShell Gallery.
 	[switch] $ForcePublish,
 
-    # Add doc templates for new command.
+    # Overwrite existing Markdown help files when initializing documentation.
 	[switch] $ForceDocInit,
 
-	# Version suffix to prereleases
-	[int] $BuildNumber
+	# Build number used to set an alpha prerelease suffix (for example, 12 becomes alpha0012).
+	[int] $BuildNumber,
+
+    # PsBuildTasks branch used to download shared files; defaults to main when omitted.
+    [string] $PsBuildTasksBranch
 )
 
 $ModuleName = 'psdocker'
