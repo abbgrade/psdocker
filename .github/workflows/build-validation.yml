@@ -19,6 +19,6 @@ on:
 jobs:
   # Delegate the matrix build validation to the reusable workflow at this pinned version
   build-validation:
-    uses: abbgrade/PsBuildTasks/.github/workflows/build-validation-matrix.yml@1.16.0
+    uses: abbgrade/PsBuildTasks/.github/workflows/build-validation-matrix.yml@1.16.1
     with:
       verbose: ${{ inputs.verbose == true }}

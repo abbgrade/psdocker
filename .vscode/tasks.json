@@ -54,7 +54,7 @@
         {
             "label": "Update docs",
             "type": "shell",
-            "command": "Invoke-Build UpdateDocs",
+            "command": "Invoke-Build Doc.Update",
             "problemMatcher": []
         },
         {
