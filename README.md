@@ -2,16 +2,35 @@
 
 [![.github/workflows/build-validation.yml](https://github.com/abbgrade/psdocker/actions/workflows/build-validation.yml/badge.svg?branch=develop)](https://github.com/abbgrade/psdocker/actions/workflows/build-validation.yml)
 
+psdocker integrates Docker into PowerShell-based DevOps workflows, including test automation. It wraps the Docker CLI with commands to find and manage images and containers, and to run commands inside containers.
+
 For details, visit the [GitHub Pages](https://abbgrade.github.io/psdocker/).
 
 ## Installation
 
-Make sure the Docker CLI is installed, for example via [Chocolatey](https://chocolatey.org/packages/docker-cli) or [Docker Desktop](https://hub.docker.com/editions/community/docker-ce-desktop-windows/).
+Make sure [PowerShell 7.0 or later](https://learn.microsoft.com/powershell/scripting/install/installing-powershell) and the Docker CLI are installed. You can install Docker, for example, via [Chocolatey](https://chocolatey.org/packages/docker-cli) or [Docker Desktop](https://hub.docker.com/editions/community/docker-ce-desktop-windows/).
 
 Install psdocker from the [PowerShell Gallery](https://www.powershellgallery.com/packages/psdocker) in a PowerShell session:
 
 ```powershell
 Install-Module -Name psdocker -Scope CurrentUser
+```
+
+## Quick start
+
+With Docker running and access to Microsoft Container Registry, pull a PowerShell image, start a container, run a command in it, and remove it:
+
+```powershell
+Install-DockerImage -Repository 'mcr.microsoft.com/powershell' -Tag 'latest' | Out-Null
+$name = "psdocker-example-$([guid]::NewGuid().ToString('N'))"
+$container = New-DockerContainer -Image 'mcr.microsoft.com/powershell:latest' -Name $name -Detach -ArgumentList @('sleep', 'infinity')
+
+try {
+    Invoke-DockerCommand -Name $container.Name -Command 'echo' -ArgumentList 'hello' -StringOutput
+}
+finally {
+    Remove-DockerContainer -Name $container.Name -Force
+}
 ```
 
 ## Build
@@ -35,7 +54,7 @@ You can run the tests by:
 - __PowerShell__: execute `Invoke-Build Test` in a PowerShell session in the project directory
 - __VS Code__: run the integrated test task feature (F1 + "Tasks: Run Test Task")
 
-For debugging tests, change the working directory to `./src/test`, set a breakpoint in VS Code, and start debugging with F1 + "Debug: Start Debugging".
+For debugging tests, change the working directory to `./test`, set a breakpoint in VS Code, and start debugging with F1 + "Debug: Start Debugging".
 
 ## Usage
 
