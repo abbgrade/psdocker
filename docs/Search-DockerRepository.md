@@ -1,14 +1,14 @@
 ---
 external help file: psdocker-help.xml
 Module Name: psdocker
-online version: https://docs.docker.com/engine/reference/commandline/search/
+online version: https://abbgrade.github.io/psdocker/docs/Search-DockerRepository.html
 schema: 2.0.0
 ---
 
 # Search-DockerRepository
 
 ## SYNOPSIS
-Search the Docker Hub for repositories
+Search Docker Hub repositories.
 
 ## SYNTAX
 
@@ -18,27 +18,26 @@ Search-DockerRepository [-Term] <String> [-Limit] <Int32> [[-Timeout] <Int32>] [
 ```
 
 ## DESCRIPTION
-Wraps the command \`docker search\`.
+Searches Docker Hub and returns repository details.
+Results can be filtered by
+official status, automated builds, and minimum star count.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Search-DockerRepository 'nanoserver' -Limit 2
+# Prerequisites: Docker CLI is installed and can access Docker Hub.
+Search-DockerRepository -Term 'hello-world' -Limit 5 -IsOfficial | Format-List
 ```
 
-Name        : microsoft/nanoserver
-Description : The official Nano Server base image
-Stars       : 479
+Searches for official repositories matching hello-world.
+Captured output (search results and popularity values can change):
+Name        : hello-world
+Description : Hello World!
+(an example of minimal Dockerization)
+Stars       : 0
 IsAutomated : False
-IsOfficial  : False
-
-Name        : nanoserver/iis
-Description : Nano Server + IIS.
-Updated on 08/21/2018 -- Version: 10.0.14393.2312
-Stars       : 42
-IsAutomated : False
-IsOfficial  : False
+IsOfficial  : True
 
 ## PARAMETERS
 
@@ -164,6 +163,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[https://abbgrade.github.io/psdocker/docs/Search-DockerRepository.html](https://abbgrade.github.io/psdocker/docs/Search-DockerRepository.html)
 
 [https://docs.docker.com/engine/reference/commandline/search/](https://docs.docker.com/engine/reference/commandline/search/)
 

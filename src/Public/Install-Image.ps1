@@ -6,23 +6,40 @@ function Install-Image {
     <#
 
     .SYNOPSIS
-    Install image
+    Pull a Docker image.
 
-    .Description
-    Installs a docker image in the service from a repository.
-    Wraps the command `docker pull`.
+    .DESCRIPTION
+    Pulls an image from a registry and returns matching local image information.
+    Supports -WhatIf and -Confirm. Wraps the Docker CLI `pull` command.
+
+    .LINK
+    https://abbgrade.github.io/psdocker/docs/Install-DockerImage.html
 
     .LINK
     https://docs.docker.com/engine/reference/commandline/pull/
 
-    .LINK
-    Uninstall-Image
-
     .OUTPUTS
-    Image: Returns `Image` objects for the images that are installed and match the parameter.
+    Image: Returns Image objects for the pulled image matching the specified parameters.
 
     .EXAMPLE
-    PS C:\> Install-DockerImage -Repository 'microsoft/nanoserver'
+    # Prerequisites: Docker is running and can access the image registry.
+    Install-DockerImage -Repository 'mcr.microsoft.com/powershell' -Tag 'latest' |
+        Format-List Repository,Tag,Id,Size
+
+    Pulls the latest PowerShell image.
+    Captured output (the image ID may change when the tag is updated):
+    Repository : mcr.microsoft.com/powershell
+    Tag        : latest
+    Id         : sha256:810c4f1e0c9d23022c3ec18c50a6205ee4b60766f1739d329b2948df1fd7d5b0
+    Size       : 489MB
+
+    .EXAMPLE
+    # Does not require the image to be present or pulled.
+    Install-DockerImage -Repository 'mcr.microsoft.com/powershell' -WhatIf
+
+    Shows the pull operation without downloading the image.
+    Captured output:
+    What if: Performing the operation "Pull Docker image" on target "mcr.microsoft.com/powershell".
 
     #>
 

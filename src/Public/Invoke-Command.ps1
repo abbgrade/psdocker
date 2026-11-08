@@ -5,22 +5,32 @@ function Invoke-Command {
     <#
 
     .SYNOPSIS
-    Invoke command
+    Run a command in a Docker container.
 
     .DESCRIPTION
-    Invokes a command on a docker container.
-    Wraps the docker `exec` command.
+    Runs a command in an existing container and optionally returns its output as a string.
+    Supports -WhatIf and -Confirm. Wraps the Docker CLI `exec` command.
+
+    .LINK
+    https://abbgrade.github.io/psdocker/docs/Invoke-DockerCommand.html
 
     .LINK
     https://docs.docker.com/engine/reference/commandline/exec/
 
     .OUTPUTS
-    System.string: Returns a string if the parameter StringOutput is set.
+    System.String: Returns command output when -StringOutput is specified.
 
     .EXAMPLE
-    PS C:\> $container = New-DockerContainer -Image 'microsoft/iis' -Detach
-    PS C:\> Invoke-DockerCommand -Name $container.Name -Command 'hostname' -StringOutput
-    88eb8fa9c07f
+    # Prerequisites: Docker is running and can pull images from Microsoft Container Registry.
+    Install-DockerImage -Repository 'mcr.microsoft.com/powershell' -Tag 'latest' | Out-Null
+    $containerName = "psdocker-example-$([guid]::NewGuid().ToString('N'))"
+    $container = New-DockerContainer -Image 'mcr.microsoft.com/powershell:latest' -Name $containerName -Detach -ArgumentList @('sleep','infinity')
+    Invoke-DockerCommand -Name $container.Name -Command 'echo' -ArgumentList 'hello' -StringOutput
+    Remove-DockerContainer -Name $container.Name -Force
+
+    Creates a temporary container, runs echo in it, then removes the container.
+    Captured output:
+    hello
 
     #>
 

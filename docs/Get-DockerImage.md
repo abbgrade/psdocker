@@ -1,14 +1,14 @@
 ---
 external help file: psdocker-help.xml
 Module Name: psdocker
-online version: https://docs.docker.com/engine/reference/commandline/image_ls/
+online version: https://abbgrade.github.io/psdocker/docs/Get-DockerImage.html
 schema: 2.0.0
 ---
 
 # Get-DockerImage
 
 ## SYNOPSIS
-Get docker image
+Get Docker images.
 
 ## SYNTAX
 
@@ -18,19 +18,25 @@ Get-DockerImage [[-Repository] <String>] [[-Tag] <String>] [[-Timeout] <Int32>]
 ```
 
 ## DESCRIPTION
-Wraps the command \`docker image ls\`.
+Returns locally available Docker images, optionally filtered by repository and tag.
+Wraps the Docker CLI \`image ls\` command.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-DockerImage -Repository 'microsoft/powershell'
-Created    : 2 weeks ago
-ImageId    : sha256:4ebab174c7292440d4d7d5e5e61d3cd4487441d3f49df0b656ccc81d2a0e4489
-Size       : 364MB
-Tag        : latest
-Repository : microsoft/powershell
+# Prerequisites: Docker is running and can pull images from Microsoft Container Registry.
+Install-DockerImage -Repository 'mcr.microsoft.com/powershell' -Tag 'latest' | Out-Null
+Get-DockerImage -Repository 'mcr.microsoft.com/powershell' -Tag 'latest' |
+    Format-List Repository,Tag,Id,Size
 ```
+
+Pulls the image if needed, then returns its local image information.
+Captured output (the image ID may change when the tag is updated):
+Repository : mcr.microsoft.com/powershell
+Tag        : latest
+Id         : sha256:810c4f1e0c9d23022c3ec18c50a6205ee4b60766f1739d329b2948df1fd7d5b0
+Size       : 489MB
 
 ## PARAMETERS
 
@@ -101,10 +107,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### Image: Returns a `Image` object for each object matching the parameters.
+### Image: Returns an Image object for each image matching the parameters.
 ## NOTES
 
 ## RELATED LINKS
+
+[https://abbgrade.github.io/psdocker/docs/Get-DockerImage.html](https://abbgrade.github.io/psdocker/docs/Get-DockerImage.html)
 
 [https://docs.docker.com/engine/reference/commandline/image_ls/](https://docs.docker.com/engine/reference/commandline/image_ls/)
 

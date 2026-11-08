@@ -1,34 +1,42 @@
 ---
 external help file: psdocker-help.xml
 Module Name: psdocker
-online version: https://docs.docker.com/engine/reference/commandline/exec/
+online version: https://abbgrade.github.io/psdocker/docs/Invoke-DockerCommand.html
 schema: 2.0.0
 ---
 
 # Invoke-DockerCommand
 
 ## SYNOPSIS
-Invoke command
+Run a command in a Docker container.
 
 ## SYNTAX
 
 ```
 Invoke-DockerCommand [-Name] <String> [-Command] <String> [[-ArgumentList] <String[]>] [[-Timeout] <Int32>]
- [-StringOutput] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-StringOutput] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Invokes a command on a docker container.
-Wraps the docker \`exec\` command.
+Runs a command in an existing container and optionally returns its output as a string.
+Supports -WhatIf and -Confirm.
+Wraps the Docker CLI \`exec\` command.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-$container = New-DockerContainer -Image 'microsoft/iis' -Detach
-PS C:\> Invoke-DockerCommand -Name $container.Name -Command 'hostname' -StringOutput
-88eb8fa9c07f
+# Prerequisites: Docker is running and can pull images from Microsoft Container Registry.
+Install-DockerImage -Repository 'mcr.microsoft.com/powershell' -Tag 'latest' | Out-Null
+$containerName = "psdocker-example-$([guid]::NewGuid().ToString('N'))"
+$container = New-DockerContainer -Image 'mcr.microsoft.com/powershell:latest' -Name $containerName -Detach -ArgumentList @('sleep','infinity')
+Invoke-DockerCommand -Name $container.Name -Command 'echo' -ArgumentList 'hello' -StringOutput
+Remove-DockerContainer -Name $container.Name -Force
 ```
+
+Creates a temporary container, runs echo in it, then removes the container.
+Captured output:
+hello
 
 ## PARAMETERS
 
@@ -107,6 +115,37 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -ProgressAction
 {{ Fill ProgressAction Description }}
 
@@ -129,10 +168,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### System.string: Returns a string if the parameter StringOutput is set.
+### System.String: Returns command output when -StringOutput is specified.
 ## NOTES
 
 ## RELATED LINKS
+
+[https://abbgrade.github.io/psdocker/docs/Invoke-DockerCommand.html](https://abbgrade.github.io/psdocker/docs/Invoke-DockerCommand.html)
 
 [https://docs.docker.com/engine/reference/commandline/exec/](https://docs.docker.com/engine/reference/commandline/exec/)
 

@@ -16,9 +16,10 @@ Describe 'Get-DockerContainer' {
             . $PSScriptRoot\Helper\IntegrationTestSetup.ps1
             $global:TestConfig.Image | Install-DockerImage -ErrorAction Stop
 
+            $script:NamePrefix = "psdocker-test-$([guid]::NewGuid().ToString('N'))-"
             $script:ContainerNames = New-Object System.Collections.ArrayList
             1..2 | ForEach-Object {
-                $name = "psdocker-test-$([guid]::NewGuid().ToString('N'))"
+                $name = "$script:NamePrefix$_"
                 New-DockerContainer -Image $global:TestConfig.Image.Name -Name $name -ErrorAction Stop | Out-Null
                 $script:ContainerNames.Add($name) | Out-Null
             }
@@ -31,11 +32,8 @@ Describe 'Get-DockerContainer' {
         }
 
         It 'returns the containers matching a unique name prefix' {
-            # Arrange
-            $namePrefix = 'psdocker-test-'
-
             # Act
-            $matchingContainers = @( Get-DockerContainer -Name $namePrefix )
+            $matchingContainers = @( Get-DockerContainer -Name $script:NamePrefix -ErrorAction Stop )
 
             # Assert
             $matchingContainers.Count | Should -Be 2

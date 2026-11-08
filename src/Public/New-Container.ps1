@@ -6,27 +6,43 @@ function New-Container {
     <#
 
     .SYNOPSIS
-    New container
+    Create a Docker container.
 
     .DESCRIPTION
-    Creates a new container in the docker service.
-    Wraps the command `docker run`.
+    Creates a container from an image and optionally configures its name, environment,
+    ports, volumes, and command. Supports -WhatIf and -Confirm.
+
+    .LINK
+    https://abbgrade.github.io/psdocker/docs/New-DockerContainer.html
 
     .LINK
     https://docs.docker.com/engine/reference/commandline/run/
 
     .OUTPUTS
-    Container: Returns a Container object for the created container.
+    Container: Returns a Container object for the created container unless -Remove is specified.
 
     .EXAMPLE
-    PS C:\> New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer'
-    Image       : microsoft/nanoserver
-    Ports       :
-    Command     : "c:\\windows\\system32\\cmd.exe"
-    Created     : 14 seconds ago
-    Name        : mycontainer
-    ContainerID : 1a0b70cfcfba78e46468dbfa72b0b36fae4c30282367482bc348b5fcee0b85d3
-    Status      : Exited (0) 1 second ago
+    # Prerequisites: Docker is running and can pull images from Microsoft Container Registry.
+    Install-DockerImage -Repository 'mcr.microsoft.com/powershell' -Tag 'latest' | Out-Null
+    $name = "psdocker-example-$([guid]::NewGuid().ToString('N'))"
+    New-DockerContainer -Image 'mcr.microsoft.com/powershell:latest' -Name $name -Detach -ArgumentList @('sleep','infinity') |
+        Format-List Id,Name,Image,Status
+    Remove-DockerContainer -Name $name -Force
+
+    Creates a temporary detached container, then removes it.
+    Captured output (temporary container ID and generated name redacted):
+    Id     : <redacted>
+    Name   : psdocker-example-...
+    Image  : mcr.microsoft.com/powershell:latest
+    Status : Up Less than a second
+
+    .EXAMPLE
+    # No Docker image or daemon is needed for this WhatIf example.
+    New-DockerContainer -Image 'mcr.microsoft.com/powershell' -WhatIf
+
+    Shows what would happen without creating a container.
+    Captured output:
+    What if: Performing the operation "Create Docker container" on target "image 'mcr.microsoft.com/powershell'".
 
     #>
 
@@ -78,7 +94,7 @@ function New-Container {
         [Parameter( Mandatory = $false, ValueFromPipelineByPropertyName = $true )]
         [switch] $Terminal,
 
-        # Automatically removes the container when it exits.
+        # Automatically removes the container when it exits; no container object is returned.
         [Parameter( Mandatory = $false )]
         [switch] $Remove,
 

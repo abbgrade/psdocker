@@ -1,14 +1,14 @@
 ---
 external help file: psdocker-help.xml
 Module Name: psdocker
-online version: https://docs.docker.com/engine/reference/commandline/run/
+online version: https://abbgrade.github.io/psdocker/docs/New-DockerContainer.html
 schema: 2.0.0
 ---
 
 # New-DockerContainer
 
 ## SYNOPSIS
-New container
+Create a Docker container.
 
 ## SYNTAX
 
@@ -16,26 +16,42 @@ New container
 New-DockerContainer [[-Name] <String>] [-ImageName] <String> [[-Environment] <Hashtable>]
  [[-Ports] <Hashtable>] [[-Volumes] <Hashtable>] [[-Timeout] <Int32>] [[-StatusTimeout] <Int32>] [-Detach]
  [-Interactive] [-Terminal] [-Remove] [-StringOutput] [[-ArgumentList] <String[]>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Creates a new container in the docker service.
-Wraps the command \`docker run\`.
+Creates a container from an image and optionally configures its name, environment,
+ports, volumes, and command.
+Supports -WhatIf and -Confirm.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer'
-Image       : microsoft/nanoserver
-Ports       :
-Command     : "c:\\windows\\system32\\cmd.exe"
-Created     : 14 seconds ago
-Name        : mycontainer
-ContainerID : 1a0b70cfcfba78e46468dbfa72b0b36fae4c30282367482bc348b5fcee0b85d3
-Status      : Exited (0) 1 second ago
+# Prerequisites: Docker is running and can pull images from Microsoft Container Registry.
+Install-DockerImage -Repository 'mcr.microsoft.com/powershell' -Tag 'latest' | Out-Null
+$name = "psdocker-example-$([guid]::NewGuid().ToString('N'))"
+New-DockerContainer -Image 'mcr.microsoft.com/powershell:latest' -Name $name -Detach -ArgumentList @('sleep','infinity') |
+    Format-List Id,Name,Image,Status
+Remove-DockerContainer -Name $name -Force
 ```
+
+Creates a temporary detached container, then removes it.
+Captured output (temporary container ID and generated name redacted):
+Id     : \<redacted\>
+Name   : psdocker-example-...
+Image  : mcr.microsoft.com/powershell:latest
+Status : Up Less than a second
+
+### EXAMPLE 2
+```
+# No Docker image or daemon is needed for this WhatIf example.
+New-DockerContainer -Image 'mcr.microsoft.com/powershell' -WhatIf
+```
+
+Shows what would happen without creating a container.
+Captured output:
+What if: Performing the operation "Create Docker container" on target "image 'mcr.microsoft.com/powershell'".
 
 ## PARAMETERS
 
@@ -191,7 +207,7 @@ Accept wildcard characters: False
 ```
 
 ### -Remove
-Automatically removes the container when it exits.
+Automatically removes the container when it exits; no container object is returned.
 
 ```yaml
 Type: SwitchParameter
@@ -235,6 +251,37 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -ProgressAction
 {{ Fill ProgressAction Description }}
 
@@ -257,10 +304,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### Container: Returns a Container object for the created container.
+### Container: Returns a Container object for the created container unless -Remove is specified.
 ## NOTES
 
 ## RELATED LINKS
+
+[https://abbgrade.github.io/psdocker/docs/New-DockerContainer.html](https://abbgrade.github.io/psdocker/docs/New-DockerContainer.html)
 
 [https://docs.docker.com/engine/reference/commandline/run/](https://docs.docker.com/engine/reference/commandline/run/)
 

@@ -5,22 +5,39 @@ function Remove-Container {
     <#
 
     .SYNOPSIS
-    Remove container
+    Remove a Docker container.
 
     .DESCRIPTION
-    Removes a docker container from the service.
-    Wraps the command `docker rm`.
+    Removes a container, optionally stopping it first with -Force.
+    Supports -WhatIf and -Confirm. Wraps the Docker CLI `rm` command.
+
+    .LINK
+    https://abbgrade.github.io/psdocker/docs/Remove-DockerContainer.html
 
     .LINK
     https://docs.docker.com/engine/reference/commandline/rm/
 
     .EXAMPLE
-    PS C:\> New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer' | Out-Null
-    PS C:\> Remove-DockerContainer -Name 'mycontainer'
+    # Prerequisites: Docker is running and can pull images from Microsoft Container Registry.
+    Install-DockerImage -Repository 'mcr.microsoft.com/powershell' -Tag 'latest' | Out-Null
+    $name = "psdocker-example-$([guid]::NewGuid().ToString('N'))"
+    New-DockerContainer -Image 'mcr.microsoft.com/powershell:latest' -Name $name -Detach -ArgumentList @('sleep','infinity') | Out-Null
+    Remove-DockerContainer -Name $name -Force
+
+    Creates a temporary container, then removes it by name.
+    Captured output:
+    No output. The container is removed.
 
     .EXAMPLE
-    PS C:\> $container = New-DockerContainer -Image 'microsoft/nanoserver'
-    PS C:\> $container | Remove-DockerContainer
+    # Prerequisites: Docker is running and can pull images from Microsoft Container Registry.
+    Install-DockerImage -Repository 'mcr.microsoft.com/powershell' -Tag 'latest' | Out-Null
+    $name = "psdocker-example-$([guid]::NewGuid().ToString('N'))"
+    $container = New-DockerContainer -Image 'mcr.microsoft.com/powershell:latest' -Name $name -Detach -ArgumentList @('sleep','infinity')
+    $container | Remove-DockerContainer -Force
+
+    Creates a temporary container, then stops and removes it through the pipeline.
+    Captured output:
+    No output. Matching containers are stopped and removed.
 
     #>
 

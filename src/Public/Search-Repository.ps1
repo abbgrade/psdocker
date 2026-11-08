@@ -3,10 +3,14 @@ function Search-Repository {
     <#
 
     .SYNOPSIS
-    Search the Docker Hub for repositories
+    Search Docker Hub repositories.
 
     .DESCRIPTION
-    Wraps the command `docker search`.
+    Searches Docker Hub and returns repository details. Results can be filtered by
+    official status, automated builds, and minimum star count.
+
+    .LINK
+    https://abbgrade.github.io/psdocker/docs/Search-DockerRepository.html
 
     .LINK
     https://docs.docker.com/engine/reference/commandline/search/
@@ -20,19 +24,16 @@ function Search-Repository {
     - IsOfficial
 
     .EXAMPLE
-    PS C:\> Search-DockerRepository 'nanoserver' -Limit 2
+    # Prerequisites: Docker CLI is installed and can access Docker Hub.
+    Search-DockerRepository -Term 'hello-world' -Limit 5 -IsOfficial | Format-List
 
-    Name        : microsoft/nanoserver
-    Description : The official Nano Server base image
-    Stars       : 479
+    Searches for official repositories matching hello-world.
+    Captured output (search results and popularity values can change):
+    Name        : hello-world
+    Description : Hello World! (an example of minimal Dockerization)
+    Stars       : 0
     IsAutomated : False
-    IsOfficial  : False
-
-    Name        : nanoserver/iis
-    Description : Nano Server + IIS. Updated on 08/21/2018 -- Version: 10.0.14393.2312
-    Stars       : 42
-    IsAutomated : False
-    IsOfficial  : False
+    IsOfficial  : True
 
     #>
 

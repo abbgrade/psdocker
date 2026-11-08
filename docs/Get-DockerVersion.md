@@ -1,14 +1,14 @@
 ---
 external help file: psdocker-help.xml
 Module Name: psdocker
-online version: https://docs.docker.com/engine/reference/commandline/version/
+online version: https://abbgrade.github.io/psdocker/docs/Get-DockerVersion.html
 schema: 2.0.0
 ---
 
 # Get-DockerVersion
 
 ## SYNOPSIS
-Get version information
+Get Docker client and server version information.
 
 ## SYNTAX
 
@@ -17,33 +17,27 @@ Get-DockerVersion [[-Timeout] <Int32>] [-ProgressAction <ActionPreference>] [<Co
 ```
 
 ## DESCRIPTION
-Returns version information of the docker client and service.
-Wraps the command \`docker version\`.
+Returns version details for the Docker client and server, including engine information.
+Wraps the Docker CLI \`version\` command.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
+# Prerequisite: Docker CLI is installed and the Docker daemon is running.
 $version = Get-DockerVersion
-PS C:\> $version.Client
-Version      : 18.06.1-ce
-Goversion    : go1.10.3
-Experimental : false
-APIversion   : 1.38
-Gitcommit    : e68fc7a
-Built        : Tue Aug 21 17:21:34 2018
-OSArch       : windows/amd64
+$version.Server | Format-List
 ```
 
-PS C:\\\> $version.Server
-Version      : 18.06.1-ce
-Built        : Tue Aug 21 17:36:40 2018
-Experimental : false
-Goversion    : go1.10.3
-APIversion   : 1.38 (minimum version 1.24)
-Gitcommit    : e68fc7a
-Engine:      :
-OSArch       : windows/amd64
+Gets client and server version details, then displays the server information.
+Captured output from Docker Engine 29.9.2:
+Version  : 29.9.2
+Goversion : go1.26.10
+APIversion : 1.56
+Gitcommit : 0367cbe
+Built     : 2026-10-20T18:45:02.000000000+00:00
+OSArch   : linux/amd64
+Engine   : @{Version=29.9.2; Goversion=go1.26.10; Experimental=false; APIversion=1.56; Gitcommit=0367cbe; Built=Tue Oct 20 19:45:02 2026; OSArch=linux/amd64}
 
 ## PARAMETERS
 
@@ -84,9 +78,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
+### PSCustomObject: Contains Client and Server version information.
 ## NOTES
 
 ## RELATED LINKS
+
+[https://abbgrade.github.io/psdocker/docs/Get-DockerVersion.html](https://abbgrade.github.io/psdocker/docs/Get-DockerVersion.html)
 
 [https://docs.docker.com/engine/reference/commandline/version/](https://docs.docker.com/engine/reference/commandline/version/)
 

@@ -5,17 +5,29 @@ function Stop-Container {
     <#
 
     .SYNOPSIS
-    Stop container
+    Stop a Docker container.
 
     .DESCRIPTION
-    Wraps the command `docker stop`.
+    Stops a running container. Supports -WhatIf and -Confirm.
+    Wraps the Docker CLI `stop` command.
+
+    .LINK
+    https://abbgrade.github.io/psdocker/docs/Stop-DockerContainer.html
 
     .LINK
     https://docs.docker.com/engine/reference/commandline/stop/
 
     .EXAMPLE
-    PS C:\> $container = New-DockerContainer -Image 'microsoft/nanoserver'
-    PS C:\> $container | Stop-DockerContainer
+    # Prerequisites: Docker is running and can pull images from Microsoft Container Registry.
+    Install-DockerImage -Repository 'mcr.microsoft.com/powershell' -Tag 'latest' | Out-Null
+    $name = "psdocker-example-$([guid]::NewGuid().ToString('N'))"
+    New-DockerContainer -Image 'mcr.microsoft.com/powershell:latest' -Name $name -Detach -ArgumentList @('sleep','infinity') | Out-Null
+    Stop-DockerContainer -Name $name
+    Remove-DockerContainer -Name $name
+
+    Creates a temporary container, stops it, then removes it.
+    Captured output:
+    No output. The container is stopped.
 
     #>
 

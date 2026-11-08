@@ -5,29 +5,50 @@ function Get-Container {
     <#
 
     .SYNOPSIS
-    Get docker container
+    Get Docker containers.
 
     .DESCRIPTION
-    Returns references to docker containers of a docker service.
-    It can be filtered by name and status.
-    Wraps the command `docker ps`.
+    Returns container information and can filter by running state, latest container,
+    or name. Wraps the Docker CLI `ps` command.
+
+    .LINK
+    https://abbgrade.github.io/psdocker/docs/Get-DockerContainer.html
 
     .LINK
     https://docs.docker.com/engine/reference/commandline/ps/
 
     .OUTPUTS
-    Container:  It returns a `Container` object for each container matching the parameters.
+    Container: Returns a Container object for each container matching the parameters.
 
     .EXAMPLE
-    PS C:\> New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer' | Out-Null
-    PS C:\> Get-DockerContainer -Name 'mycontainer'
-    Image       : microsoft/nanoserver
-    Ports       :
-    Command     : "c:\\windows\\system32\\cmd.exe"
-    Created     : 13 seconds ago
-    Name        : mycontainer
-    ContainerID : 1c3bd73d25552b41a677a99a15a9326ba72123096f9e10c3d36f72fb90e57f16
-    Status      : Exited (0) 5 seconds ago
+    # Prerequisites: Docker is running and can pull images from Microsoft Container Registry.
+    Install-DockerImage -Repository 'mcr.microsoft.com/powershell' -Tag 'latest' | Out-Null
+    $name = "psdocker-example-$([guid]::NewGuid().ToString('N'))"
+    New-DockerContainer -Image 'mcr.microsoft.com/powershell:latest' -Name $name -Detach -ArgumentList @('sleep','infinity') | Out-Null
+    Get-DockerContainer -Running -Name $name | Format-List Id,Name,Image,Status
+    Remove-DockerContainer -Name $name -Force
+
+    Creates a temporary running container, lists it, then removes it.
+    Captured output (temporary container ID and generated name redacted):
+    Id     : <redacted>
+    Name   : psdocker-example-...
+    Image  : mcr.microsoft.com/powershell:latest
+    Status : Up Less than a second
+
+    .EXAMPLE
+    # Prerequisites: Docker is running and can pull images from Microsoft Container Registry.
+    $name = "psdocker-example-$([guid]::NewGuid().ToString('N'))"
+    Install-DockerImage -Repository 'mcr.microsoft.com/powershell' -Tag 'latest' | Out-Null
+    New-DockerContainer -Image 'mcr.microsoft.com/powershell:latest' -Name $name -Detach -ArgumentList @('sleep','infinity') | Out-Null
+    Get-DockerContainer -Name $name | Format-List Id,Name,Image,Status
+    Remove-DockerContainer -Name $name -Force
+
+    Finds a container by name, then removes the temporary container.
+    Captured output (temporary container ID and generated name redacted):
+    Id     : <redacted>
+    Name   : psdocker-example-...
+    Image  : mcr.microsoft.com/powershell:latest
+    Status : Up Less than a second
 
     #>
 

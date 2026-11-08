@@ -1,39 +1,56 @@
 ---
 external help file: psdocker-help.xml
 Module Name: psdocker
-online version: https://docs.docker.com/engine/reference/commandline/rm/
+online version: https://abbgrade.github.io/psdocker/docs/Remove-DockerContainer.html
 schema: 2.0.0
 ---
 
 # Remove-DockerContainer
 
 ## SYNOPSIS
-Remove container
+Remove a Docker container.
 
 ## SYNTAX
 
 ```
 Remove-DockerContainer [-Name] <String> [-Force] [[-Timeout] <Int32>] [[-StopTimeout] <Int32>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Removes a docker container from the service.
-Wraps the command \`docker rm\`.
+Removes a container, optionally stopping it first with -Force.
+Supports -WhatIf and -Confirm.
+Wraps the Docker CLI \`rm\` command.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-New-DockerContainer -Image 'microsoft/nanoserver' -Name 'mycontainer' | Out-Null
-PS C:\> Remove-DockerContainer -Name 'mycontainer'
+# Prerequisites: Docker is running and can pull images from Microsoft Container Registry.
+Install-DockerImage -Repository 'mcr.microsoft.com/powershell' -Tag 'latest' | Out-Null
+$name = "psdocker-example-$([guid]::NewGuid().ToString('N'))"
+New-DockerContainer -Image 'mcr.microsoft.com/powershell:latest' -Name $name -Detach -ArgumentList @('sleep','infinity') | Out-Null
+Remove-DockerContainer -Name $name -Force
 ```
+
+Creates a temporary container, then removes it by name.
+Captured output:
+No output.
+The container is removed.
 
 ### EXAMPLE 2
 ```
-$container = New-DockerContainer -Image 'microsoft/nanoserver'
-PS C:\> $container | Remove-DockerContainer
+# Prerequisites: Docker is running and can pull images from Microsoft Container Registry.
+Install-DockerImage -Repository 'mcr.microsoft.com/powershell' -Tag 'latest' | Out-Null
+$name = "psdocker-example-$([guid]::NewGuid().ToString('N'))"
+$container = New-DockerContainer -Image 'mcr.microsoft.com/powershell:latest' -Name $name -Detach -ArgumentList @('sleep','infinity')
+$container | Remove-DockerContainer -Force
 ```
+
+Creates a temporary container, then stops and removes it through the pipeline.
+Captured output:
+No output.
+Matching containers are stopped and removed.
 
 ## PARAMETERS
 
@@ -97,6 +114,37 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -ProgressAction
 {{ Fill ProgressAction Description }}
 
@@ -122,6 +170,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[https://abbgrade.github.io/psdocker/docs/Remove-DockerContainer.html](https://abbgrade.github.io/psdocker/docs/Remove-DockerContainer.html)
 
 [https://docs.docker.com/engine/reference/commandline/rm/](https://docs.docker.com/engine/reference/commandline/rm/)
 

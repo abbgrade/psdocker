@@ -5,20 +5,33 @@ function Uninstall-Image {
     <#
 
     .SYNOPSIS
-    Remove docker image
+    Remove a Docker image.
 
     .DESCRIPTION
-    Wraps the docker command `docker image rm`.
+    Removes a local image, optionally forcing removal or preventing removal of
+    untagged parent images. Supports -WhatIf and -Confirm.
+
+    .LINK
+    https://abbgrade.github.io/psdocker/docs/Uninstall-DockerImage.html
 
     .LINK
     https://docs.docker.com/engine/reference/commandline/image_rm/
 
-    .LINK
-    Install-Image
-
     .EXAMPLE
-    PS C:\> Get-DockerImage -Repository 'microsoft/powershell' | Uninstall-DockerImage
+    # Prerequisites: Docker is running and can pull images from Microsoft Container Registry.
+    Install-DockerImage -Repository 'mcr.microsoft.com/powershell' -Tag 'latest' | Out-Null
+    $repository = "psdocker-example-$([guid]::NewGuid().ToString('N'))"
+    $buildContext = Join-Path $env:TEMP $repository
+    New-Item -Path $buildContext -ItemType Directory | Out-Null
+    Set-Content -Path (Join-Path $buildContext 'Dockerfile') -Value 'FROM mcr.microsoft.com/powershell:latest'
+    New-DockerImage -Repository $repository -Path $buildContext
+    Get-DockerImage -Repository $repository -Tag 'latest' |
+        Uninstall-DockerImage -Force
+    Remove-Item -Path $buildContext -Recurse -Force
 
+    Builds a uniquely named temporary image, then removes it through the pipeline.
+    Captured output:
+    No output. The image is removed.
     #>
 
     [CmdletBinding(SupportsShouldProcess = $true)]
