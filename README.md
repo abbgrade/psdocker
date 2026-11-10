@@ -60,6 +60,10 @@ For debugging tests, change the working directory to `./test`, set a breakpoint 
 
 See [the command reference](./docs/) for descriptions and examples.
 
+## Architecture decisions
+
+See the [architecture decision records](./adr/README.md) for the reasoning behind key project design choices.
+
 ## Changelog
 
 See the [changelog](./CHANGELOG.md) file.
